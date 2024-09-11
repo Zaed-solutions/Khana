@@ -24,8 +24,8 @@ import org.zaed.khana.ui.theme.KhanaTheme
 
 @Composable
 fun LocationAndNotificationsSection(
-    modifier: Modifier = Modifier,
     onNotificationsButtonClicked: () -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = Modifier

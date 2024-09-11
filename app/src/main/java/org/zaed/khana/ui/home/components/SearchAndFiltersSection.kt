@@ -30,13 +30,13 @@ import org.zaed.khana.ui.theme.KhanaTheme
 
 @Composable
 fun SearchAndFiltersSection(
-    modifier: Modifier = Modifier,
     onFiltersButtonClicked: () -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     onSearch: (String) -> Unit,
     searchQuery: String,
     isSearching: Boolean,
-    onChangeSearchingStatus: (Boolean) -> Unit
+    onChangeSearchingStatus: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier
@@ -72,12 +72,12 @@ fun SearchAndFiltersSection(
 
 @Composable
 private fun SearchTextField(
-    modifier: Modifier = Modifier,
     onSearchQueryChanged: (String) -> Unit,
     onSearch: (String) -> Unit,
     searchQuery: String,
     isSearching: Boolean,
-    onChangeSearchingStatus: (Boolean) -> Unit
+    onChangeSearchingStatus: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
     if (!isSearching) {
