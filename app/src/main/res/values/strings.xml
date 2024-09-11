@@ -2,4 +2,5 @@
     <string name="app_name">Khana</string>
     <string name="location">Location</string>
     <string name="search">Search</string>
+    <string name="category">Category</string>
 </resources>

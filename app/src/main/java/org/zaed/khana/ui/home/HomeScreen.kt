@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.zaed.khana.ui.home.components.AdvertisementSection
+import org.zaed.khana.ui.home.components.CategoriesSection
 import org.zaed.khana.ui.home.components.LocationAndNotificationsSection
 import org.zaed.khana.ui.home.components.SearchAndFiltersSection
 
@@ -27,9 +28,9 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
-    modifier: Modifier = Modifier,
     searchQuery: String,
     isSearching: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold (
 
@@ -58,6 +59,9 @@ private fun HomeContent(
                 AdvertisementSection(ads = emptyList())
             }
             //categories
+            item{
+                CategoriesSection(emptyList())
+            }
             //flash sale (optional)
             //items
         }
