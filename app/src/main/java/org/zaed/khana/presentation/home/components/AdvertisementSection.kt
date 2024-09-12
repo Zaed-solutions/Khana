@@ -1,4 +1,4 @@
-package org.zaed.khana.ui.home.components
+package org.zaed.khana.presentation.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +17,7 @@ import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
 import com.tbuonomo.viewpagerdotsindicator.compose.type.ShiftIndicatorType
 import org.zaed.khana.data.model.Advertisement
-import org.zaed.khana.ui.theme.KhanaTheme
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun AdvertisementSection(

@@ -1,4 +1,4 @@
-package org.zaed.khana.ui.home.components
+package org.zaed.khana.presentation.home.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
-import org.zaed.khana.ui.theme.KhanaTheme
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun SearchAndFiltersSection(

@@ -1,21 +1,20 @@
-package org.zaed.khana.ui.home
+package org.zaed.khana.presentation.home
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.zaed.khana.ui.home.components.AdvertisementSection
-import org.zaed.khana.ui.home.components.CategoriesSection
-import org.zaed.khana.ui.home.components.LocationAndNotificationsSection
-import org.zaed.khana.ui.home.components.SearchAndFiltersSection
+import org.zaed.khana.presentation.home.components.AdvertisementSection
+import org.zaed.khana.presentation.home.components.CategoriesSection
+import org.zaed.khana.presentation.home.components.FlashSaleSection
+import org.zaed.khana.presentation.home.components.LabelFilterSection
+import org.zaed.khana.presentation.home.components.LocationAndNotificationsSection
+import org.zaed.khana.presentation.home.components.ProductItems
+import org.zaed.khana.presentation.home.components.SearchAndFiltersSection
 
 @Composable
 fun HomeScreen(
@@ -63,7 +62,20 @@ private fun HomeContent(
                 CategoriesSection(emptyList())
             }
             //flash sale (optional)
+            item{
+                FlashSaleSection(0)
+            }
             //items
+            item{
+                LabelFilterSection(
+                    labels = emptyList(),
+                    selectedLabel = "",
+                    onSelectLabel = {}
+                )
+            }
+            item{
+                ProductItems()
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.zaed.khana.ui.home
+package org.zaed.khana.presentation.home
 
 data class HomeUiState(
     val text: String = "",

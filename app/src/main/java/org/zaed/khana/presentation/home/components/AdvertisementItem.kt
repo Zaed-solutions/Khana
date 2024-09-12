@@ -1,4 +1,4 @@
-package org.zaed.khana.ui.home.components
+package org.zaed.khana.presentation.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +19,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import org.zaed.khana.data.model.Advertisement
-import org.zaed.khana.ui.theme.KhanaTheme
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun AdvertisementItem(

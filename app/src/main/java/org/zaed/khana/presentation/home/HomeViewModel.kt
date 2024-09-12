@@ -1,4 +1,4 @@
-package org.zaed.khana.ui.home
+package org.zaed.khana.presentation.home
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
