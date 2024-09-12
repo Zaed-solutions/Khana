@@ -1,13 +1,18 @@
 package org.zaed.khana.presentation.home
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.zaed.khana.data.model.Advertisement
+import org.zaed.khana.data.model.Category
+import org.zaed.khana.data.model.Product
 import org.zaed.khana.presentation.home.components.AdvertisementSection
 import org.zaed.khana.presentation.home.components.CategoriesSection
 import org.zaed.khana.presentation.home.components.FlashSaleSection
@@ -27,54 +32,74 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
+    hasNewNotification: Boolean,
     searchQuery: String,
     isSearching: Boolean,
+    ads: List<Advertisement>,
+    categories: List<Category>,
+    flashSaleEndsAtEpochSeconds: Long,
+    labels: List<String>,
+    selectedLabel: String,
+    products: List<Product>,
+    wishlistedProducts: List<String>,
+    onAction: (HomeUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold (
-
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    Scaffold(
+        modifier = modifier.fillMaxSize()
     ) { paddingValues ->
-        LazyColumn (
+        LazyColumn(
             modifier = Modifier.padding(paddingValues),
             contentPadding = PaddingValues(all = 16.dp)
-        ){
-            //location and notification part
+        ) {
             item {
-                LocationAndNotificationsSection()
+                LocationAndNotificationsSection(
+                    onNotificationsButtonClicked = {
+                        onAction(HomeUiAction.OnNotificationButtonClicked)
+                    },
+                    hasNewNotification = hasNewNotification
+                )
             }
-            //search and filters part
             item {
                 SearchAndFiltersSection(
-                    onFiltersButtonClicked = {/*TODO*/},
-                    onSearchQueryChanged = {/*TODO*/},
-                    onSearch = {/*TODO*/},
+                    onFiltersButtonClicked = { onAction(HomeUiAction.OnFiltersButtonClicked) },
+                    onSearchQueryChanged = { onAction(HomeUiAction.OnSearchQueryChanged(it)) },
+                    onSearch = { onAction(HomeUiAction.OnSearch(it)) },
                     searchQuery = searchQuery,
                     isSearching = isSearching,
-                    onChangeSearchingStatus = {/*TODO*/}
+                    onChangeSearchingStatus = { onAction(HomeUiAction.OnChangeSearchingStatus(it)) }
                 )
             }
             //ads pager
-            item{
-                AdvertisementSection(ads = emptyList())
+            item {
+                AdvertisementSection(ads = ads)
             }
             //categories
-            item{
-                CategoriesSection(emptyList())
+            item {
+                CategoriesSection(categories)
             }
             //flash sale (optional)
-            item{
-                FlashSaleSection(0)
+            item {
+                FlashSaleSection(flashSaleEndsAtEpochSeconds)
             }
             //items
-            item{
+            item {
                 LabelFilterSection(
-                    labels = emptyList(),
-                    selectedLabel = "",
-                    onSelectLabel = {}
+                    labels = labels,
+                    selectedLabel = selectedLabel,
+                    onSelectLabel = { onAction(HomeUiAction.OnSelectLabel(it)) }
                 )
             }
-            item{
-                ProductItems()
+            item {
+                ProductItems(
+                    products = products,
+                    wishlistedProducts = wishlistedProducts,
+                    onProductClicked = { onAction(HomeUiAction.OnProductClicked(it)) },
+                    onWishlistProduct = { onAction(HomeUiAction.OnWishlistProduct(it)) },
+                    screenWidth = screenWidth.value.toInt()
+                )
             }
         }
     }

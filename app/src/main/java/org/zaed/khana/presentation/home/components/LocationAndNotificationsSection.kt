@@ -24,7 +24,8 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun LocationAndNotificationsSection(
-    onNotificationsButtonClicked: () -> Unit = {},
+    onNotificationsButtonClicked: () -> Unit,
+    hasNewNotification: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -63,6 +64,6 @@ fun LocationAndNotificationsSection(
 @Composable
 private fun LocationAndNotificationsSectionPreview() {
     KhanaTheme {
-        LocationAndNotificationsSection(modifier = Modifier.padding(horizontal = 16.dp))
+        LocationAndNotificationsSection({}, true, modifier = Modifier.padding(horizontal = 16.dp))
     }
 }
