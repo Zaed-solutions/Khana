@@ -1,6 +1,8 @@
 [versions]
 agp = "8.5.2"
 coreSplashscreen = "1.0.1"
+firebaseBom = "33.2.0"
+firebase-service ="4.4.2"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -30,6 +32,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
 kotlin-compose-compiler-plugin = { module = "org.jetbrains.kotlin:kotlin-compose-compiler-plugin", version.ref = "kotlinComposeCompilerPlugin" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-client" }
@@ -66,4 +69,5 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 realm = { id = "io.realm.kotlin", version.ref = "realm" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+firebase = { id = "com.google.gms.google-services" , version.ref ="firebase-service"}
 
