@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -26,8 +27,37 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel,
 ) {
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
-
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    HomeContent(
+        modifier = modifier,
+        hasNewNotification = state.hasNewNotification,
+        searchQuery = state.searchQuery,
+        isSearching = state.isSearching,
+        ads = state.ads,
+        categories = state.categories,
+        flashSaleEndsAtEpochSeconds = state.flashSaleEndsAtEpochSeconds,
+        labels = state.labels,
+        selectedLabel = state.selectedLabel,
+        products = state.products,
+        wishlistedProducts = state.wishlistedProducts,
+        onAction = { action ->
+            when(action){
+                HomeUiAction.OnFiltersButtonClicked -> {
+                    TODO("navigate to filters screen")
+                }
+                HomeUiAction.OnNotificationButtonClicked -> {
+                    TODO("navigate to notifications screen")
+                }
+                is HomeUiAction.OnProductClicked -> {
+                    TODO("navigate to product details")
+                }
+                is HomeUiAction.OnSearch -> {
+                    TODO("navigate to search results screen")
+                }
+                else -> viewModel.handleUiAction(action)
+            }
+        }
+    )
 }
 
 @Composable
