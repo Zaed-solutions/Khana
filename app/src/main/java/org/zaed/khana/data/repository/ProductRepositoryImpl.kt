@@ -31,4 +31,8 @@ class ProductRepositoryImpl (
         val request = ProductRequest.RemoveWishlistedProduct(productId = productId, userId = userId)
         return productRemoteSource.removeWishlistedProduct(request)
     }
+
+    override suspend fun fetchFlashSaleEndTime(): Long {
+        return productRemoteSource.fetchFlashSaleEndTime()
+    }
 }

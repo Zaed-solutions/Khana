@@ -22,7 +22,7 @@ class HomeViewModel(
         TODO("get hasNewNotifications")
         fetchAdvertisements()
         fetchCategories()
-        TODO("get flash sale end time")
+        fetchFlashSaleEndTime()
         fetchLabels()
         fetchProducts()
         fetchWishlistedProductIds()
@@ -41,6 +41,13 @@ class HomeViewModel(
             categoryRepo.fetchCategories().collect{ categories ->
                 _uiState.update { it.copy(categories = categories) }
             }
+        }
+    }
+
+    private fun fetchFlashSaleEndTime(){
+        viewModelScope.launch {
+            val time = productRepo.fetchFlashSaleEndTime()
+            _uiState.update { it.copy(flashSaleEndsAtEpochSeconds = time) }
         }
     }
 
@@ -70,12 +77,6 @@ class HomeViewModel(
 
     fun handleUiAction(action: HomeUiAction){
         when(action){
-            is HomeUiAction.OnChangeSearchingStatus -> {
-                updateSearchingStatus(action.isSearching)
-            }
-            is HomeUiAction.OnSearchQueryChanged -> {
-                updateSearchQuery(action.newQuery)
-            }
             is HomeUiAction.OnSelectLabel -> {
                 updateSelectedLabel(action.label)
             }
@@ -83,16 +84,6 @@ class HomeViewModel(
                 wishlistProduct(action.productId)
             }
             else -> Unit
-        }
-    }
-    private fun updateSearchingStatus(isSearching: Boolean){
-        viewModelScope.launch {
-            _uiState.update { it.copy(isSearching = isSearching) }
-        }
-    }
-    private fun updateSearchQuery(query: String){
-        viewModelScope.launch {
-            _uiState.update { it.copy(searchQuery = query) }
         }
     }
     private fun updateSelectedLabel(label: String){

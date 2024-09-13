@@ -25,8 +25,24 @@ class ProductRemoteDataSourceImpl(
             if(response.status == HttpStatusCode.OK) {
                 emit(response.body<List<String>>())
             }
-        }catch(e: Exception){
+        } catch(e: Exception) {
             e.printStackTrace()
+        }
+    }
+    //fetch flash sale end time in epoch seconds
+    override suspend fun fetchFlashSaleEndTime(): Long {
+        return try{
+            val response = httpClient.get {
+                endPoint(EndPoint.Product.FetchFlashSaleEndTime.route)
+            }
+            if(response.status == HttpStatusCode.OK){
+                response.body<Long>()
+            } else {
+                -1
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            -1L
         }
     }
 

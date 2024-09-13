@@ -9,4 +9,5 @@ interface ProductRepository {
     fun fetchWishlistedProductsIds(userId: String): Flow<List<String>>
     suspend fun addWishlistedProduct(productId: String, userId: String)
     suspend fun removeWishlistedProduct(productId: String, userId: String)
+    suspend fun fetchFlashSaleEndTime(): Long
 }
