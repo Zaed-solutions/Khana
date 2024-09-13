@@ -31,8 +31,6 @@ fun HomeScreen(
     HomeContent(
         modifier = modifier,
         hasNewNotification = state.hasNewNotification,
-        searchQuery = state.searchQuery,
-        isSearching = state.isSearching,
         ads = state.ads,
         categories = state.categories,
         flashSaleEndsAtEpochSeconds = state.flashSaleEndsAtEpochSeconds,
@@ -51,8 +49,8 @@ fun HomeScreen(
                 is HomeUiAction.OnProductClicked -> {
                     TODO("navigate to product details")
                 }
-                is HomeUiAction.OnSearch -> {
-                    TODO("navigate to search results screen")
+                is HomeUiAction.OnSearchClicked -> {
+                    TODO("navigate to search screen")
                 }
                 else -> viewModel.handleUiAction(action)
             }
@@ -63,8 +61,6 @@ fun HomeScreen(
 @Composable
 private fun HomeContent(
     hasNewNotification: Boolean,
-    searchQuery: String,
-    isSearching: Boolean,
     ads: List<Advertisement>,
     categories: List<Category>,
     flashSaleEndsAtEpochSeconds: Long,
@@ -95,11 +91,7 @@ private fun HomeContent(
             item {
                 SearchAndFiltersSection(
                     onFiltersButtonClicked = { onAction(HomeUiAction.OnFiltersButtonClicked) },
-                    onSearchQueryChanged = { onAction(HomeUiAction.OnSearchQueryChanged(it)) },
-                    onSearch = { onAction(HomeUiAction.OnSearch(it)) },
-                    searchQuery = searchQuery,
-                    isSearching = isSearching,
-                    onChangeSearchingStatus = { onAction(HomeUiAction.OnChangeSearchingStatus(it)) }
+                    onChangeSearchingStatus = { if(it) onAction(HomeUiAction.OnSearchClicked) }
                 )
             }
             //ads pager
