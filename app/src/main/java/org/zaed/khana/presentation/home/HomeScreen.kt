@@ -9,8 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.datetime.Clock
 import org.zaed.khana.data.model.Advertisement
 import org.zaed.khana.data.model.Category
 import org.zaed.khana.data.model.Product
@@ -21,6 +23,7 @@ import org.zaed.khana.presentation.home.components.LabelFilterSection
 import org.zaed.khana.presentation.home.components.LocationAndNotificationsSection
 import org.zaed.khana.presentation.home.components.ProductItems
 import org.zaed.khana.presentation.home.components.SearchAndFiltersSection
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun HomeScreen(
@@ -124,5 +127,26 @@ private fun HomeContent(
                 )
             }
         }
+    }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun HomeScreenContentPreview() {
+    val ads = listOf(Advertisement(title = "Test Advertisement 1", "Test Description 1", ""), Advertisement(title = "Test Advertisement 2", "Test Description 2", ""))
+    val categories = listOf(Category("","Jacket"), Category("","Shirt"), Category("","Pants"), Category("","Shoes"), )
+    val products = listOf(Product(name = "Product 1", rating = 4.3f, basePrice = 130f), Product(name = "Product 2", rating = 1.6f, basePrice = 236f), Product(name = "Product 3", rating = 4.1f, basePrice = 99.99f), Product(name = "Product 4", rating = 3.2f, basePrice = 350f), )
+    KhanaTheme {
+        HomeContent(
+            hasNewNotification = true,
+            ads = ads,
+            categories = categories,
+            flashSaleEndsAtEpochSeconds = Clock.System.now().epochSeconds+30000,
+            labels = listOf("All", "Newest", "Popular", "Men", "Women"),
+            selectedLabel = "All",
+            products = products,
+            wishlistedProducts = emptyList(),
+            onAction ={}
+        )
     }
 }

@@ -16,10 +16,10 @@ import org.zaed.khana.data.source.remote.ProductRemoteDataSourceImpl
 import kotlin.time.Duration.Companion.seconds
 
 val remoteDataSourceModule = module {
-    single<AdvertisementRemoteDataSource>{AdvertisementRemoteDataSourceImpl(get())}
-    single<CategoryRemoteDataSource>{CategoryRemoteDataSourceImpl(get())}
-    single<ProductRemoteDataSource>{ProductRemoteDataSourceImpl(get())}
-    single<HttpClient>{
+    single<AdvertisementRemoteDataSource> { AdvertisementRemoteDataSourceImpl(get()) }
+    single<CategoryRemoteDataSource> { CategoryRemoteDataSourceImpl(get()) }
+    single<ProductRemoteDataSource> { ProductRemoteDataSourceImpl(get()) }
+    single<HttpClient> {
         HttpClient {
             install(ContentNegotiation) {
                 json(Json {
