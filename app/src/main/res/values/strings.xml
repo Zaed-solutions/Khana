@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Khana</string>
+    <string name="sign_in">Sign In</string>
+    <string name="hi_welcome_back_you_ve_been_missed">Hi! Welcome back, you\'ve been missed</string>
+    <string name="or_sign_in_with">"Or Sign in with "</string>
+    <string name="don_t_have_an_account">"Don't have an account? "</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="password">Password</string>
+    <string name="toggle_password_visibility">Toggle password visibility</string>
+    <string name="email">Email</string>
+    <string name="sign_in_with_social_account">Sign in with social account</string>
 </resources>
