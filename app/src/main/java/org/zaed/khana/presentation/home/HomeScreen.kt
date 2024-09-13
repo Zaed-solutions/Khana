@@ -39,7 +39,7 @@ fun HomeScreen(
         labels = state.labels,
         selectedLabel = state.selectedLabel,
         products = state.products,
-        wishlistedProducts = state.wishlistedProducts,
+        wishlistedProducts = state.wishlistedProductsIds,
         onAction = { action ->
             when(action){
                 HomeUiAction.OnFiltersButtonClicked -> {

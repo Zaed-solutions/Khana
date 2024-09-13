@@ -6,6 +6,7 @@ import org.zaed.khana.data.model.Category
 import org.zaed.khana.data.model.Product
 
 data class HomeUiState(
+    val currentUserId: String = "",
     val hasNewNotification: Boolean= false,
     val searchQuery: String = "",
     val isSearching: Boolean = false,
@@ -15,5 +16,5 @@ data class HomeUiState(
     val labels: List<String> = emptyList(),
     val selectedLabel: String = "All",
     val products: List<Product> = emptyList(),
-    val wishlistedProducts: List<String> = emptyList(),
+    val wishlistedProductsIds: List<String> = emptyList(),
 )
