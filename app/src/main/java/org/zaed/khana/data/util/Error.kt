@@ -3,7 +3,7 @@ package org.zaed.khana.data.util
 import kotlinx.serialization.Serializable
 
 
-@kotlinx.serialization.Serializable
+@Serializable
 sealed interface Error
 
 fun Error.userMessage(): String {

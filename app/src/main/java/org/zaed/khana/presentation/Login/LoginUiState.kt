@@ -1,11 +1,12 @@
 package org.zaed.khana.presentation.Login
 
-import org.zaed.khana.presentation.utils.AuthError
+import org.zaed.khana.data.util.AuthResults
+
 
 data class LoginUiState(
     val email: String = "",
     val password: String = "",
-    val emailError: AuthError = AuthError.NO_ERROR,
-    val passwordError: AuthError = AuthError.NO_ERROR,
+    val emailError: AuthResults = AuthResults.IDLE,
+    val passwordError: AuthResults = AuthResults.IDLE,
     val loading: Boolean = false
 )
