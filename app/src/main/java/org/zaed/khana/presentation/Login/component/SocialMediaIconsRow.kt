@@ -11,7 +11,6 @@ import org.zaed.khana.presentation.Login.LoginUIAction
 @Composable
 fun SocialMediaIconsRow(
     modifier: Modifier = Modifier,
-    action: (LoginUIAction) -> Unit,
     onSignInWithGoogleClicked: () -> Unit,
     onSignInWithFacebookClicked: () -> Unit,
     onSignInWithMicrosoftClicked: () -> Unit

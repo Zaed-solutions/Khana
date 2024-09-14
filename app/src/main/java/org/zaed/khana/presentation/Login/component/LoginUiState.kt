@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login
+package org.zaed.khana.presentation.Login.component
 
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.EmailFieldError

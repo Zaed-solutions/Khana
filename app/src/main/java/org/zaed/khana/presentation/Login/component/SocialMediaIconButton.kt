@@ -22,7 +22,7 @@ fun SocialMediaIconButton(
     onClick: () -> Unit,
 ) {
     IconButton(
-        onClick = onClick,
+        onClick =  onClick,
         modifier = modifier
             .size(70.dp)
             .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), CircleShape)

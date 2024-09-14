@@ -94,5 +94,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.google.auth.library.oauth2.http)
 
+    implementation ("com.facebook.android:facebook-android-sdk:14.1.0")
+
+
 
 }

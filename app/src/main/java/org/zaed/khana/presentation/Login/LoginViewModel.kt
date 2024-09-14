@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.auth.repository.AuthenticationRepository
-import org.zaed.khana.data.auth.source.remote.model.User
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.EmailFieldError
 import org.zaed.khana.data.util.PasswordFieldError
 import org.zaed.khana.data.util.Result
+import org.zaed.khana.presentation.Login.component.LoginUiState
 import org.zaed.khana.presentation.Login.util.Validator
 
 class LoginViewModel(
@@ -50,6 +50,7 @@ class LoginViewModel(
             )
         }
     }
+
     private fun updateEmailError(message: EmailFieldError) {
         _uiState.update {
             it.copy(
@@ -57,6 +58,7 @@ class LoginViewModel(
             )
         }
     }
+
     private fun updatePasswordError(message: PasswordFieldError) {
         _uiState.update {
             it.copy(
@@ -114,22 +116,21 @@ class LoginViewModel(
             )
         }
     }
-    fun onGoogleSignedIn(result: Result<AuthResult, AuthResults>) {
 
-            result.onSuccessWithData { authResult ->
-                updateActionResult(AuthResults.LOGIN_SUCCESS)
-                viewModelScope.launch (Dispatchers.IO) {
-                    authRepo.saveUser(authResult.user)
-                }
-                getSignedInUser()
-            }.onFailure { error ->
-                updateActionResult(error)
+    fun signInWithProvider(result: Result<AuthResult, AuthResults>) {
+        result.onSuccessWithData { authResult ->
+            updateActionResult(AuthResults.LOGIN_SUCCESS)
+            viewModelScope.launch(Dispatchers.IO) {
+                authRepo.saveUser(authResult.user)
             }
-
+            getSignedInUser()
+        }.onFailure { error ->
+            updateActionResult(error)
+        }
     }
 
     fun handleUiState(it: LoginUIAction) {
-        when(it){
+        when (it) {
             is LoginUIAction.OnEmailChanged -> updateEmail(it.newEmail)
             is LoginUIAction.OnPasswordChanged -> updatePassword(it.newPass)
             LoginUIAction.OnSignInClicked -> TODO()
@@ -151,6 +152,4 @@ class LoginViewModel(
             )
         }
     }
-
-
 }

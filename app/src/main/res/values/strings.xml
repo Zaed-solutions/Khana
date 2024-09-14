@@ -10,4 +10,11 @@
     <string name="toggle_password_visibility">Toggle password visibility</string>
     <string name="email">Email</string>
     <string name="sign_in_with_social_account">Sign in with social account</string>
+
+
+    <string name="facebook_app_id">929458978950223</string>
+    <string name="fb_login_protocol_scheme">fb929458978950223</string>
+    <string name="facebook_client_token">8aeb171232aea750345d59f192e2179c</string>
+
+
 </resources>
