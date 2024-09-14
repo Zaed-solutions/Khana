@@ -11,7 +11,10 @@ import org.zaed.khana.presentation.Login.LoginUIAction
 @Composable
 fun SocialMediaIconsRow(
     modifier: Modifier = Modifier,
-    action: (LoginUIAction) -> Unit
+    action: (LoginUIAction) -> Unit,
+    onSignInWithGoogleClicked: () -> Unit,
+    onSignInWithFacebookClicked: () -> Unit,
+    onSignInWithMicrosoftClicked: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -20,15 +23,16 @@ fun SocialMediaIconsRow(
     ) {
         SocialMediaIconButton(
             icon = R.drawable.facebook,
-            action = action
+            onClick = onSignInWithFacebookClicked
         )
         SocialMediaIconButton(
             icon = R.drawable.google,
-            action = action
+            onClick = onSignInWithGoogleClicked
+
         )
         SocialMediaIconButton(
             icon = R.drawable.microsoft,
-            action = action
+            onClick = onSignInWithMicrosoftClicked
         )
 
     }

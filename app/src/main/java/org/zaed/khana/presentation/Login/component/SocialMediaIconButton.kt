@@ -18,16 +18,11 @@ import org.zaed.khana.presentation.Login.LoginUIAction
 @Composable
 fun SocialMediaIconButton(
     modifier: Modifier = Modifier,
-    icon: Int, action: (LoginUIAction) -> Unit,
+    icon: Int,
+    onClick: () -> Unit,
 ) {
     IconButton(
-        onClick = {
-            when (icon) {
-                R.drawable.google -> action(LoginUIAction.OnLoginWithGoogleClicked)
-                R.drawable.facebook -> action(LoginUIAction.OnLoginWithFacebookClicked)
-                R.drawable.microsoft -> action(LoginUIAction.OnLoginWithMicrosoftClicked)
-            }
-        },
+        onClick = onClick,
         modifier = modifier
             .size(70.dp)
             .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), CircleShape)

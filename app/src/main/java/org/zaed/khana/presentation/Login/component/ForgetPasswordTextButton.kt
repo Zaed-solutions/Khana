@@ -14,9 +14,9 @@ import org.zaed.khana.presentation.Login.LoginUIAction
 @Composable
 fun ForgetPasswordTextButton(
     modifier: Modifier = Modifier,
-    onClick: (LoginUIAction) -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
-    TextButton({ onClick(LoginUIAction.OnForgetPasswordClicked) }) {
+    TextButton( onClick ) {
         Text(
             text = stringResource(R.string.forget_password),
             modifier = modifier.fillMaxWidth(),

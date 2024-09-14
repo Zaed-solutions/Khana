@@ -17,7 +17,7 @@ import org.zaed.khana.presentation.Login.LoginUIAction
 @Composable
 fun SignUpTextButton(
     modifier: Modifier = Modifier,
-    action: (LoginUIAction) -> Unit,
+    onClick: () -> Unit,
 ) {
     val annotatedString = buildAnnotatedString {
         append(stringResource(R.string.don_t_have_an_account))
@@ -29,10 +29,11 @@ fun SignUpTextButton(
     Text(
         text = annotatedString,
         modifier = Modifier
-            .fillMaxWidth()
             .clickable {
-                action(LoginUIAction.OnSignInClicked)
-            }.then(modifier),
+                onClick()
+            }
+            .then(modifier)
+            .fillMaxWidth(),
         textAlign = TextAlign.Center
     )
 }
