@@ -1,5 +1,8 @@
 package org.zaed.khana.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Product(
     val id: String = "",
     val name: String = "",
