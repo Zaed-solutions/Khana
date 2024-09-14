@@ -8,32 +8,41 @@ sealed interface Error
 
 fun Error.userMessage(): String {
     return when (this) {
-        is AuthResults -> userMessage
+        is AuthResults -> this.userMessage
+        is EmailFieldError -> this.userMessage
+        is PasswordFieldError -> this.userMessage
     }
 }
 
 fun Error.isNotIdle(): Boolean {
-    return when (this) {
-        is AuthResults -> this !in listOf(
-            AuthResults.IDLE,
-            AuthResults.INVALID_EMAIL,
-            AuthResults.INVALID_NAME,
-            AuthResults.INVALID_PASSWORD,
-            AuthResults.PASSWORD_DOES_NOT_MATCH
-        )
+    when(this){
+        is AuthResults -> return this != AuthResults.IDLE
+        is EmailFieldError -> return this != EmailFieldError.IDLE
+        is PasswordFieldError -> return this != PasswordFieldError.IDLE
     }
 }
 
+@Serializable
+enum class EmailFieldError(val userMessage: String):Error{
+    IDLE(""),
+    INVALID_EMAIL("Invalid Email"),
+    EMAIL_FIELD_IS_EMPTY("Email field is empty"),
+    EMAIL_NOT_REGISTERED("Email not registered"),
+    EMAIL_ALREADY_REGISTERED("Email already registered"),
+    RESET_EMAIL_SENT("Reset Email Sent"),
 
-
+}
+@Serializable
+enum class PasswordFieldError(val userMessage: String):Error {
+    IDLE(""),
+    INVALID_PASSWORD("Invalid Password"),
+    PASSWORD_FIELD_IS_EMPTY("Password field is empty"),
+    PASSWORD_DOES_NOT_MATCH("Password does not match"),
+}
 @Serializable
 enum class AuthResults(val userMessage: String) : Error {
     IDLE(""),
     INVALID_NAME("Invalid Name"),
-    PASSWORD_DOES_NOT_MATCH("Password does not match"),
-    INVALID_EMAIL("Invalid Email"),
-    INVALID_PASSWORD("Invalid Password"),
-    RESET_EMAIL_SENT("Reset Email Sent"),
     LOGIN_SUCCESS("Login Successful"),
     LOGIN_FIRST_TO_ACCESS_ALL_FEATURES("Login first to access all features"),
     LOGIN_FAILED("Login Failed"),
