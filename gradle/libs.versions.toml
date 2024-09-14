@@ -6,7 +6,9 @@ firebase-service ="4.4.2"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
+googleAuthLibraryOauth2Http = "1.19.0"
 junitVersion = "1.2.1"
+playServicesAuth = "21.2.0"
 espressoCore = "3.6.1"
 kotlinComposeCompilerPlugin = "2.0.0"
 kotlinComposeCompilerPluginEmbeddable = "2.0.0"
@@ -23,6 +25,8 @@ kotlinx-datetime = "0.5.0"
 navigationCompose = "2.8.0-rc01"
 koinAndroidxCompose = "3.5.6"
 androidx-appcompat = "1.7.0"
+firebaseAuthKtx = "23.0.0"
+firebaseFirestoreKtx = "25.1.0"
 
 [libraries]
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
@@ -62,6 +66,11 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

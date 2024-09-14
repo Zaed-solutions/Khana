@@ -1,0 +1,29 @@
+package org.zaed.khana.data.auth.source.remote
+
+import android.net.Uri
+import kotlinx.coroutines.flow.Flow
+import org.zaed.khana.data.auth.source.remote.model.User
+import org.zaed.khana.data.util.AuthResults
+import org.zaed.khana.data.util.Result
+
+interface AuthenticationRemoteDataSource {
+    fun sendPasswordResetEmail(email: String): Flow<Result<AuthResults, AuthResults>>
+    fun signInWithEmail(
+        email: String,
+        password: String
+    ): Flow<Result<User, AuthResults>>
+
+    fun signUpWithEmail(
+        name: String,
+        avatarByteArray: Uri,
+        email: String,
+        password: String
+    ): Flow<Result<User, AuthResults>>
+
+    suspend fun getSignedInUser(): Result<User, AuthResults>
+    suspend fun logout(): Result<AuthResults, AuthResults>
+    suspend fun deleteAccount(userId: String): Result<Unit, AuthResults>
+    suspend fun saveUser(user: User)
+
+
+}
