@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Khana</string>
+    <string name="location">Location</string>
+    <string name="search">Search</string>
+    <string name="category">Category</string>
+    <string name="flash_sale">Flash Sale</string>
 </resources>

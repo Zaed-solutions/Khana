@@ -1,4 +1,4 @@
-package org.zaed.khana.ui.theme
+package org.zaed.khana.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

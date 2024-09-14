@@ -72,6 +72,7 @@ dependencies {
     implementation (libs.realm.sync)
     // If using coroutines with the SDK
     implementation (libs.kotlinx.coroutines.core)
+    implementation("com.tbuonomo:dotsindicator:5.0")
     implementation(libs.coil.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.ktor.client.core)
