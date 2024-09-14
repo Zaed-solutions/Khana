@@ -10,21 +10,25 @@ import kotlinx.coroutines.flow.flow
 import org.zaed.khana.data.model.Category
 import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.endPoint
+import org.zaed.khana.data.util.CategoryResult
+import org.zaed.khana.data.util.Result
 
 class CategoryRemoteDataSourceImpl(
     private val httpClient: HttpClient
 ) : CategoryRemoteDataSource {
     //fetch the displayed categories in home screen
-    override fun fetchCategories(): Flow<List<Category>> = flow {
+    override fun fetchCategories(): Flow<Result<List<Category>, CategoryResult>> = flow {
+        emit(Result.Loading)
         try{
             val response = httpClient.get{
                 endPoint(EndPoint.Category.FetchCategories.route)
             }
             if(response.status == HttpStatusCode.OK) {
-                emit(response.body<List<Category>>())
+                emit(Result.success(response.body<List<Category>>()))
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            emit(Result.failure(CategoryResult.SERVER_ERROR))
         }
     }
 }

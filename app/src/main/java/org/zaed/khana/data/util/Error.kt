@@ -9,6 +9,9 @@ sealed interface Error
 fun Error.userMessage(): String {
     return when (this) {
         is AuthResults -> userMessage
+        is AdvertisementResult -> userMessage
+        is CategoryResult -> userMessage
+        is ProductResult -> userMessage
     }
 }
 
@@ -21,10 +24,38 @@ fun Error.isNotIdle(): Boolean {
             AuthResults.INVALID_PASSWORD,
             AuthResults.PASSWORD_DOES_NOT_MATCH
         )
+        is AdvertisementResult -> this != AdvertisementResult.IDLE
+        is CategoryResult -> this != CategoryResult.IDLE
+        is ProductResult -> this != ProductResult.IDLE
     }
 }
 
+@Serializable
+enum class AdvertisementResult(val userMessage: String) : Error {
+    IDLE(""),
+    SERVER_ERROR("Failed to fetch advertisements"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
 
+@Serializable
+enum class CategoryResult(val userMessage: String) : Error {
+    IDLE(""),
+    SERVER_ERROR("Failed to fetch categories"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+
+@Serializable
+enum class ProductResult(val userMessage: String) : Error {
+    IDLE(""),
+    FETCH_LABELS_FAILED("Failed to fetch product labels"),
+    FETCH_FLASH_SALE_END_TIME_FAILED("Failed to fetch flash sale end time"),
+    FETCH_PRODUCTS_FAILED("Failed to fetch products"),
+    FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),
+    ADD_WISHLISTED_PRODUCTS_FAILED("Failed to add wishlisted product"),
+    REMOVE_WISHLISTED_PRODUCTS_FAILED("Failed to remove wishlisted product"),
+    NETWORK_ERROR("Failed to connect to the network"),
+    SERVER_ERROR("Server error"),
+}
 
 @Serializable
 enum class AuthResults(val userMessage: String) : Error {
