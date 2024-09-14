@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -43,9 +44,10 @@ android {
     buildFeatures {
         compose = true
     }
+
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/*"
         }
     }
 }
@@ -73,11 +75,14 @@ dependencies {
     implementation (libs.realm.sync)
     // If using coroutines with the SDK
     implementation (libs.kotlinx.coroutines.core)
+    implementation(libs.play.services.auth)
     implementation(libs.coil.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.ktor.client.core)
     implementation(libs.kotlin.compose.compiler.plugin)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -87,5 +92,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(platform(libs.firebase.bom))
+    implementation(libs.google.auth.library.oauth2.http)
+
 
 }
