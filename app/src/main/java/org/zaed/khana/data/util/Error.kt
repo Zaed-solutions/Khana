@@ -48,6 +48,7 @@ enum class CategoryResult(val userMessage: String) : Error {
 enum class ProductResult(val userMessage: String) : Error {
     IDLE(""),
     FETCH_LABELS_FAILED("Failed to fetch product labels"),
+    CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED("Failed to check whether product is wishlisted"),
     FETCH_FLASH_SALE_END_TIME_FAILED("Failed to fetch flash sale end time"),
     FETCH_PRODUCTS_FAILED("Failed to fetch products"),
     FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),

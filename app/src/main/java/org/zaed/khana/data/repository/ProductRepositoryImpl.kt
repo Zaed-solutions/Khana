@@ -10,6 +10,19 @@ import org.zaed.khana.data.util.Result
 class ProductRepositoryImpl (
     private val productRemoteSource: ProductRemoteDataSource
 ): ProductRepository {
+    override suspend fun fetchProductById(id: String): Result<Product, ProductResult> {
+        val request = ProductRequest.FetchProductById(id)
+        return productRemoteSource.fetchProductById(request)
+    }
+
+    override suspend fun checkIfIsProductWishlisted(
+        userId: String,
+        productId: String
+    ): Result<Boolean, ProductResult> {
+        val request = ProductRequest.CheckIfIsProductWishlisted(userId = userId, productId = productId)
+        return productRemoteSource.checkIfIsProductWishlisted(request)
+    }
+
     override fun fetchLabels(): Flow<Result<List<String>, ProductResult>> {
         return productRemoteSource.fetchLabels()
     }

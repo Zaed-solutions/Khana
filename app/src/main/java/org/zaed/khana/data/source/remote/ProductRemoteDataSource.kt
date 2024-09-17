@@ -7,6 +7,8 @@ import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.Result
 
 interface ProductRemoteDataSource {
+    suspend fun fetchProductById(request: ProductRequest.FetchProductById): Result<Product, ProductResult>
+    suspend fun checkIfIsProductWishlisted(request: ProductRequest.CheckIfIsProductWishlisted): Result<Boolean, ProductResult>
     fun fetchLabels(): Flow<Result<List<String>, ProductResult>>
     suspend fun fetchFlashSaleEndTime(): Result<Long, ProductResult>
     fun fetchProductsByLabel(request: ProductRequest.FetchProductsByLabelRequest): Flow<Result<List<Product>, ProductResult>>

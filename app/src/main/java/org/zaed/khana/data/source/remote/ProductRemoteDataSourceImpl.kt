@@ -18,6 +18,38 @@ import org.zaed.khana.data.util.Result
 class ProductRemoteDataSourceImpl(
     private val httpClient: HttpClient,
 ) : ProductRemoteDataSource {
+    override suspend fun fetchProductById(request: ProductRequest.FetchProductById): Result<Product, ProductResult> {
+        return try{
+            val response = httpClient.get {
+                endPoint(EndPoint.Product.FetchProductById.route)
+            }
+            if(response.status == HttpStatusCode.OK){
+                Result.success(response.body<Product>())
+            } else {
+                Result.failure(ProductResult.FETCH_PRODUCTS_FAILED)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(ProductResult.SERVER_ERROR)
+        }
+    }
+
+    override suspend fun checkIfIsProductWishlisted(request: ProductRequest.CheckIfIsProductWishlisted): Result<Boolean, ProductResult> {
+        return try{
+            val response = httpClient.get {
+                endPoint(EndPoint.Product.CheckIfProductIsWishlisted.route)
+            }
+            if(response.status == HttpStatusCode.OK){
+                Result.success(response.body<Boolean>())
+            } else {
+                Result.failure(ProductResult.CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(ProductResult.SERVER_ERROR)
+        }
+    }
+
     //fetch labels displayed above products in home screen as list of strings(e.g.: All, Newest, Popular, Man, Woman,.. etc)
     override fun fetchLabels(): Flow<Result<List<String>, ProductResult>> = flow {
         emit(Result.Loading)

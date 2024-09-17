@@ -4,6 +4,9 @@ import kotlinx.serialization.Serializable
 
 sealed interface ProductRequest {
     @Serializable
+    data class FetchProductById(val id: String): ProductRequest
+    data class CheckIfIsProductWishlisted(val userId: String, val productId: String): ProductRequest
+    @Serializable
     data class FetchProductsByLabelRequest(val label: String): ProductRequest
     @Serializable
     data class FetchWishlistedProductsIds(val userId: String): ProductRequest

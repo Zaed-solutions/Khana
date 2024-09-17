@@ -4,7 +4,7 @@ import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.Product
 
 data class ProductDetailsUiState(
-    val userId: String = "",
+    val currentUserId: String = "",
     val productId: String = "",
     val isWishlisted: Boolean = false,
     val product: Product = Product(),

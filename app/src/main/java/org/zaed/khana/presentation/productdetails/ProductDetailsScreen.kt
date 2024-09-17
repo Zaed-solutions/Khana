@@ -23,6 +23,7 @@ import org.zaed.khana.presentation.productdetails.components.SizeSelectionSectio
 fun ProductDetailsScreen(
     modifier: Modifier = Modifier,
     productId: String,
+    onBackPressed: () -> Unit,
     viewModel: ProductDetailsViewModel = koinViewModel()
 ) {
     LaunchedEffect(key1 = true) {
@@ -30,7 +31,12 @@ fun ProductDetailsScreen(
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     ProductDetailsScreenContent(
-        onAction = {},
+        onAction = { action ->
+            when(action){
+                is ProductDetailsUiAction.OnBackPressed -> onBackPressed()
+                else -> viewModel.handleUiAction(action)
+            }
+        },
         isWishlisted = state.isWishlisted,
         title = state.product.name,
         category = state.product.category.categoryTitle,
