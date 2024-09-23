@@ -3,7 +3,7 @@ package org.zaed.khana.data.util
 import kotlinx.serialization.Serializable
 
 
-@kotlinx.serialization.Serializable
+@Serializable
 sealed interface Error
 
 fun Error.userMessage(): String {
@@ -24,6 +24,7 @@ fun Error.isNotIdle(): Boolean {
             AuthResults.INVALID_PASSWORD,
             AuthResults.PASSWORD_DOES_NOT_MATCH
         )
+
         is AdvertisementResult -> this != AdvertisementResult.IDLE
         is CategoryResult -> this != CategoryResult.IDLE
         is ProductResult -> this != ProductResult.IDLE

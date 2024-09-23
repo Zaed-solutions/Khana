@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.repository.ProductRepository
+import org.zaed.khana.data.util.ProductResult
 
 class ProductDetailsViewModel(
     private val productRepo: ProductRepository
@@ -36,70 +37,89 @@ class ProductDetailsViewModel(
             }
         }
     }
-    private fun checkIfIsWishlisted(productId: String){
+
+    private fun checkIfIsWishlisted(productId: String) {
         viewModelScope.launch {
-            productRepo.checkIfIsProductWishlisted(uiState.value.currentUserId, productId).onSuccessWithData{ isWishlisted ->
-                _uiState.update { it.copy(isWishlisted = isWishlisted) }
-            }.onFailure{ error ->
+            productRepo.checkIfIsProductWishlisted(uiState.value.currentUserId, productId)
+                .onSuccessWithData { isWishlisted ->
+                    _uiState.update { it.copy(isWishlisted = isWishlisted) }
+                }.onFailure { error ->
                 Log.e("ProductDetailsViewModel:checkIfIsWishlisted", error.userMessage)
             }
         }
     }
-    fun handleUiAction(action: ProductDetailsUiAction){
-        when(action){
+
+    fun handleUiAction(action: ProductDetailsUiAction) {
+        when (action) {
             is ProductDetailsUiAction.OnSelectSize -> {
                 updateSelectedSize(action.size)
             }
+
             is ProductDetailsUiAction.OnSelectColor -> {
                 updateSelectedColor(action.hexColor)
             }
+
             is ProductDetailsUiAction.OnWishlistProduct -> {
                 wishlistProduct(productId = uiState.value.productId)
             }
+
             is ProductDetailsUiAction.OnAddToCartClicked -> {
                 addItemToCart()
             }
+
             else -> Unit
         }
     }
 
-    private fun addItemToCart(){
+    private fun addItemToCart() {
         viewModelScope.launch {
-            with(uiState.value){
-                productRepo.addItemToCart(currentUserId, productId, selectedColor, selectedSize).onSuccess {
-                    //TODO: show notification to user
-                }.onFailure {
-                    //TODO: handle error
+            with(uiState.value) {
+                productRepo.addItemToCart(currentUserId, productId, selectedColor, selectedSize)
+                    .onSuccess {
+                        _uiState.update { it.copy(result = ProductResult.IDLE) }
+                    }.onFailure { error ->
+                    Log.e("ProductDetailsViewModel:addItemToCart", error.userMessage)
+                    _uiState.update { it.copy(result = error) }
                 }
             }
         }
     }
 
-    private fun wishlistProduct(productId: String){
+    private fun wishlistProduct(productId: String) {
         viewModelScope.launch {
-            if(uiState.value.isWishlisted) {
-                productRepo.removeWishlistedProduct(productId = productId, userId = uiState.value.currentUserId).onSuccess {
-                    _uiState.update { it.copy(isWishlisted = false) }
+            if (uiState.value.isWishlisted) {
+                productRepo.removeWishlistedProduct(
+                    productId = productId,
+                    userId = uiState.value.currentUserId
+                ).onSuccess {
+                    _uiState.update { it.copy(isWishlisted = false, result = ProductResult.IDLE) }
                 }.onFailure { error ->
                     Log.e("ProductDetailsViewModel:wishlistProduct", error.userMessage)
+                    _uiState.update { it.copy(result = error) }
                 }
             } else {
-                productRepo.addWishlistedProduct(productId = productId, userId = uiState.value.currentUserId).onSuccess {
-                    _uiState.update { it.copy(isWishlisted = true) }
+                productRepo.addWishlistedProduct(
+                    productId = productId,
+                    userId = uiState.value.currentUserId
+                ).onSuccess {
+                    _uiState.update { it.copy(isWishlisted = true, result = ProductResult.IDLE) }
                 }.onFailure { error ->
                     Log.e("ProductDetailsViewModel:wishlistProduct", error.userMessage)
+                    _uiState.update { it.copy(result = error) }
                 }
             }
         }
     }
 
-    private fun updateSelectedColor(hexColor: String){
+    private fun updateSelectedColor(hexColor: String) {
         viewModelScope.launch {
-            val selectedColor = uiState.value.product.availableColors.find { it.hex == hexColor }?:Color()
+            val selectedColor =
+                uiState.value.product.availableColors.find { it.hex == hexColor } ?: Color()
             _uiState.update { it.copy(selectedColor = selectedColor) }
         }
     }
-    private fun updateSelectedSize(size: String){
+
+    private fun updateSelectedSize(size: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(selectedSize = size) }
         }

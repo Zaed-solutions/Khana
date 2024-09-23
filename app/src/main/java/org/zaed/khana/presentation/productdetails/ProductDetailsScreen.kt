@@ -6,13 +6,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.Color
+import org.zaed.khana.data.util.ProductResult
+import org.zaed.khana.data.util.isNotIdle
 import org.zaed.khana.presentation.home.components.ColorSelectionSection
 import org.zaed.khana.presentation.productdetails.components.ImagesPreviewPager
 import org.zaed.khana.presentation.productdetails.components.ProductDetailsBottomBar
@@ -33,7 +40,7 @@ fun ProductDetailsScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     ProductDetailsScreenContent(
         onAction = { action ->
-            when(action){
+            when (action) {
                 is ProductDetailsUiAction.OnBackPressed -> onBackPressed()
                 else -> viewModel.handleUiAction(action)
             }
@@ -48,7 +55,8 @@ fun ProductDetailsScreen(
         availableColors = state.product.availableColors,
         selectedColor = state.selectedColor,
         price = state.product.basePrice,
-        imagesUrls = state.product.previewImagesLinks
+        imagesUrls = state.product.previewImagesLinks,
+        actionResult = state.result
     )
 }
 
@@ -68,8 +76,42 @@ private fun ProductDetailsScreenContent(
     availableColors: List<Color>,
     selectedColor: Color,
     price: Float,
+    actionResult: ProductResult
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(key1 = actionResult) {
+        if (actionResult.isNotIdle()) {
+            snackbarHostState.showSnackbar(
+                message = actionResult.userMessage,
+                actionLabel = when (actionResult) {
+                    ProductResult.ADD_ITEM_TO_CART_FAILED,
+                    ProductResult.ADD_WISHLISTED_PRODUCTS_FAILED -> "Retry"
+                    else -> null
+                }
+            ).run {
+                when (this) {
+                    SnackbarResult.Dismissed -> {}
+                    SnackbarResult.ActionPerformed -> {
+                        when (actionResult) {
+                            ProductResult.ADD_ITEM_TO_CART_FAILED -> {
+                                onAction(
+                                    ProductDetailsUiAction.OnAddToCartClicked
+                                )
+                            }
+
+                            ProductResult.ADD_WISHLISTED_PRODUCTS_FAILED -> {
+                                onAction(ProductDetailsUiAction.OnWishlistProduct)
+                            }
+
+                            else -> Unit
+                        }
+                    }
+                }
+            }
+        }
+    }
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             ProductDetailsTopBar(
                 onBackPressed = { onAction(ProductDetailsUiAction.OnBackPressed) },
