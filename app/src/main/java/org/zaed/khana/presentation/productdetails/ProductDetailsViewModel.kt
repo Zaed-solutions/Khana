@@ -57,9 +57,21 @@ class ProductDetailsViewModel(
                 wishlistProduct(productId = uiState.value.productId)
             }
             is ProductDetailsUiAction.OnAddToCartClicked -> {
-                //TODO("Add Item to cart")
+                addItemToCart()
             }
             else -> Unit
+        }
+    }
+
+    private fun addItemToCart(){
+        viewModelScope.launch {
+            with(uiState.value){
+                productRepo.addItemToCart(currentUserId, productId, selectedColor, selectedSize).onSuccess {
+                    //TODO: show notification to user
+                }.onFailure {
+                    //TODO: handle error
+                }
+            }
         }
     }
 

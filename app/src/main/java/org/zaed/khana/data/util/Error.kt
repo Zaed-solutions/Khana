@@ -52,6 +52,7 @@ enum class ProductResult(val userMessage: String) : Error {
     FETCH_FLASH_SALE_END_TIME_FAILED("Failed to fetch flash sale end time"),
     FETCH_PRODUCTS_FAILED("Failed to fetch products"),
     FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),
+    ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     ADD_WISHLISTED_PRODUCTS_FAILED("Failed to add wishlisted product"),
     REMOVE_WISHLISTED_PRODUCTS_FAILED("Failed to remove wishlisted product"),
     NETWORK_ERROR("Failed to connect to the network"),

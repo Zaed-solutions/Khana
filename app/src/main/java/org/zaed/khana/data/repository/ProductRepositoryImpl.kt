@@ -1,6 +1,7 @@
 package org.zaed.khana.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.Product
 import org.zaed.khana.data.source.remote.ProductRemoteDataSource
 import org.zaed.khana.data.source.remote.model.request.ProductRequest
@@ -49,5 +50,15 @@ class ProductRepositoryImpl (
 
     override suspend fun fetchFlashSaleEndTime(): Result<Long, ProductResult> {
         return productRemoteSource.fetchFlashSaleEndTime()
+    }
+
+    override suspend fun addItemToCart(
+        userId: String,
+        productId: String,
+        productColor: Color,
+        productSize: String
+    ): Result<Unit, ProductResult> {
+        val request = ProductRequest.AddItemToCart(productId = productId, userId = userId, productColor = productColor, productSize = productSize)
+        return productRemoteSource.addItemToCart(request)
     }
 }

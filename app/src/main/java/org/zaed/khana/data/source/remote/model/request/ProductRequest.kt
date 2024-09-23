@@ -1,6 +1,7 @@
 package org.zaed.khana.data.source.remote.model.request
 
 import kotlinx.serialization.Serializable
+import org.zaed.khana.data.model.Color
 
 sealed interface ProductRequest {
     @Serializable
@@ -14,4 +15,6 @@ sealed interface ProductRequest {
     data class AddWishlistedProduct(val productId: String, val userId: String): ProductRequest
     @Serializable
     data class RemoveWishlistedProduct(val productId: String, val userId: String): ProductRequest
+    @Serializable
+    data class AddItemToCart(val productId: String, val userId: String, val productColor: Color, val productSize: String): ProductRequest
 }
