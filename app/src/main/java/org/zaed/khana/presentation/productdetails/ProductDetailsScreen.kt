@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.Color
 import org.zaed.khana.presentation.home.components.ColorSelectionSection
+import org.zaed.khana.presentation.productdetails.components.ImagesPreviewPager
 import org.zaed.khana.presentation.productdetails.components.ProductDetailsBottomBar
 import org.zaed.khana.presentation.productdetails.components.ProductDetailsTopBar
 import org.zaed.khana.presentation.productdetails.components.ProductInformationSection
@@ -46,7 +47,8 @@ fun ProductDetailsScreen(
         selectedSize = state.selectedSize,
         availableColors = state.product.availableColors,
         selectedColor = state.selectedColor,
-        price = state.product.basePrice
+        price = state.product.basePrice,
+        imagesUrls = state.product.previewImagesLinks
     )
 }
 
@@ -62,6 +64,7 @@ private fun ProductDetailsScreenContent(
     description: String,
     availableSizes: List<String>,
     selectedSize: String,
+    imagesUrls: List<String>,
     availableColors: List<Color>,
     selectedColor: Color,
     price: Float,
@@ -87,7 +90,7 @@ private fun ProductDetailsScreenContent(
                 .padding(paddingValues)
                 .fillMaxWidth()
         ) {
-            //product images
+            ImagesPreviewPager(imagesUrls = imagesUrls)
             ProductInformationSection(
                 title = title,
                 description = description,
@@ -99,13 +102,11 @@ private fun ProductDetailsScreenContent(
                 selectedSize = selectedSize,
                 onSelectSize = { size -> onAction(ProductDetailsUiAction.OnSelectSize(size)) }
             )
-            //color section
             ColorSelectionSection(
                 availableColors = availableColors,
                 selectedColor = selectedColor,
                 onSelectColor = { hexColor -> onAction(ProductDetailsUiAction.OnSelectColor(hexColor)) }
             )
-            //price and add to cart button
         }
     }
 }
