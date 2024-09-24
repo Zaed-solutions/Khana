@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.productdetails
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.Color
@@ -26,6 +29,7 @@ import org.zaed.khana.presentation.productdetails.components.ProductDetailsBotto
 import org.zaed.khana.presentation.productdetails.components.ProductDetailsTopBar
 import org.zaed.khana.presentation.productdetails.components.ProductInformationSection
 import org.zaed.khana.presentation.productdetails.components.SizeSelectionSection
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun ProductDetailsScreen(
@@ -137,21 +141,44 @@ private fun ProductDetailsScreenContent(
                 title = title,
                 description = description,
                 category = category,
-                rating = rating
+                rating = rating,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
             SizeSelectionSection(
                 availableSizes = availableSizes,
                 selectedSize = selectedSize,
-                onSelectSize = { size -> onAction(ProductDetailsUiAction.OnSelectSize(size)) }
+                onSelectSize = { size -> onAction(ProductDetailsUiAction.OnSelectSize(size)) },
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
             ColorSelectionSection(
                 availableColors = availableColors,
                 selectedColor = selectedColor,
-                onSelectColor = { hexColor -> onAction(ProductDetailsUiAction.OnSelectColor(hexColor)) }
+                onSelectColor = { hexColor -> onAction(ProductDetailsUiAction.OnSelectColor(hexColor)) },
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
     }
 }
 
 
-
+@Preview(showSystemUi = false, showBackground = true)
+@Composable
+private fun ProductDetailsScreenPreview() {
+    KhanaTheme {
+        ProductDetailsScreenContent(
+            onAction = {  },
+            isWishlisted = true,
+            title = "Test Product",
+            category = "Test Category",
+            rating = 4.7f,
+            description = "Test Description, Test Description, Test Description, Test Description, Test Description, Test Description, Test Description, Test Description",
+            availableSizes = listOf("S", "M", "L", "XL", "XXL"),
+            selectedSize = "L",
+            imagesUrls = listOf("https://www.test.com/image1.jpg", "https://www.test.com/image2.jpg", "https://www.test.com/image3.jpg", ),
+            availableColors = listOf(Color("Black", "#000000"), Color("White", "#ffffff"), Color("Red", "#ff0000")),
+            selectedColor = Color("Black", "#000000"),
+            price = 183.5f,
+            actionResult = ProductResult.IDLE
+        )
+    }
+}

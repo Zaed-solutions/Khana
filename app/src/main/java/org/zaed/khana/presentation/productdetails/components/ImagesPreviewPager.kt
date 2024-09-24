@@ -26,7 +26,7 @@ fun ImagesPreviewPager(
     val pagerState = rememberPagerState(pageCount = { imagesUrls.size })
     Box(
         modifier = modifier
-            .height(350.dp)
+            .height(320.dp)
             .fillMaxWidth()
     ) {
         HorizontalPager(state = pagerState) { pageIndex ->
