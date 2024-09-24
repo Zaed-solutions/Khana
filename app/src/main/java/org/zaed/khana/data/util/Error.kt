@@ -3,7 +3,7 @@ package org.zaed.khana.data.util
 import kotlinx.serialization.Serializable
 
 
-@kotlinx.serialization.Serializable
+@Serializable
 sealed interface Error
 
 fun Error.userMessage(): String {
@@ -24,6 +24,7 @@ fun Error.isNotIdle(): Boolean {
             AuthResults.INVALID_PASSWORD,
             AuthResults.PASSWORD_DOES_NOT_MATCH
         )
+
         is AdvertisementResult -> this != AdvertisementResult.IDLE
         is CategoryResult -> this != CategoryResult.IDLE
         is ProductResult -> this != ProductResult.IDLE
@@ -48,9 +49,11 @@ enum class CategoryResult(val userMessage: String) : Error {
 enum class ProductResult(val userMessage: String) : Error {
     IDLE(""),
     FETCH_LABELS_FAILED("Failed to fetch product labels"),
+    CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED("Failed to check whether product is wishlisted"),
     FETCH_FLASH_SALE_END_TIME_FAILED("Failed to fetch flash sale end time"),
     FETCH_PRODUCTS_FAILED("Failed to fetch products"),
     FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),
+    ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     ADD_WISHLISTED_PRODUCTS_FAILED("Failed to add wishlisted product"),
     REMOVE_WISHLISTED_PRODUCTS_FAILED("Failed to remove wishlisted product"),
     NETWORK_ERROR("Failed to connect to the network"),

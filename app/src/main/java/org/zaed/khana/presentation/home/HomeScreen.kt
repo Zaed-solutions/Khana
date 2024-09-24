@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.datetime.Clock
+import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.Advertisement
 import org.zaed.khana.data.model.Category
 import org.zaed.khana.data.model.Product
@@ -28,7 +29,11 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = koinViewModel(),
+    onNavigateToFiltersScreen: () -> Unit,
+    onNavigateToNotificationsScreen: () -> Unit,
+    onNavigateToProductDetailsScreen: (String) -> Unit,
+    onNavigateToSearchScreen: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     HomeContent(
@@ -44,16 +49,16 @@ fun HomeScreen(
         onAction = { action ->
             when(action){
                 HomeUiAction.OnFiltersButtonClicked -> {
-                    TODO("navigate to filters screen")
+                    onNavigateToFiltersScreen()
                 }
                 HomeUiAction.OnNotificationButtonClicked -> {
-                    TODO("navigate to notifications screen")
+                    onNavigateToNotificationsScreen()
                 }
                 is HomeUiAction.OnProductClicked -> {
-                    TODO("navigate to product details")
+                    onNavigateToProductDetailsScreen(action.productId)
                 }
                 is HomeUiAction.OnSearchClicked -> {
-                    TODO("navigate to search screen")
+                    onNavigateToSearchScreen()
                 }
                 else -> viewModel.handleUiAction(action)
             }

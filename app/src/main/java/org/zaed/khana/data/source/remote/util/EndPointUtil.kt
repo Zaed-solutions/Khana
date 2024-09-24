@@ -24,10 +24,13 @@ sealed class EndPoint(val route: String) {
     }
     object Product{
         data object FetchFlashSaleEndTime: EndPoint("/fetchFlashSaleEndTime")
+        data object CheckIfProductIsWishlisted: EndPoint("/CheckIfProductIsWishlisted")
         data object  FetchLabels: EndPoint("/fetchLabels")
         data object FetchProductsByLabel: EndPoint("/fetchProductsByLabel")
+        data object FetchProductById: EndPoint("/fetchProductById")
         data object FetchWishlistedProductsIds: EndPoint("/fetchWishlistedProductsIds")
         data object AddWishlistedProduct: EndPoint("/addWishlistedProduct")
         data object RemoveWishlistedProduct: EndPoint("/removeWishlistedProduct")
+        data object AddItemToCart: EndPoint("/addItemToCart")
     }
 }

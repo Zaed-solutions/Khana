@@ -4,4 +4,10 @@
     <string name="search">Search</string>
     <string name="category">Category</string>
     <string name="flash_sale">Flash Sale</string>
+    <string name="product_details">Product Details</string>
+    <string name="description">Description</string>
+    <string name="select_size">Select Size</string>
+    <string name="select_color">Select Color :</string>
+    <string name="total_price">Total Price</string>
+    <string name="add_to_cart">Add to Cart</string>
 </resources>

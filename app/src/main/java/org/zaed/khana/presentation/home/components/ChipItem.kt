@@ -7,16 +7,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
-fun LabelItem(
-    label: String,
+fun ChipItem(
+    modifier: Modifier = Modifier,
+    title: String,
     isSelected: Boolean,
-    onSelectLabel: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onSelectItem: (String) -> Unit,
+    shape: Shape =  MaterialTheme.shapes.extraLarge
 ) {
     FilterChip(
         modifier = modifier,
@@ -25,13 +27,13 @@ fun LabelItem(
             selectedLabelColor =  MaterialTheme.colorScheme.onPrimary
         ) else FilterChipDefaults.filterChipColors(),
         selected = isSelected,
-        shape = MaterialTheme.shapes.extraLarge,
+        shape = shape,
         onClick = {
-            onSelectLabel(label)
+            onSelectItem(title)
         },
         label = {
             Text(
-                text = label,
+                text = title,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
@@ -42,7 +44,7 @@ fun LabelItem(
 @Composable
 private fun SelectedLabelItemPreview() {
     KhanaTheme {
-        LabelItem(label = "Test", isSelected = true, onSelectLabel = {})
+        ChipItem(title = "Test", isSelected = true, onSelectItem = {})
     }
 }
 
@@ -50,6 +52,6 @@ private fun SelectedLabelItemPreview() {
 @Composable
 private fun UnselectedLabelItemPreview() {
     KhanaTheme {
-        LabelItem(label = "Test", isSelected = false, onSelectLabel = {})
+        ChipItem(title = "Test", isSelected = false, onSelectItem = {})
     }
 }
