@@ -7,14 +7,14 @@ import org.zaed.khana.data.source.remote.model.request.ProductRequest
 import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.Result
 
-class ProductRepositoryImpl (
+class ProductRepositoryImpl(
     private val productRemoteSource: ProductRemoteDataSource
-): ProductRepository {
+) : ProductRepository {
     override fun fetchLabels(): Flow<Result<List<String>, ProductResult>> {
         return productRemoteSource.fetchLabels()
     }
 
-    override fun fetchProductsByLabel(label: String):Flow<Result<List<Product>, ProductResult>> {
+    override fun fetchProductsByLabel(label: String): Flow<Result<List<Product>, ProductResult>> {
         val request = ProductRequest.FetchProductsByLabelRequest(label)
         return productRemoteSource.fetchProductsByLabel(request)
     }
@@ -24,12 +24,23 @@ class ProductRepositoryImpl (
         return productRemoteSource.fetchWishlistedProductsIds(request)
     }
 
-    override suspend fun addWishlistedProduct(productId: String, userId: String): Result<Unit, ProductResult> {
+    override fun fetchWishlistedProducts(userId: String): Flow<Result<List<Product>, ProductResult>> {
+        val request = ProductRequest.FetchWishlistedProducts(userId)
+        return productRemoteSource.fetchWishlistedProducts(request)
+    }
+
+    override suspend fun addWishlistedProduct(
+        productId: String,
+        userId: String
+    ): Result<Unit, ProductResult> {
         val request = ProductRequest.AddWishlistedProduct(productId = productId, userId = userId)
         return productRemoteSource.addWishlistedProduct(request)
     }
 
-    override suspend fun removeWishlistedProduct(productId: String, userId: String): Result<Unit, ProductResult> {
+    override suspend fun removeWishlistedProduct(
+        productId: String,
+        userId: String
+    ): Result<Unit, ProductResult> {
         val request = ProductRequest.RemoveWishlistedProduct(productId = productId, userId = userId)
         return productRemoteSource.removeWishlistedProduct(request)
     }
