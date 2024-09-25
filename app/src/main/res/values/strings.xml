@@ -10,4 +10,11 @@
     <string name="select_color">Select Color :</string>
     <string name="total_price">Total Price</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="my_cart">My Cart</string>
+    <string name="yes_remove">Yes, Remove</string>
+    <string name="remove_from_cart">Remove from Cart?</string>
+    <string name="cancel">Cancel</string>
+    <string name="proceed_to_checkout">Proceed to Checkout</string>
+    <string name="promo_code">Promo Code</string>
+    <string name="apply">Apply</string>
 </resources>

@@ -33,6 +33,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.util.toMoney
 
 @Composable
 fun ProductItem(
@@ -75,7 +76,7 @@ fun ProductItem(
             }
         }
         //price
-        Text(text = "\$${DecimalFormat("#.00").format(productPrice)}")
+        Text(text = productPrice.toMoney())
     }
 }
 
