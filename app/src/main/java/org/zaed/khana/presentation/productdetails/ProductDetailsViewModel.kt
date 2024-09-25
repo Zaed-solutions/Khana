@@ -8,11 +8,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.Color
+import org.zaed.khana.data.repository.CartRepository
 import org.zaed.khana.data.repository.ProductRepository
 import org.zaed.khana.data.util.ProductResult
 
 class ProductDetailsViewModel(
-    private val productRepo: ProductRepository
+    private val productRepo: ProductRepository,
+    private val cartRepo: CartRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductDetailsUiState())
     val uiState = _uiState.asStateFlow()
@@ -74,7 +76,7 @@ class ProductDetailsViewModel(
     private fun addItemToCart() {
         viewModelScope.launch {
             with(uiState.value) {
-                productRepo.addItemToCart(currentUserId, productId, selectedColor, selectedSize)
+                cartRepo.addItemToCart(currentUserId, productId, selectedColor, selectedSize)
                     .onSuccess {
                         _uiState.update { it.copy(result = ProductResult.IDLE) }
                     }.onFailure { error ->

@@ -9,6 +9,8 @@ import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import org.zaed.khana.data.source.remote.AdvertisementRemoteDataSource
 import org.zaed.khana.data.source.remote.AdvertisementRemoteDataSourceImpl
+import org.zaed.khana.data.source.remote.CartRemoteDataSource
+import org.zaed.khana.data.source.remote.CartRemoteDataSourceImpl
 import org.zaed.khana.data.source.remote.CategoryRemoteDataSource
 import org.zaed.khana.data.source.remote.CategoryRemoteDataSourceImpl
 import org.zaed.khana.data.source.remote.ProductRemoteDataSource
@@ -19,6 +21,7 @@ val remoteDataSourceModule = module {
     single<AdvertisementRemoteDataSource> { AdvertisementRemoteDataSourceImpl(get()) }
     single<CategoryRemoteDataSource> { CategoryRemoteDataSourceImpl(get()) }
     single<ProductRemoteDataSource> { ProductRemoteDataSourceImpl(get()) }
+    single<CartRemoteDataSource> { CartRemoteDataSourceImpl(get()) }
     single<HttpClient> {
         HttpClient {
             install(ContentNegotiation) {

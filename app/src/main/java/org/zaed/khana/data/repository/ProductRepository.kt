@@ -15,5 +15,4 @@ interface ProductRepository {
     suspend fun addWishlistedProduct(productId: String, userId: String): Result<Unit, ProductResult>
     suspend fun removeWishlistedProduct(productId: String, userId: String): Result<Unit, ProductResult>
     suspend fun fetchFlashSaleEndTime(): Result<Long, ProductResult>
-    suspend fun addItemToCart(userId: String, productId: String, productColor: Color, productSize: String): Result<Unit, ProductResult>
 }

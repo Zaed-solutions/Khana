@@ -153,21 +153,4 @@ class ProductRemoteDataSourceImpl(
             Result.failure(ProductResult.SERVER_ERROR)
         }
     }
-
-    override suspend fun addItemToCart(request: ProductRequest.AddItemToCart): Result<Unit, ProductResult> {
-        return try {
-            val response = httpClient.post {
-                endPoint(EndPoint.Product.AddItemToCart.route)
-                setBody(request)
-            }
-            if(response.status == HttpStatusCode.OK){
-                Result.success(Unit)
-            } else {
-                Result.failure(ProductResult.ADD_ITEM_TO_CART_FAILED)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure(ProductResult.SERVER_ERROR)
-        }
-    }
 }

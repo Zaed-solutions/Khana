@@ -42,6 +42,19 @@ fun CartScreen(
     viewModel: CartViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    CartScreenContent(
+        cartItems = state.cartItems,
+        onAction = { action ->
+            when (action) {
+                CartUiAction.OnBackPressed -> onBackPressed()
+                CartUiAction.OnProceedToCheckout -> TODO("navigate to checkout")
+                else -> viewModel.handleUiAction(action)
+            }
+        },
+        discountPercentage = state.discountPercentage,
+        subTotalPrice = state.subTotalPrice,
+        deliveryFee = state.deliveryFee
+    )
 
 }
 
@@ -103,18 +116,28 @@ private fun CartScreenContent(
                     CartItem(
                         item = item,
                         onIncrementQuantity = { onAction(CartUiAction.OnIncrementItemQuantity(item.productId)) },
-                        onDecrementQuantity = { onAction(CartUiAction.OnDecrementItemQuantity(item.productId)) })
+                        onDecrementQuantity = {
+                            if (item.quantity == 1) {
+                                swipedItemIndex = index
+                                isItemSwiped = true
+                                showBottomSheet = true
+                            } else {
+                                onAction(CartUiAction.OnDecrementItemQuantity(item.productId))
+                            }
+
+                        }
+                    )
                 }
             }
         }
-        if(showBottomSheet){
+        if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
                     showBottomSheet = false
                 },
                 sheetState = sheetState
             ) {
-                if(isItemSwiped){
+                if (isItemSwiped) {
                     val item = cartItems[swipedItemIndex]
                     ConfirmDeleteItemBottomSheetContent(
                         item = item,

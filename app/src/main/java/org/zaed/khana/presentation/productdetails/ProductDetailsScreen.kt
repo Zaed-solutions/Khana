@@ -21,8 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.Color
+import org.zaed.khana.data.util.CartResult
+import org.zaed.khana.data.util.Error
 import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.isNotIdle
+import org.zaed.khana.data.util.userMessage
 import org.zaed.khana.presentation.home.components.ColorSelectionSection
 import org.zaed.khana.presentation.productdetails.components.ImagesPreviewPager
 import org.zaed.khana.presentation.productdetails.components.ProductDetailsBottomBar
@@ -80,15 +83,15 @@ private fun ProductDetailsScreenContent(
     availableColors: List<Color>,
     selectedColor: Color,
     price: Float,
-    actionResult: ProductResult
+    actionResult: Error
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = actionResult) {
         if (actionResult.isNotIdle()) {
             snackbarHostState.showSnackbar(
-                message = actionResult.userMessage,
+                message = actionResult.userMessage(),
                 actionLabel = when (actionResult) {
-                    ProductResult.ADD_ITEM_TO_CART_FAILED,
+                    CartResult.ADD_ITEM_TO_CART_FAILED,
                     ProductResult.ADD_WISHLISTED_PRODUCTS_FAILED -> "Retry"
                     else -> null
                 }
@@ -97,7 +100,7 @@ private fun ProductDetailsScreenContent(
                     SnackbarResult.Dismissed -> {}
                     SnackbarResult.ActionPerformed -> {
                         when (actionResult) {
-                            ProductResult.ADD_ITEM_TO_CART_FAILED -> {
+                            CartResult.ADD_ITEM_TO_CART_FAILED -> {
                                 onAction(
                                     ProductDetailsUiAction.OnAddToCartClicked
                                 )

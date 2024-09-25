@@ -15,6 +15,4 @@ sealed interface ProductRequest {
     data class AddWishlistedProduct(val productId: String, val userId: String): ProductRequest
     @Serializable
     data class RemoveWishlistedProduct(val productId: String, val userId: String): ProductRequest
-    @Serializable
-    data class AddItemToCart(val productId: String, val userId: String, val productColor: Color, val productSize: String): ProductRequest
 }
