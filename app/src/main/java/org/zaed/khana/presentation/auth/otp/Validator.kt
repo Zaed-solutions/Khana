@@ -1,8 +1,8 @@
-package org.zaed.khana.presentation.Login.util
+package org.zaed.khana.presentation.auth.otp
 
 import android.util.Patterns
 import kotlinx.datetime.LocalDateTime
-import org.zaed.khana.presentation.Login.util.LocalDateTimeUtil.now
+import org.zaed.khana.presentation.auth.util.LocalDateTimeUtil.now
 
 object Validator {
     object PasswordValidator {
