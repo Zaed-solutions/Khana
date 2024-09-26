@@ -16,10 +16,9 @@ interface AuthenticationRepository {
 
     fun signUpWithEmail(
         name: String,
-        avatarByteArray: Uri,
         email: String,
         password: String
-    ): Flow<Result<User, AuthResults>>
+    ): Flow<Result<FirebaseUser, AuthResults>>
 
     suspend fun getSignedInUser(): Result<User, AuthResults>
     suspend fun logout(): Result<AuthResults, AuthResults>

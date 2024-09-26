@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import org.zaed.khana.data.auth.source.remote.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -64,35 +65,21 @@ class AuthenticationRemoteDataSourceImpl(
 
     override fun signUpWithEmail(
         name: String,
-        avatarByteArray: Uri,
         email: String,
         password: String
-    ): Flow<org.zaed.khana.data.util.Result<User, AuthResults>> = callbackFlow {
+    ): Flow<org.zaed.khana.data.util.Result<FirebaseUser, AuthResults>> = callbackFlow {
         org.zaed.khana.data.util.Result.Loading
-        var uri = Uri.EMPTY
-//        if (avatarByteArray != Uri.EMPTY) {
-//            uri = Firebase.storage.reference.child("avatars").putFile(avatarByteArray)
-//                .await().storage.downloadUrl.await()
-//        }
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 auth.currentUser?.updateProfile(
                     com.google.firebase.auth.UserProfileChangeRequest.Builder()
                         .setDisplayName(name)
-                        .setPhotoUri(uri)
                         .build()
                 )
                 val user = auth.currentUser
                 trySend(
                     org.zaed.khana.data.util.Result.Success(
-                        User(
-                            id = user?.uid ?: "",
-                            username = user?.displayName ?: "",
-                            avatar = user?.photoUrl.toString(),
-                            email = user?.email ?: "",
-                            phoneNumber = user?.phoneNumber ?: "",
-                            createdAt = user?.metadata?.creationTimestamp?:0L,
-                        )
+                        user!!
                     )
                 )
 

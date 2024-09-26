@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login
+package org.zaed.khana.presentation.auth.login
 
 sealed interface LoginUIAction{
     data class OnEmailChanged(val newEmail:String):LoginUIAction

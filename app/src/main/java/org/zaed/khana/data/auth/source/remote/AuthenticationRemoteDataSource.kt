@@ -1,6 +1,7 @@
 package org.zaed.khana.data.auth.source.remote
 
 import android.net.Uri
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 import org.zaed.khana.data.auth.source.remote.model.User
 import org.zaed.khana.data.util.AuthResults
@@ -15,10 +16,9 @@ interface AuthenticationRemoteDataSource {
 
     fun signUpWithEmail(
         name: String,
-        avatarByteArray: Uri,
         email: String,
         password: String
-    ): Flow<Result<User, AuthResults>>
+    ): Flow<Result<FirebaseUser, AuthResults>>
 
     suspend fun getSignedInUser(): Result<User, AuthResults>
     suspend fun logout(): Result<AuthResults, AuthResults>

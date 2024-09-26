@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +8,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.zaed.khana.presentation.Login.LoginUIAction
+import org.zaed.khana.presentation.auth.login.LoginUIAction
+import org.zaed.khana.presentation.auth.login.LoginUiState
 
 @Composable
 fun LoginScreenContent(
@@ -34,18 +35,18 @@ fun LoginScreenContent(
             EmailTextField(
                 modifier = Modifier.weight(0.1f),
                 value = state.email,
-                onValueChanged = action,
+                onValueChanged = { action(LoginUIAction.OnEmailChanged(it)) },
             )
             PasswordTextField(
                 modifier = Modifier.weight(0.1f),
                 value = state.password,
-                onValueChanged = action,
+                onValueChanged = { action(LoginUIAction.OnPasswordChanged(it)) },
             )
             ForgetPasswordTextButton(
                 modifier = Modifier.weight(0.1f),
                 onClick = navigateToForgetPassword
             )
-            SignInButton(onClick = action)
+            SignInButton(onClick ={ action(LoginUIAction.OnSignInClicked)})
             OrSignInWithText(modifier = Modifier.weight(0.1f))
             SocialMediaIconsRow(
                 modifier = Modifier.weight(0.1f),

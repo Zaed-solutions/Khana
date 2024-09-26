@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 import org.zaed.khana.data.auth.source.remote.AuthenticationRemoteDataSource
 import org.zaed.khana.data.auth.source.remote.model.User
 import kotlinx.coroutines.flow.Flow
+import org.zaed.khana.data.auth.source.remote.mapper.toUser
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.Result
 
@@ -22,11 +23,10 @@ class AuthenticationRepositoryImpl(
 
     override fun signUpWithEmail(
         name: String,
-        avatarByteArray: Uri,
         email: String,
         password: String
-    ): Flow<Result<User, AuthResults>> =
-        remoteDataSource.signUpWithEmail(name, avatarByteArray, email, password)
+    ): Flow<Result<FirebaseUser, AuthResults>> =
+        remoteDataSource.signUpWithEmail(name, email, password)
 
     override suspend fun getSignedInUser(): Result<User, AuthResults> =
         remoteDataSource.getSignedInUser()
@@ -45,16 +45,7 @@ class AuthenticationRepositoryImpl(
 
     override suspend fun saveUser(firebaseUser: FirebaseUser?) {
         if (firebaseUser == null) return
-        val user = User(
-            id = firebaseUser.uid,
-            avatar = firebaseUser.photoUrl.toString(),
-            username = firebaseUser.displayName.toString(),
-            email = firebaseUser.email.toString(),
-            phoneNumber = firebaseUser.phoneNumber.toString(),
-            createdAt = firebaseUser.metadata?.creationTimestamp?:0L,
-            providerName =  firebaseUser.providerData[1].providerId
-        )
-        remoteDataSource.saveUser(user)
+        remoteDataSource.saveUser(firebaseUser.toUser())
     }
 
 

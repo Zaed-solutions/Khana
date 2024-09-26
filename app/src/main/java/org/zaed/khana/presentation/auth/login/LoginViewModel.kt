@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login
+package org.zaed.khana.presentation.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,8 +13,8 @@ import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.EmailFieldError
 import org.zaed.khana.data.util.PasswordFieldError
 import org.zaed.khana.data.util.Result
-import org.zaed.khana.presentation.Login.component.LoginUiState
-import org.zaed.khana.presentation.Login.util.Validator
+import org.zaed.khana.presentation.auth.util.Validator
+
 
 class LoginViewModel(
     private val authRepo: AuthenticationRepository,

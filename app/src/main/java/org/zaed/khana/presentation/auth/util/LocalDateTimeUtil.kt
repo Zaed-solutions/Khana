@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.util
+package org.zaed.khana.presentation.auth.util
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
@@ -10,7 +10,6 @@ import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import java.time.YearMonth
 
 object LocalDateTimeUtil {
     fun LocalDateTime.Companion.now() = Clock.System.now().toLocalDateTime(TimeZone.UTC)

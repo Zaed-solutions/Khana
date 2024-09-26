@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login
+package org.zaed.khana.presentation.auth.login
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.Composable
@@ -10,10 +10,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
 import org.koin.androidx.compose.koinViewModel
-import org.zaed.khana.presentation.Login.component.LoginScreenContent
-import org.zaed.khana.presentation.Login.component.SignInWithFacebook
-import org.zaed.khana.presentation.Login.component.googleSignInOption
-import org.zaed.khana.presentation.Login.component.rememberFirebaseAuthLauncher
+import org.zaed.khana.presentation.auth.component.LoginScreenContent
+import org.zaed.khana.presentation.auth.component.SignInWithFacebook
+import org.zaed.khana.presentation.auth.component.googleSignInOption
+import org.zaed.khana.presentation.auth.component.rememberFirebaseAuthLauncher
+
 import org.zaed.khana.ui.theme.KhanaTheme
 
 
@@ -69,6 +70,12 @@ fun LoginScreen(
 )
 fun LoginScreenPreview() {
     KhanaTheme {
-        LoginScreen()
+        LoginScreenContent(
+            state = LoginUiState(),
+            action = {},
+            navigateToForgetPassword = {},
+            navigateToSignUp = {},
+            onSignInWithGoogleClicked = {},
+        )
     }
 }
