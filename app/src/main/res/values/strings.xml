@@ -15,6 +15,16 @@
     <string name="facebook_app_id">929458978950223</string>
     <string name="fb_login_protocol_scheme">fb929458978950223</string>
     <string name="facebook_client_token">8aeb171232aea750345d59f192e2179c</string>
+    <string name="name">Name</string>
+    <string name="create_account">Create Account</string>
+    <string name="fill_the_information_below_or_register_with_social_media_account">Fill the information below or register with social media account</string>
+    <string name="or_sign_up_with">Or Sign Up With</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="please_enter_the_code_we_just_sent_to_email">Please enter the code we just sent to email</string>
+    <string name="example_email_com">example@email.com</string>
+    <string name="didn_t_receive_otp">Didn\'t receive OTP?</string>
+    <string name="resend_code">Resend code</string>
+    <string name="your_new_password_must_be_different_from_previously_used_passwords">Your new password must be different from previously used passwords.</string>
 
 
 </resources>

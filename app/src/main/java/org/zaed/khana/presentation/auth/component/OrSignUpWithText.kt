@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,14 +14,14 @@ import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
 
 @Composable
-fun OrSignInWithText(
+fun OrSignUpWithText(
     modifier: Modifier = Modifier
 ) {
     Box(modifier) {
         HorizontalDivider(Modifier.align(Alignment.Center))
         Text(
-            stringResource(R.string.or_sign_in_with),
-            Modifier
+            text = stringResource(R.string.or_sign_up_with),
+            modifier = Modifier
                 .align(Alignment.Center)
                 .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 4.dp),

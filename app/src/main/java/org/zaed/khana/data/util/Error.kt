@@ -11,6 +11,8 @@ fun Error.userMessage(): String {
         is AuthResults -> this.userMessage
         is EmailFieldError -> this.userMessage
         is PasswordFieldError -> this.userMessage
+        is NameFieldError -> this.userMessage
+        is TermsAndConditionsError -> this.userMessage
     }
 }
 
@@ -19,6 +21,8 @@ fun Error.isNotIdle(): Boolean {
         is AuthResults -> return this != AuthResults.IDLE
         is EmailFieldError -> return this != EmailFieldError.IDLE
         is PasswordFieldError -> return this != PasswordFieldError.IDLE
+        is NameFieldError -> return this != NameFieldError.IDLE
+        is TermsAndConditionsError -> return this != TermsAndConditionsError.IDLE
     }
 }
 
@@ -31,6 +35,17 @@ enum class EmailFieldError(val userMessage: String):Error{
     EMAIL_ALREADY_REGISTERED("Email already registered"),
     RESET_EMAIL_SENT("Reset Email Sent"),
 
+}
+@Serializable
+enum class NameFieldError(val userMessage: String):Error{
+    IDLE(""),
+    INVALID_NAME("Invalid Name"),
+    NAME_FIELD_IS_EMPTY("Name field is empty"),
+}
+@Serializable
+enum class TermsAndConditionsError(val userMessage: String):Error{
+    IDLE(""),
+    TERMS_AND_CONDITIONS_NOT_ACCEPTED("Terms and conditions not accepted"),
 }
 @Serializable
 enum class PasswordFieldError(val userMessage: String):Error {

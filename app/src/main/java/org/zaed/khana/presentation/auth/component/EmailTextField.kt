@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -19,13 +19,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
-import org.zaed.khana.presentation.Login.LoginUIAction
+import org.zaed.khana.presentation.auth.login.LoginUIAction
 
 @Composable
 fun EmailTextField(
     modifier: Modifier = Modifier,
     value: String = "",
-    onValueChanged: (LoginUIAction) -> Unit = {}
+    onValueChanged: (String) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -42,7 +42,7 @@ fun EmailTextField(
         )
         OutlinedTextField(
             value = value,
-            onValueChange = { onValueChanged(LoginUIAction.OnEmailChanged(it)) },
+            onValueChange = { onValueChanged(it) },
             shape = RoundedCornerShape(30.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),

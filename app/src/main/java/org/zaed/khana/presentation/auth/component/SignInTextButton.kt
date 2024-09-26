@@ -1,6 +1,7 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,28 +13,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import org.zaed.khana.R
-import org.zaed.khana.presentation.Login.LoginUIAction
 
 @Composable
-fun SignUpTextButton(
+fun SignInTextButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     val annotatedString = buildAnnotatedString {
         append(stringResource(R.string.don_t_have_an_account))
         withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
-            append(stringResource(R.string.sign_up))
+            append(stringResource(R.string.sign_in))
         }
     }
-
-    Text(
-        text = annotatedString,
-        modifier = Modifier
-            .clickable {
-                onClick()
-            }
-            .then(modifier)
-            .fillMaxWidth(),
-        textAlign = TextAlign.Center
-    )
+    Column(
+        modifier = modifier,
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+    ) {
+        Text(
+            text = annotatedString,
+            modifier = Modifier
+                .clickable {
+                    onClick()
+                }
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+    }
 }

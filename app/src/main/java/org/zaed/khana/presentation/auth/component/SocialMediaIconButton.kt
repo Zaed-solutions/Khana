@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
-import org.zaed.khana.presentation.Login.LoginUIAction
 
 @Composable
 fun SocialMediaIconButton(

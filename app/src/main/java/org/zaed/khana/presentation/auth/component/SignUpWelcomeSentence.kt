@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -10,11 +10,11 @@ import androidx.compose.ui.text.style.TextAlign
 import org.zaed.khana.R
 
 @Composable
-fun SignInWelcomeSentence(
+fun SignUpWelcomeSentence(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = stringResource(R.string.hi_welcome_back_you_ve_been_missed),
+        text = stringResource(R.string.fill_the_information_below_or_register_with_social_media_account),
         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.8f),
         modifier = Modifier
             .fillMaxWidth()

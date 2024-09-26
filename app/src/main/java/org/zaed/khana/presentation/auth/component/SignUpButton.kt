@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,19 +10,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.zaed.khana.R
-import org.zaed.khana.presentation.Login.LoginUIAction
+import org.zaed.khana.presentation.auth.login.LoginUIAction
 
 @Composable
-fun SignInButton(
+fun SignUpButton(
     modifier: Modifier = Modifier,
-    onClick: (LoginUIAction) -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
     Button(
-        onClick = { onClick(LoginUIAction.OnSignInClicked) },
+        onClick = onClick,
         modifier = Modifier.fillMaxWidth().then(modifier)
     ) {
         Text(
-            text = stringResource(R.string.sign_in),
+            text = stringResource(R.string.sign_up),
             fontSize = 20.sp,
             modifier = Modifier.padding(8.dp)
         )

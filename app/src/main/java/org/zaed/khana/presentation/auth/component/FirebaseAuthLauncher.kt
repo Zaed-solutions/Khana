@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import android.content.Intent
 import androidx.activity.compose.ManagedActivityResultLauncher

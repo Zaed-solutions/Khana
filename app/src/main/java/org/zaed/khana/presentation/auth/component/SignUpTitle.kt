@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
@@ -11,11 +11,11 @@ import androidx.compose.ui.unit.sp
 import org.zaed.khana.R
 
 @Composable
-fun SignInTitle(
+fun SignUpTitle(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = stringResource(R.string.sign_in),
+        text = stringResource(R.string.create_account),
         fontSize = 28.sp,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,

@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation.Login.component
+package org.zaed.khana.presentation.auth.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -30,13 +30,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
-import org.zaed.khana.presentation.Login.LoginUIAction
 
 @Composable
 fun PasswordTextField(
     modifier: Modifier = Modifier,
     value: String = "",
-    onValueChanged: (LoginUIAction) -> Unit = {}
+    onValueChanged: (String) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -55,7 +54,7 @@ fun PasswordTextField(
         )
         OutlinedTextField(
             value = value,
-            onValueChange = { onValueChanged(LoginUIAction.OnPasswordChanged(it)) },
+            onValueChange = { onValueChanged(it) },
             shape = RoundedCornerShape(30.dp),
             visualTransformation = if (showPassword) {
                 VisualTransformation.None
