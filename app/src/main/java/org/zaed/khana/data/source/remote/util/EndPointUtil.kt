@@ -17,10 +17,10 @@ fun HttpRequestBuilder.endPoint(path: String) {
 
 sealed class EndPoint(val route: String) {
     object Advertisement {
-        data object FetchAdvertisement: EndPoint("/fetchAdvertisements")
+        data object FetchAdvertisement: EndPoint("/advertisements/all")
     }
     object Category{
-        data object FetchCategories: EndPoint("/fetchCategories")
+        data object FetchCategories: EndPoint("/categories/all")
     }
     object Product{
         data object FetchFlashSaleEndTime: EndPoint("/fetchFlashSaleEndTime")
