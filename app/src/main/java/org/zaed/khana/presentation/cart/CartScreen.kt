@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.cart
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,15 +27,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.CartItem
+import org.zaed.khana.data.model.Color
 import org.zaed.khana.presentation.cart.components.CartItem
 import org.zaed.khana.presentation.cart.components.ConfirmDeleteItemBottomSheetContent
 import org.zaed.khana.presentation.cart.components.ProceedToCheckoutBottomSheetContent
 import org.zaed.khana.presentation.cart.components.SwipeToDeleteContainer
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun CartScreen(
@@ -115,6 +120,7 @@ private fun CartScreenContent(
                 ) {
                     CartItem(
                         item = item,
+                        modifier = Modifier.background(MaterialTheme.colorScheme.background),
                         onIncrementQuantity = { onAction(CartUiAction.OnIncrementItemQuantity(item.productId)) },
                         onDecrementQuantity = {
                             if (item.quantity == 1) {
@@ -164,5 +170,56 @@ private fun CartScreenContent(
                 }
             }
         }
+    }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun CartScreenContentPreview() {
+    val items = listOf(
+        CartItem(
+            quantity = 1,
+            productName = "Jacket",
+            productColor = Color(name = "Brown"),
+            productSize = "XL",
+            productBasePrice = 999.99f
+        ),
+        CartItem(
+            quantity = 1,
+            productName = "Shirt",
+            productColor = Color(name = "White"),
+            productSize = "XL",
+            productBasePrice = 199.99f
+        ),
+        CartItem(
+            quantity = 1,
+            productName = "Pants",
+            productColor = Color(name = "Blue"),
+            productSize = "35",
+            productBasePrice = 249.99f
+        ),
+        CartItem(
+            quantity = 1,
+            productName = "T-Shirt",
+            productColor = Color(name = "Pink"),
+            productSize = "XL",
+            productBasePrice = 159.99f
+        ),
+        CartItem(
+            quantity = 10,
+            productName = "Shoes",
+            productColor = Color(name = "White"),
+            productSize = "45",
+            productBasePrice = 320f
+        )
+    )
+    KhanaTheme {
+        CartScreenContent(
+            cartItems = items,
+                onAction ={},
+                discountPercentage = 0.05f,
+                subTotalPrice = 2199.95f,
+                deliveryFee = 25f
+            )
     }
 }
