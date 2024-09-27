@@ -10,4 +10,7 @@
     <string name="select_color">Select Color :</string>
     <string name="total_price">Total Price</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="coupons">Coupons</string>
+    <string name="best_offers_for_you">Best offers for you</string>
+    <string name="copy_code">COPY CODE</string>
 </resources>
