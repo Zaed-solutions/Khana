@@ -22,6 +22,9 @@ sealed class EndPoint(val route: String) {
     object Category{
         data object FetchCategories: EndPoint("/fetchCategories")
     }
+    object Coupon{
+        data object FetchCoupon: EndPoint("/fetchCoupons")
+    }
     object Product{
         data object FetchFlashSaleEndTime: EndPoint("/fetchFlashSaleEndTime")
         data object CheckIfProductIsWishlisted: EndPoint("/CheckIfProductIsWishlisted")
