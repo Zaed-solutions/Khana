@@ -12,6 +12,7 @@ fun Error.userMessage(): String {
         is AdvertisementResult -> userMessage
         is CategoryResult -> userMessage
         is ProductResult -> userMessage
+        is SearchResult -> userMessage
     }
 }
 
@@ -28,6 +29,7 @@ fun Error.isNotIdle(): Boolean {
         is AdvertisementResult -> this != AdvertisementResult.IDLE
         is CategoryResult -> this != CategoryResult.IDLE
         is ProductResult -> this != ProductResult.IDLE
+        is SearchResult -> this != SearchResult.IDLE
     }
 }
 
@@ -42,6 +44,16 @@ enum class AdvertisementResult(val userMessage: String) : Error {
 enum class CategoryResult(val userMessage: String) : Error {
     IDLE(""),
     SERVER_ERROR("Failed to fetch categories"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+
+@Serializable
+enum class SearchResult(val userMessage: String) : Error {
+    IDLE(""),
+    FAILED_TO_CLEAR_RECENT_SEARCHES("Failed to clear recent searches"),
+    FAILED_TO_DELETE_RECENT_SEARCH("Failed to delete recent search"),
+    FAILED_TO_FETCH_RECENT_SEARCHES("Failed to fetch recent searches"),
+    SERVER_ERROR("Failed to fetch search results"),
     NETWORK_ERROR("Failed to connect to the network"),
 }
 

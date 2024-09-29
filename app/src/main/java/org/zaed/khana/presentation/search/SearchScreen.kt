@@ -1,10 +1,36 @@
 package org.zaed.khana.presentation.search
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
+import org.zaed.khana.R
+import org.zaed.khana.data.model.Product
+import org.zaed.khana.presentation.search.components.RecentSearchesSection
+import org.zaed.khana.presentation.search.components.SearchResultList
+import org.zaed.khana.presentation.search.components.SearchTextField
 
 @Composable
 fun SearchScreen(
@@ -13,9 +39,110 @@ fun SearchScreen(
     onBackPressed: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    SearchScreenContent(
+        products = state.products,
+        wishlistedProductsIds = state.wishlistedProductsIds,
+        recentSearches = state.recentSearches,
+        onAction = { action ->
+            when (action) {
+                SearchUiAction.OnBackPressed -> {
+                    onBackPressed()
+                }
+                SearchUiAction.OnProductClicked -> {
+                    TODO("navigate to product details")
+                }
+                else -> viewModel.handleUiAction(action)
+            }
+        })
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SearchScreenContent(modifier: Modifier = Modifier) {
+private fun SearchScreenContent(
+    modifier: Modifier = Modifier,
+    products: List<Product>,
+    wishlistedProductsIds: List<String>,
+    recentSearches: List<String>,
+    onAction: (SearchUiAction) -> Unit
+) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    var searchQuery by remember { mutableStateOf("") }
+    val isSearching by remember {
+        derivedStateOf { searchQuery.isNotBlank() }
+    }
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(stringResource(id = R.string.search))
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onAction(SearchUiAction.OnBackPressed) }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "back button"
+                        )
+                    }
+                })
+        },
+        modifier = modifier.fillMaxSize()
+    ) { paddingValues ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxWidth()
+        ) {
+            SearchTextField(
+                modifier = Modifier.fillMaxWidth(),
+                onSearchQueryChanged = { query ->
+                    searchQuery = query
+                    onAction(SearchUiAction.OnSearchQueryChanged(query))
+                },
+                searchQuery = searchQuery
+            )
+            AnimatedContent(targetState = isSearching, label = "Search Tabs") { state ->
+                when {
+                    state -> {
+                        SearchResultList(
+                            modifier = Modifier.fillMaxSize(),
+                            searchQuery = searchQuery,
+                            products = products,
+                            onProductClicked = { id -> onAction(SearchUiAction.OnProductClicked(id)) },
+                            onWishlistProduct = { id ->
+                                onAction(
+                                    SearchUiAction.OnWishlistProductClicked(
+                                        id
+                                    )
+                                )
+                            },
+                            wishlistedProducts = wishlistedProductsIds,
+                            screenWidth = screenWidth.value.toInt()
+                        )
+                    }
 
+                    else -> {
+                        RecentSearchesSection(
+                            items = recentSearches,
+                            onItemClick = { query ->
+                                searchQuery = query
+                                onAction(SearchUiAction.OnSearchQueryChanged(query))
+                            },
+                            onDeleteItem = { query ->
+                                onAction(
+                                    SearchUiAction.OnDeleteRecentSearchClicked(
+                                        query
+                                    )
+                                )
+                            },
+                            onClearAllRecentSearches = { onAction(SearchUiAction.OnClearRecentSearchesClicked) }
+                        )
+                    }
+                }
+
+            }
+        }
+
+    }
 }
