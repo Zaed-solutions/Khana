@@ -23,12 +23,10 @@ fun RecentSearchItem(
     onItemClick: (String) -> Unit,
     onDeleteItem: (String) -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Row(verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onItemClick(item) }
-    ) {
+            .clickable { onItemClick(item) }) {
         Text(
             text = item,
             style = MaterialTheme.typography.bodyMedium,
@@ -37,9 +35,7 @@ fun RecentSearchItem(
                 .weight(1f)
                 .focusable(false)
         )
-        IconButton(
-            onClick = { onDeleteItem(item) }
-        ) {
+        IconButton(onClick = { onDeleteItem(item) }) {
             Icon(
                 imageVector = Icons.Default.Cancel,
                 contentDescription = "Delete",

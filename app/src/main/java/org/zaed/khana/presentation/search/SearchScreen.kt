@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
@@ -31,12 +32,14 @@ import org.zaed.khana.data.model.Product
 import org.zaed.khana.presentation.search.components.RecentSearchesSection
 import org.zaed.khana.presentation.search.components.SearchResultList
 import org.zaed.khana.presentation.search.components.SearchTextField
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = koinViewModel(),
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    navigateToProductDetails: (String) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     SearchScreenContent(
@@ -45,12 +48,14 @@ fun SearchScreen(
         recentSearches = state.recentSearches,
         onAction = { action ->
             when (action) {
-                SearchUiAction.OnBackPressed -> {
+                is SearchUiAction.OnBackPressed -> {
                     onBackPressed()
                 }
-                SearchUiAction.OnProductClicked -> {
-                    TODO("navigate to product details")
+
+                is SearchUiAction.OnProductClicked -> {
+                    navigateToProductDetails(action.productId)
                 }
+
                 else -> viewModel.handleUiAction(action)
             }
         })
@@ -92,6 +97,7 @@ private fun SearchScreenContent(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .padding(paddingValues)
+                .padding(horizontal = 24.dp)
                 .fillMaxWidth()
         ) {
             SearchTextField(
@@ -100,6 +106,7 @@ private fun SearchScreenContent(
                     searchQuery = query
                     onAction(SearchUiAction.OnSearchQueryChanged(query))
                 },
+                onDoneClicked = { onAction(SearchUiAction.OnSearchQueryChanged(searchQuery)) },
                 searchQuery = searchQuery
             )
             AnimatedContent(targetState = isSearching, label = "Search Tabs") { state ->
@@ -143,6 +150,18 @@ private fun SearchScreenContent(
 
             }
         }
+    }
+}
 
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun SearchScreenContentPreview() {
+    KhanaTheme {
+        SearchScreenContent(
+            products = emptyList(),
+            wishlistedProductsIds = emptyList(),
+            recentSearches = listOf("Shoes", "Shirts", "Pants"),
+            onAction = {}
+        )
     }
 }

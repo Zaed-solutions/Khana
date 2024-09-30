@@ -13,18 +13,19 @@ import org.zaed.khana.data.repository.SearchRepository
 class SearchViewModel(
     private val productRepo: ProductRepository,
     private val searchRepo: SearchRepository
-) : ViewModel(){
+) : ViewModel() {
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState = _uiState.asStateFlow()
+
     init {
 //        TODO("get currentUserId")
         fetchWishlistedProductIds()
         fetchRecentSearches()
     }
 
-    private fun fetchWishlistedProductIds(){
+    private fun fetchWishlistedProductIds() {
         viewModelScope.launch {
-            productRepo.fetchWishlistedProductsIds(uiState.value.currentUserId).collect{ result ->
+            productRepo.fetchWishlistedProductsIds(uiState.value.currentUserId).collect { result ->
                 result.onSuccessWithData { ids ->
                     _uiState.update { it.copy(wishlistedProductsIds = ids) }
                 }.onFailure { error ->
@@ -56,11 +57,22 @@ class SearchViewModel(
             is SearchUiAction.OnDeleteRecentSearchClicked -> deleteRecentSearch(action.query)
             is SearchUiAction.OnSearchQueryChanged -> fetchSearchResult(action.query)
             is SearchUiAction.OnWishlistProductClicked -> wishlistProduct(action.productId)
+            is SearchUiAction.OnAddRecentSearchItem -> addRecentSearch(action.query)
             else -> Unit
         }
     }
 
-    private fun clearRecentSearches(){
+    private fun addRecentSearch(query: String) {
+        viewModelScope.launch {
+            searchRepo.addRecentSearch(query).onSuccess {
+                _uiState.update { it.copy(recentSearches = uiState.value.recentSearches.plus(query)) }
+            }.onFailure { error ->
+                Log.e("SearchViewModel:addRecentSearch", error.userMessage)
+            }
+        }
+    }
+
+    private fun clearRecentSearches() {
         viewModelScope.launch {
             searchRepo.clearRecentSearches().onSuccess {
                 _uiState.update { it.copy(recentSearches = emptyList()) }
@@ -70,17 +82,23 @@ class SearchViewModel(
         }
     }
 
-    private fun deleteRecentSearch(query: String){
+    private fun deleteRecentSearch(query: String) {
         viewModelScope.launch {
             searchRepo.deleteRecentSearch(query).onSuccess {
-                _uiState.update { it.copy(recentSearches = uiState.value.recentSearches.minusElement(query)) }
+                _uiState.update {
+                    it.copy(
+                        recentSearches = uiState.value.recentSearches.minusElement(
+                            query
+                        )
+                    )
+                }
             }.onFailure { error ->
                 Log.e("SearchViewModel:deleteRecentSearch", error.userMessage)
             }
         }
     }
 
-    private fun fetchSearchResult(query: String){
+    private fun fetchSearchResult(query: String) {
         viewModelScope.launch {
             searchRepo.fetchSearchResult(query).collect { result ->
                 result.onSuccessWithData { products ->
@@ -92,17 +110,35 @@ class SearchViewModel(
         }
     }
 
-    private fun wishlistProduct(productId: String){
+    private fun wishlistProduct(productId: String) {
         viewModelScope.launch {
-            if(uiState.value.wishlistedProductsIds.contains(productId)) {
-                productRepo.removeWishlistedProduct(productId = productId, userId = uiState.value.currentUserId).onSuccess {
-                    _uiState.update { it.copy(wishlistedProductsIds = it.wishlistedProductsIds.minusElement(productId)) }
+            if (uiState.value.wishlistedProductsIds.contains(productId)) {
+                productRepo.removeWishlistedProduct(
+                    productId = productId,
+                    userId = uiState.value.currentUserId
+                ).onSuccess {
+                    _uiState.update {
+                        it.copy(
+                            wishlistedProductsIds = it.wishlistedProductsIds.minusElement(
+                                productId
+                            )
+                        )
+                    }
                 }.onFailure { error ->
                     Log.e("SearchViewModel:wishlistProduct", error.userMessage)
                 }
             } else {
-                productRepo.addWishlistedProduct(productId = productId, userId = uiState.value.currentUserId).onSuccess {
-                    _uiState.update { it.copy(wishlistedProductsIds = it.wishlistedProductsIds.plus(productId)) }
+                productRepo.addWishlistedProduct(
+                    productId = productId,
+                    userId = uiState.value.currentUserId
+                ).onSuccess {
+                    _uiState.update {
+                        it.copy(
+                            wishlistedProductsIds = it.wishlistedProductsIds.plus(
+                                productId
+                            )
+                        )
+                    }
                 }.onFailure { error ->
                     Log.e("SearchViewModel:wishlistProduct", error.userMessage)
                 }

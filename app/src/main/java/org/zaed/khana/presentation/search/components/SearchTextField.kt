@@ -2,7 +2,6 @@ package org.zaed.khana.presentation.search.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -14,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,13 +23,13 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun SearchTextField(
     modifier: Modifier = Modifier,
     onSearchQueryChanged: (String) -> Unit,
+    onDoneClicked: () -> Unit = {},
     searchQuery: String,
 ) {
     val focusManager = LocalFocusManager.current
     OutlinedTextField(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
             .height(54.dp),
         textStyle = MaterialTheme.typography.bodyMedium,
         shape = MaterialTheme.shapes.extraLarge,

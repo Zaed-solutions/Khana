@@ -16,4 +16,5 @@ interface ProductRemoteDataSource {
     suspend fun addWishlistedProduct(request: ProductRequest.AddWishlistedProduct): Result<Unit, ProductResult>
     suspend fun removeWishlistedProduct(request: ProductRequest.RemoveWishlistedProduct): Result<Unit, ProductResult>
     suspend fun addItemToCart(request: ProductRequest.AddItemToCart): Result<Unit, ProductResult>
+    fun searchProductsByTitle(request: ProductRequest.SearchProductsByTitle): Flow<Result<List<Product>, ProductResult>>
 }
