@@ -1,0 +1,110 @@
+package org.zaed.khana.presentation.filter
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
+import org.zaed.khana.R
+import org.zaed.khana.data.model.ProductFilter
+import org.zaed.khana.presentation.filter.component.BrandsFilterContent
+import org.zaed.khana.presentation.filter.component.FilterBottomBar
+import org.zaed.khana.presentation.filter.component.FilterSection
+import org.zaed.khana.presentation.filter.component.GenderFilterContent
+import org.zaed.khana.presentation.filter.component.PricingRangeFilterContent
+import org.zaed.khana.presentation.filter.component.ReviewsFilterContent
+import org.zaed.khana.presentation.filter.component.SortByFilterContent
+
+@Composable
+fun FilterScreen(
+    modifier: Modifier = Modifier,
+    viewModel: FilterViewModel = koinViewModel(),
+    onBackPressed: () -> Unit,
+    onNavigateToHome: (ProductFilter) -> Unit,
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    FilterScreenContent(modifier = modifier, filter = state.productFilter) { action ->
+        when (action) {
+            FilterUiAction.OnApplyFilters -> onNavigateToHome(state.productFilter)
+            FilterUiAction.OnBackPressed -> onBackPressed()
+            else -> viewModel.handleUiAction(action)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FilterScreenContent(
+    modifier: Modifier = Modifier,
+    filter: ProductFilter,
+    onAction: (FilterUiAction) -> Unit,
+) {
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(stringResource(R.string.filter))
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onAction(FilterUiAction.OnBackPressed) }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
+        },
+        bottomBar = {
+            FilterBottomBar(
+                onApplyFilters = { onAction(FilterUiAction.OnApplyFilters) },
+                onResetFilters = { onAction(FilterUiAction.OnResetFilters) }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier.padding(paddingValues)
+        ) {
+
+            FilterSection(title = stringResource(R.string.brands)) {
+                BrandsFilterContent(selectedBrand = filter.brand) {
+                    onAction(FilterUiAction.OnUpdateBrandFilter(it))
+                }
+            }
+            FilterSection(title = stringResource(R.string.gender)) {
+                GenderFilterContent(selectedGender = filter.gender) {
+                    onAction(FilterUiAction.OnUpdateGenderFilter(it))
+                }
+            }
+
+            FilterSection(title = stringResource(R.string.sort_by)) {
+                SortByFilterContent(selectedSortingOption = filter.sortedBy) {
+                    onAction(FilterUiAction.OnUpdateSortingOption(it))
+                }
+            }
+            FilterSection(title = stringResource(R.string.pricing_range)) {
+                PricingRangeFilterContent(priceRange = filter.priceRange) {
+                    onAction(FilterUiAction.OnUpdatePriceRange(it))
+                }
+            }
+            FilterSection(title = stringResource(R.string.reviews)) {
+                ReviewsFilterContent(selectedReviewsOption = filter.reviews) {
+                    onAction(FilterUiAction.OnUpdateReviewsFilter(it))
+                }
+            }
+        }
+    }
+}
