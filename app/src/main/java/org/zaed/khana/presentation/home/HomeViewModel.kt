@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.zaed.khana.data.repository.AdvertisementRepository
 import org.zaed.khana.data.repository.CategoryRepository
 import org.zaed.khana.data.repository.ProductRepository
+import org.zaed.khana.data.util.Result
 
 class HomeViewModel(
     private val advertisementRepo: AdvertisementRepository,
@@ -36,8 +37,6 @@ class HomeViewModel(
                     _uiState.update { it.copy(ads = ads) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchAdvertisement", error.userMessage)
-                }.onLoading {
-                    //TODO("handle loading")
                 }
             }
         }
@@ -50,8 +49,6 @@ class HomeViewModel(
                     _uiState.update { it.copy(categories = categories) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchCategories", error.userMessage)
-                }.onLoading {
-                    //TODO("handle loading")
                 }
             }
         }
@@ -75,8 +72,6 @@ class HomeViewModel(
                     _uiState.update { it.copy(labels = labels) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchLabels", error.userMessage)
-                }.onLoading {
-                    //TODO: handle loading
                 }
             }
         }
@@ -85,12 +80,11 @@ class HomeViewModel(
     private fun fetchProducts(){
         viewModelScope.launch {
             productRepo.fetchProductsByLabel(uiState.value.selectedLabel).collect{ result ->
+                Log.d("HomeViewModel:fetchProducts", result.toString())
                 result.onSuccessWithData { products ->
                     _uiState.update { it.copy(products = products) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchProducts", error.userMessage)
-                }.onLoading {
-                    //TODO: handle loading
                 }
             }
         }
@@ -103,8 +97,6 @@ class HomeViewModel(
                     _uiState.update { it.copy(wishlistedProductsIds = ids) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchWishlistedProductIds", error.userMessage)
-                }.onLoading {
-                    //TODO: handle loading
                 }
             }
         }

@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:name=".app.MainApplication"
         android:theme="@style/Theme.Khana"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"

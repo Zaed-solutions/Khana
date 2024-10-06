@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.realm)
 }
+
 
 android {
     namespace = "org.zaed.khana"
@@ -21,6 +25,16 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val keystoreFile = project.rootProject.file("localKeys.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        val apiKey = properties.getProperty("BASE_URL") ?: ""
+        buildConfigField(
+            type = "String",
+            name = "BASE_URL",
+            value = apiKey
+        )
     }
 
     buildTypes {
@@ -41,6 +55,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources {
