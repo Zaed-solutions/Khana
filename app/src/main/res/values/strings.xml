@@ -10,4 +10,8 @@
     <string name="select_color">Select Color :</string>
     <string name="total_price">Total Price</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="checkout">Checkout</string>
+    <string name="change">Change</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="continue_to_payment">Continue to Payment</string>
 </resources>
