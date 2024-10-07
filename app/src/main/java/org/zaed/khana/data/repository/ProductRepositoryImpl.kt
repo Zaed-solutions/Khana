@@ -7,7 +7,7 @@ import org.zaed.khana.data.source.remote.ProductRemoteDataSource
 import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.Result
 
-class ProductRepositoryImpl (
+class ProductRepositoryImpl(
     private val productRemoteSource: ProductRemoteDataSource
 ): ProductRepository {
     override suspend fun fetchProductById(id: String): Result<Product, ProductResult> {
@@ -33,10 +33,13 @@ class ProductRepositoryImpl (
         return productRemoteSource.fetchWishlistedProductsIds(userId = userId)
     }
 
+    override fun fetchWishlistedProducts(userId: String): Flow<Result<List<Product>, ProductResult>> {
+        return productRemoteSource.fetchWishlistedProducts(userId = userId)
+    }
+
     override suspend fun addWishlistedProduct(productId: String, userId: String): Result<Unit, ProductResult> {
         return productRemoteSource.addWishlistedProduct(productId = productId, userId = userId)
     }
-
     override suspend fun removeWishlistedProduct(productId: String, userId: String): Result<Unit, ProductResult> {
         return productRemoteSource.removeWishlistedProduct(productId = productId, userId = userId)
     }

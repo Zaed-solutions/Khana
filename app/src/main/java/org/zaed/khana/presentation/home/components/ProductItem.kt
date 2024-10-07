@@ -116,7 +116,7 @@ private fun ThumbnailSection(
             ),
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(end = 16.dp, top = 16.dp)
+                .padding(end = 8.dp, top = 8.dp)
         ) {
             Icon(
                 imageVector = if (isWishlisted) Icons.Default.Favorite else Icons.Default.FavoriteBorder,

@@ -28,7 +28,7 @@ class ProductDetailsViewModel(
             authRepo.getSignedInUser().onSuccessWithData { user ->
                 _uiState.update { it.copy(currentUser = user) }
             }.onFailure {
-                Log.e("HomeViewModel:fetchCurrentUser", it.userMessage)
+                Log.e("ProductDetailsViewModel:fetchCurrentUser", it.userMessage)
             }
         }
     }

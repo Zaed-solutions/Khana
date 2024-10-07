@@ -16,4 +16,5 @@ interface ProductRemoteDataSource {
     suspend fun addWishlistedProduct(userId: String, productId: String): Result<Unit, ProductResult>
     suspend fun removeWishlistedProduct(userId: String, productId: String): Result<Unit, ProductResult>
     suspend fun addItemToCart(productId: String, userId: String, productColor: Color, productSize: String): Result<Unit, ProductResult>
+    fun fetchWishlistedProducts(userId: String): Flow<Result<List<Product>, ProductResult>>
 }

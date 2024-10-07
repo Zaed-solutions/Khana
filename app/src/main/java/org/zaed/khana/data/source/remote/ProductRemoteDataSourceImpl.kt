@@ -85,14 +85,15 @@ class ProductRemoteDataSourceImpl(
             } else {
                 emit(Result.failure(ProductResult.FETCH_LABELS_FAILED))
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             emit(Result.failure(ProductResult.SERVER_ERROR))
         }
     }
+
     //fetch flash sale end time in epoch seconds
     override suspend fun fetchFlashSaleEndTime(): Result<Long, ProductResult> {
-        return try{
+        return try {
             val response = httpClient.get {
                 endPoint(EndPoint.Product.FetchFlashSaleEndTime.route)
             }
@@ -165,7 +166,7 @@ class ProductRemoteDataSourceImpl(
                 parameter("productId", productId)
                 parameter("userId", userId)
             }
-            if(response.status == HttpStatusCode.OK){
+            if (response.status == HttpStatusCode.OK) {
                 Result.success(Unit)
             } else {
                 Result.failure(ProductResult.ADD_WISHLISTED_PRODUCTS_FAILED)
@@ -183,7 +184,7 @@ class ProductRemoteDataSourceImpl(
                 parameter("productId", productId)
                 parameter("userId", userId)
             }
-            if(response.status == HttpStatusCode.OK){
+            if (response.status == HttpStatusCode.OK) {
                 Result.success(Unit)
             } else {
                 Result.failure(ProductResult.REMOVE_WISHLISTED_PRODUCTS_FAILED)
@@ -215,4 +216,28 @@ class ProductRemoteDataSourceImpl(
             Result.failure(ProductResult.SERVER_ERROR)
         }
     }
+
+    override fun fetchWishlistedProducts(userId: String): Flow<Result<List<Product>, ProductResult>> =
+        flow {
+            emit(Result.Loading)
+            try {
+                val response = httpClient.get {
+                    endPoint(EndPoint.Product.FetchWishlistedProducts.route)
+                    parameter("userId", userId)
+                }
+                if (response.status == HttpStatusCode.OK) {
+                    val responseData = response.body<GenericResponse<List<Product>>>().data
+                    if (responseData != null) {
+                        emit(Result.success(responseData))
+                    } else {
+                        emit(Result.failure(ProductResult.FETCH_WISHLISTED_PRODUCTS_FAILED))
+                    }
+                } else {
+                    emit(Result.failure(ProductResult.FETCH_WISHLISTED_PRODUCTS_FAILED))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Result.failure(ProductResult.SERVER_ERROR))
+            }
+        }
 }

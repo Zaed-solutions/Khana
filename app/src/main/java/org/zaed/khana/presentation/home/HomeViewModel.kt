@@ -26,14 +26,13 @@ class HomeViewModel(
         fetchCategories()
         fetchFlashSaleEndTime()
         fetchLabels()
-        fetchProducts()
-        fetchWishlistedProductIds()
     }
 
     private fun fetchCurrentUser(){
         viewModelScope.launch {
             authRepo.getSignedInUser().onSuccessWithData { user ->
                 _uiState.update { it.copy(currentUser = user) }
+                fetchWishlistedProductIds()
             }.onFailure {
                 Log.e("HomeViewModel:fetchCurrentUser", it.userMessage)
             }
@@ -80,6 +79,7 @@ class HomeViewModel(
             productRepo.fetchLabels().collect{ result ->
                 result.onSuccessWithData { labels ->
                     _uiState.update { it.copy(labels = labels) }
+                    fetchProducts()
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchLabels", error.userMessage)
                 }
