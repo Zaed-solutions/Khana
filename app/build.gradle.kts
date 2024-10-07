@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -44,10 +43,9 @@ android {
     buildFeatures {
         compose = true
     }
-
     packaging {
         resources {
-            excludes += "/META-INF/*"
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
@@ -76,6 +74,7 @@ dependencies {
     // If using coroutines with the SDK
     implementation (libs.kotlinx.coroutines.core)
     implementation(libs.play.services.auth)
+    implementation("com.tbuonomo:dotsindicator:5.0")
     implementation(libs.coil.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.ktor.client.core)
