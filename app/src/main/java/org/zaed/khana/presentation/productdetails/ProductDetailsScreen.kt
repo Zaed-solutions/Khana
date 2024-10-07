@@ -1,6 +1,7 @@
 package org.zaed.khana.presentation.productdetails
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,6 +47,7 @@ fun ProductDetailsScreen(
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     ProductDetailsScreenContent(
+        modifier = modifier,
         onAction = { action ->
             when (action) {
                 is ProductDetailsUiAction.OnBackPressed -> onBackPressed()
@@ -137,7 +139,7 @@ private fun ProductDetailsScreenContent(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             ImagesPreviewPager(imagesUrls = imagesUrls)
             ProductInformationSection(
@@ -145,19 +147,19 @@ private fun ProductDetailsScreenContent(
                 description = description,
                 category = category,
                 rating = rating,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp)
             )
             SizeSelectionSection(
                 availableSizes = availableSizes,
                 selectedSize = selectedSize,
                 onSelectSize = { size -> onAction(ProductDetailsUiAction.OnSelectSize(size)) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 8.dp)
             )
             ColorSelectionSection(
                 availableColors = availableColors,
                 selectedColor = selectedColor,
                 onSelectColor = { hexColor -> onAction(ProductDetailsUiAction.OnSelectColor(hexColor)) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 8.dp)
             )
         }
     }

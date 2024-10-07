@@ -8,21 +8,32 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.Color
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.CartRepository
 import org.zaed.khana.data.repository.ProductRepository
 import org.zaed.khana.data.util.ProductResult
 
 class ProductDetailsViewModel(
     private val productRepo: ProductRepository,
+    private val authRepo: AuthenticationRepository
     private val cartRepo: CartRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductDetailsUiState())
     val uiState = _uiState.asStateFlow()
     fun init(productId: String) {
         _uiState.update { it.copy(productId = productId) }
+        fetchCurrentUser()
         fetchProduct(productId)
     }
-
+    private fun fetchCurrentUser(){
+        viewModelScope.launch {
+            authRepo.getSignedInUser().onSuccessWithData { user ->
+                _uiState.update { it.copy(currentUser = user) }
+            }.onFailure {
+                Log.e("ProductDetailsViewModel:fetchCurrentUser", it.userMessage)
+            }
+        }
+    }
     private fun fetchProduct(productId: String) {
         viewModelScope.launch {
             productRepo.fetchProductById(productId).onSuccessWithData { product ->
@@ -42,7 +53,7 @@ class ProductDetailsViewModel(
 
     private fun checkIfIsWishlisted(productId: String) {
         viewModelScope.launch {
-            productRepo.checkIfIsProductWishlisted(uiState.value.currentUserId, productId)
+            productRepo.checkIfIsProductWishlisted(uiState.value.currentUser.id, productId)
                 .onSuccessWithData { isWishlisted ->
                     _uiState.update { it.copy(isWishlisted = isWishlisted) }
                 }.onFailure { error ->
@@ -92,7 +103,7 @@ class ProductDetailsViewModel(
             if (uiState.value.isWishlisted) {
                 productRepo.removeWishlistedProduct(
                     productId = productId,
-                    userId = uiState.value.currentUserId
+                    userId = uiState.value.currentUser.id
                 ).onSuccess {
                     _uiState.update { it.copy(isWishlisted = false, result = ProductResult.IDLE) }
                 }.onFailure { error ->
@@ -102,7 +113,7 @@ class ProductDetailsViewModel(
             } else {
                 productRepo.addWishlistedProduct(
                     productId = productId,
-                    userId = uiState.value.currentUserId
+                    userId = uiState.value.currentUser.id
                 ).onSuccess {
                     _uiState.update { it.copy(isWishlisted = true, result = ProductResult.IDLE) }
                 }.onFailure { error ->

@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.rounded.LocationOn
-import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -53,7 +53,7 @@ fun LocationAndNotificationsSection(
         Spacer(modifier = Modifier.weight(1f))
         IconButton(onClick = { onNotificationsButtonClicked() }) {
             Icon(
-                imageVector = Icons.Rounded.Notifications, contentDescription = "notifications"
+                imageVector = Icons.Default.Notifications, contentDescription = "notifications"
             )
         }
     }
