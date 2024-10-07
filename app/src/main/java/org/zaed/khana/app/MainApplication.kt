@@ -1,6 +1,8 @@
 package org.zaed.khana.app
 
 import android.app.Application
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -15,6 +17,10 @@ class MainApplication : Application() {
             androidContext(this@MainApplication)
             modules(appModule)
         }
+        FacebookSdk.sdkInitialize(applicationContext)
+        AppEventsLogger.activateApp(this@MainApplication)
+        println("Facebook hash key: ${FacebookSdk.getApplicationSignature(this)}")
+
 
     }
 }

@@ -1,6 +1,7 @@
 package org.zaed.khana.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.Product
 import org.zaed.khana.data.source.remote.ProductRemoteDataSource
 import org.zaed.khana.data.source.remote.model.request.ProductRequest
@@ -10,6 +11,19 @@ import org.zaed.khana.data.util.Result
 class ProductRepositoryImpl (
     private val productRemoteSource: ProductRemoteDataSource
 ): ProductRepository {
+    override suspend fun fetchProductById(id: String): Result<Product, ProductResult> {
+        val request = ProductRequest.FetchProductById(id)
+        return productRemoteSource.fetchProductById(request)
+    }
+
+    override suspend fun checkIfIsProductWishlisted(
+        userId: String,
+        productId: String
+    ): Result<Boolean, ProductResult> {
+        val request = ProductRequest.CheckIfIsProductWishlisted(userId = userId, productId = productId)
+        return productRemoteSource.checkIfIsProductWishlisted(request)
+    }
+
     override fun fetchLabels(): Flow<Result<List<String>, ProductResult>> {
         return productRemoteSource.fetchLabels()
     }
@@ -36,5 +50,15 @@ class ProductRepositoryImpl (
 
     override suspend fun fetchFlashSaleEndTime(): Result<Long, ProductResult> {
         return productRemoteSource.fetchFlashSaleEndTime()
+    }
+
+    override suspend fun addItemToCart(
+        userId: String,
+        productId: String,
+        productColor: Color,
+        productSize: String
+    ): Result<Unit, ProductResult> {
+        val request = ProductRequest.AddItemToCart(productId = productId, userId = userId, productColor = productColor, productSize = productSize)
+        return productRemoteSource.addItemToCart(request)
     }
 }

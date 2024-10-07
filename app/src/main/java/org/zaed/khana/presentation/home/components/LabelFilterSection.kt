@@ -21,10 +21,10 @@ fun LabelFilterSection(
     ) {
         items(labels.size) { index ->
             val label = labels[index]
-            LabelItem(
-                label = label,
+            ChipItem(
+                title = label,
                 isSelected = label == selectedLabel,
-                onSelectLabel = onSelectLabel
+                onSelectItem = onSelectLabel
             )
         }
     }

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.realm)
+    alias(libs.plugins.firebase)
 }
 
 
@@ -87,12 +88,15 @@ dependencies {
     implementation (libs.realm.sync)
     // If using coroutines with the SDK
     implementation (libs.kotlinx.coroutines.core)
+    implementation(libs.play.services.auth)
     implementation("com.tbuonomo:dotsindicator:5.0")
     implementation(libs.coil.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.ktor.client.core)
     implementation(libs.kotlin.compose.compiler.plugin)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -100,5 +104,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.google.auth.library.oauth2.http)
+
+    implementation (libs.facebook.android.sdk)
+
+
 
 }

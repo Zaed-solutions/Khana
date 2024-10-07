@@ -3,11 +3,16 @@ package org.zaed.khana.data.util
 import kotlinx.serialization.Serializable
 
 
-@kotlinx.serialization.Serializable
+@Serializable
 sealed interface Error
 
 fun Error.userMessage(): String {
     return when (this) {
+        is AuthResults -> this.userMessage
+        is EmailFieldError -> this.userMessage
+        is PasswordFieldError -> this.userMessage
+        is NameFieldError -> this.userMessage
+        is TermsAndConditionsError -> this.userMessage
         is AuthResults -> userMessage
         is AdvertisementResult -> userMessage
         is CategoryResult -> userMessage
@@ -24,12 +29,27 @@ fun Error.isNotIdle(): Boolean {
             AuthResults.INVALID_PASSWORD,
             AuthResults.PASSWORD_DOES_NOT_MATCH
         )
+
         is AdvertisementResult -> this != AdvertisementResult.IDLE
         is CategoryResult -> this != CategoryResult.IDLE
         is ProductResult -> this != ProductResult.IDLE
+    when(this){
+        is AuthResults -> return this != AuthResults.IDLE
+        is EmailFieldError -> return this != EmailFieldError.IDLE
+        is PasswordFieldError -> return this != PasswordFieldError.IDLE
+        is NameFieldError -> return this != NameFieldError.IDLE
+        is TermsAndConditionsError -> return this != TermsAndConditionsError.IDLE
     }
 }
 
+@Serializable
+enum class EmailFieldError(val userMessage: String):Error{
+    IDLE(""),
+    INVALID_EMAIL("Invalid Email"),
+    EMAIL_FIELD_IS_EMPTY("Email field is empty"),
+    EMAIL_NOT_REGISTERED("Email not registered"),
+    EMAIL_ALREADY_REGISTERED("Email already registered"),
+    RESET_EMAIL_SENT("Reset Email Sent"),
 @Serializable
 enum class AdvertisementResult(val userMessage: String) : Error {
     IDLE(""),
@@ -37,6 +57,25 @@ enum class AdvertisementResult(val userMessage: String) : Error {
     NETWORK_ERROR("Failed to connect to the network"),
 }
 
+}
+@Serializable
+enum class NameFieldError(val userMessage: String):Error{
+    IDLE(""),
+    INVALID_NAME("Invalid Name"),
+    NAME_FIELD_IS_EMPTY("Name field is empty"),
+}
+@Serializable
+enum class TermsAndConditionsError(val userMessage: String):Error{
+    IDLE(""),
+    TERMS_AND_CONDITIONS_NOT_ACCEPTED("Terms and conditions not accepted"),
+}
+@Serializable
+enum class PasswordFieldError(val userMessage: String):Error {
+    IDLE(""),
+    INVALID_PASSWORD("Invalid Password"),
+    PASSWORD_FIELD_IS_EMPTY("Password field is empty"),
+    PASSWORD_DOES_NOT_MATCH("Password does not match"),
+}
 @Serializable
 enum class CategoryResult(val userMessage: String) : Error {
     IDLE(""),
@@ -48,9 +87,11 @@ enum class CategoryResult(val userMessage: String) : Error {
 enum class ProductResult(val userMessage: String) : Error {
     IDLE(""),
     FETCH_LABELS_FAILED("Failed to fetch product labels"),
+    CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED("Failed to check whether product is wishlisted"),
     FETCH_FLASH_SALE_END_TIME_FAILED("Failed to fetch flash sale end time"),
     FETCH_PRODUCTS_FAILED("Failed to fetch products"),
     FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),
+    ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     ADD_WISHLISTED_PRODUCTS_FAILED("Failed to add wishlisted product"),
     REMOVE_WISHLISTED_PRODUCTS_FAILED("Failed to remove wishlisted product"),
     NETWORK_ERROR("Failed to connect to the network"),
