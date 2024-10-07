@@ -8,37 +8,46 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.ProductRepository
 
 class WishlistViewModel(
-    private val productRepo: ProductRepository
+    private val productRepo: ProductRepository,
+    private val authRepo: AuthenticationRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WishlistUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-//        getCurrentUserId()
+        fetchCurrentUser()
         getWishlistedProducts()
-        fetchCategoriesFromWishlistedProducts()
+    }
+
+    private fun fetchCurrentUser(){
+        viewModelScope.launch {
+            authRepo.getSignedInUser().onSuccessWithData { user ->
+                _uiState.update { it.copy(currentUser = user) }
+            }.onFailure {
+                Log.e("WishlistViewModel:fetchCurrentUser", it.userMessage)
+            }
+        }
     }
 
     private fun getWishlistedProducts() {
         viewModelScope.launch(Dispatchers.IO) {
-            productRepo.fetchWishlistedProducts(uiState.value.currentUserId).collect { result ->
+            productRepo.fetchWishlistedProducts(uiState.value.currentUser.id).collect { result ->
                 result.onSuccessWithData { products ->
                     _uiState.update {
                         it.copy(
                             wishlistedProducts = products,
                         )
                     }
-                }.onLoading {
-                    //TODO: handle loading
+                    fetchCategoriesFromWishlistedProducts()
                 }.onFailure { error ->
                     Log.e(
                         "${this@WishlistViewModel::class.simpleName}:getWishlistedProducts",
                         error.userMessage
                     )
-                    //TODO: handle error
                 }
             }
         }
@@ -104,7 +113,7 @@ class WishlistViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             productRepo.removeWishlistedProduct(
                 productId = productId,
-                userId = uiState.value.currentUserId
+                userId = uiState.value.currentUser.id
             ).onSuccess {
                 val updatedWishlistedProducts =
                     uiState.value.wishlistedProducts.filter { it.id != productId }
@@ -115,7 +124,6 @@ class WishlistViewModel(
                     "${this@WishlistViewModel::class.simpleName}:removeWishlistedProduct",
                     error.userMessage
                 )
-                //TODO: handle error
             }
         }
     }
