@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.AdvertisementRepository
 import org.zaed.khana.data.repository.CategoryRepository
 import org.zaed.khana.data.repository.ProductRepository
@@ -15,18 +16,28 @@ class HomeViewModel(
     private val advertisementRepo: AdvertisementRepository,
     private val categoryRepo: CategoryRepository,
     private val productRepo: ProductRepository,
+    private val authRepo: AuthenticationRepository,
 ): ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
     init{
-//        TODO("get currentUserId")
-//        TODO("get hasNewNotifications")
+        fetchCurrentUser()
         fetchAdvertisements()
         fetchCategories()
         fetchFlashSaleEndTime()
         fetchLabels()
         fetchProducts()
         fetchWishlistedProductIds()
+    }
+
+    private fun fetchCurrentUser(){
+        viewModelScope.launch {
+            authRepo.getSignedInUser().onSuccessWithData { user ->
+                _uiState.update { it.copy(currentUser = user) }
+            }.onFailure {
+                Log.e("HomeViewModel:fetchCurrentUser", it.userMessage)
+            }
+        }
     }
 
     private fun fetchAdvertisements(){
@@ -36,8 +47,6 @@ class HomeViewModel(
                     _uiState.update { it.copy(ads = ads) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchAdvertisement", error.userMessage)
-                }.onLoading {
-                    //TODO("handle loading")
                 }
             }
         }
@@ -50,8 +59,6 @@ class HomeViewModel(
                     _uiState.update { it.copy(categories = categories) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchCategories", error.userMessage)
-                }.onLoading {
-                    //TODO("handle loading")
                 }
             }
         }
@@ -75,8 +82,6 @@ class HomeViewModel(
                     _uiState.update { it.copy(labels = labels) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchLabels", error.userMessage)
-                }.onLoading {
-                    //TODO: handle loading
                 }
             }
         }
@@ -85,12 +90,11 @@ class HomeViewModel(
     private fun fetchProducts(){
         viewModelScope.launch {
             productRepo.fetchProductsByLabel(uiState.value.selectedLabel).collect{ result ->
+                Log.d("HomeViewModel:fetchProducts", result.toString())
                 result.onSuccessWithData { products ->
                     _uiState.update { it.copy(products = products) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchProducts", error.userMessage)
-                }.onLoading {
-                    //TODO: handle loading
                 }
             }
         }
@@ -98,13 +102,11 @@ class HomeViewModel(
 
     private fun fetchWishlistedProductIds(){
         viewModelScope.launch {
-            productRepo.fetchWishlistedProductsIds(uiState.value.currentUserId).collect{ result ->
+            productRepo.fetchWishlistedProductsIds(uiState.value.currentUser.id).collect{ result ->
                 result.onSuccessWithData { ids ->
                     _uiState.update { it.copy(wishlistedProductsIds = ids) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchWishlistedProductIds", error.userMessage)
-                }.onLoading {
-                    //TODO: handle loading
                 }
             }
         }
@@ -130,13 +132,13 @@ class HomeViewModel(
     private fun wishlistProduct(productId: String){
         viewModelScope.launch {
             if(uiState.value.wishlistedProductsIds.contains(productId)) {
-                productRepo.removeWishlistedProduct(productId = productId, userId = uiState.value.currentUserId).onSuccess {
+                productRepo.removeWishlistedProduct(productId = productId, userId = uiState.value.currentUser.id).onSuccess {
                     _uiState.update { it.copy(wishlistedProductsIds = it.wishlistedProductsIds.minusElement(productId)) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:wishlistProduct", error.userMessage)
                 }
             } else {
-                productRepo.addWishlistedProduct(productId = productId, userId = uiState.value.currentUserId).onSuccess {
+                productRepo.addWishlistedProduct(productId = productId, userId = uiState.value.currentUser.id).onSuccess {
                     _uiState.update { it.copy(wishlistedProductsIds = it.wishlistedProductsIds.plus(productId)) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:wishlistProduct", error.userMessage)

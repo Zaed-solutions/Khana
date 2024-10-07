@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -62,15 +61,18 @@ fun ProductItem(
         )
         //title and rating
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = productName)
-            Row (
+            Text(text = productName, modifier = Modifier.weight(1f))
+            Row(
                 verticalAlignment = Alignment.CenterVertically
-            ){
-                Icon(imageVector = Icons.Rounded.Star, tint  = Color.Yellow, contentDescription = null)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Star,
+                    tint = Color.Yellow,
+                    contentDescription = null
+                )
                 Text(text = DecimalFormat("#.#").format(productRating))
             }
         }
@@ -136,6 +138,7 @@ private fun ThumbnailSectionPreview2() {
         )
     }
 }
+
 @Preview(showBackground = true, name = "not wishlisted product")
 @Composable
 private fun ThumbnailSectionPreview1() {
