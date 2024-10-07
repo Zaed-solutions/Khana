@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +34,7 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun WishlistScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
+    onNavigateToProductDetails: (String) -> Unit,
     viewModel: WishlistViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -40,7 +45,7 @@ fun WishlistScreen(
         onAction = { action ->
             when (action) {
                 WishlistUiAction.OnBackPressed -> onBackPressed()
-                is WishlistUiAction.OnProductClicked -> TODO("navigate to product details")
+                is WishlistUiAction.OnProductClicked -> onNavigateToProductDetails(action.productId)
                 else -> viewModel.handleUiAction(action)
             }
         },
@@ -61,7 +66,16 @@ private fun WishlistScreenContent(
     val screenWidth = configuration.screenWidthDp.dp
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = { Text(text = stringResource(R.string.my_wishlist)) })
+            CenterAlignedTopAppBar(
+                title = { Text(text = stringResource(R.string.my_wishlist)) },
+                navigationIcon = {
+                    IconButton(onClick = { onAction(WishlistUiAction.OnBackPressed) }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                })
         },
         modifier = modifier.fillMaxSize()
     ) { paddingValues ->
@@ -77,7 +91,7 @@ private fun WishlistScreenContent(
             )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(vertical = 16.dp, horizontal = 32.dp),
+                contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
