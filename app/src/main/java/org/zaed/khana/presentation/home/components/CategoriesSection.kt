@@ -2,10 +2,10 @@ package org.zaed.khana.presentation.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,14 +22,13 @@ fun CategoriesSection(
     modifier: Modifier = Modifier
 ) {
     Column {
-        Text(text = stringResource(R.string.category))
+        Text(text = stringResource(R.string.category), style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.size(16.dp))
         LazyRow(
-            contentPadding = PaddingValues(16.dp),
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(categories.size){ index ->
+            items(categories.size) { index ->
                 val category = categories[index]
                 CategoryItem(
                     categoryImage = category.categoryImage,
