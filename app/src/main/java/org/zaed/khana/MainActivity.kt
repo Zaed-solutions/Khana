@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import org.zaed.khana.presentation.auth.login.LoginScreen
+import org.zaed.khana.presentation.auth.signup.SignUpScreen
+import org.zaed.khana.ui.theme.KhanaTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
