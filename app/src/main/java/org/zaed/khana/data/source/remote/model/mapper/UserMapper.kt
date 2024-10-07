@@ -1,7 +1,7 @@
-package org.zaed.khana.data.auth.source.remote.mapper
+package org.zaed.khana.data.source.remote.model.mapper
 
 import com.google.firebase.auth.FirebaseUser
-import org.zaed.khana.data.auth.source.remote.model.User
+import org.zaed.khana.data.model.User
 
 fun FirebaseUser.toUser(): User =
     User(

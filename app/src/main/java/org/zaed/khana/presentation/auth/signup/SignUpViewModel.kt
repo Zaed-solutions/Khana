@@ -8,14 +8,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.zaed.khana.data.auth.repository.AuthenticationRepository
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.EmailFieldError
 import org.zaed.khana.data.util.NameFieldError
 import org.zaed.khana.data.util.PasswordFieldError
 import org.zaed.khana.data.util.Result
 import org.zaed.khana.data.util.TermsAndConditionsError
-import org.zaed.khana.presentation.auth.login.LoginUIAction
 import org.zaed.khana.presentation.auth.util.Validator
 
 class SignUpViewModel(

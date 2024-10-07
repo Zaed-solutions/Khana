@@ -18,7 +18,7 @@ import org.zaed.khana.presentation.auth.component.SignUpTitle
 import org.zaed.khana.presentation.auth.component.SignUpWelcomeSentence
 import org.zaed.khana.presentation.auth.component.SocialMediaIconsRow
 import org.zaed.khana.presentation.auth.component.TermsAndConditions
-import org.zaed.khana.ui.theme.KhanaTheme
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun SignUpScreenContent(

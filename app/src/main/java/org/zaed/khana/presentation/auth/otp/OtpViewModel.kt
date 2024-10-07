@@ -4,10 +4,9 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import org.zaed.khana.data.auth.repository.AuthenticationRepository
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.PasswordFieldError
-import org.zaed.khana.presentation.auth.util.Validator
 
 
 class OtpViewModel(

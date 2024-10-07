@@ -1,9 +1,8 @@
-package org.zaed.khana.data.auth.source.remote
+package org.zaed.khana.data.source.remote
 
-import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
-import org.zaed.khana.data.auth.source.remote.model.User
+import org.zaed.khana.data.model.User
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.Result
 

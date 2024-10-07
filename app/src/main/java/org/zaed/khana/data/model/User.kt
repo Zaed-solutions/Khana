@@ -1,4 +1,4 @@
-package org.zaed.khana.data.auth.source.remote.model
+package org.zaed.khana.data.model
 
 import kotlinx.serialization.Serializable
 

@@ -1,7 +1,7 @@
 package org.zaed.khana.presentation.home
 
 import kotlinx.datetime.Clock
-import org.zaed.khana.data.auth.source.remote.model.User
+import org.zaed.khana.data.model.User
 import org.zaed.khana.data.model.Advertisement
 import org.zaed.khana.data.model.Category
 import org.zaed.khana.data.model.Product

@@ -36,14 +36,16 @@ fun AdvertisementSection(
                 advertisement = ads[page]
             )
         }
-        DotsIndicator(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .height(8.dp),
-            dotCount = ads.size,
-            type = ShiftIndicatorType(dotsGraphic = DotGraphic(color = MaterialTheme.colorScheme.primary)),
-            pagerState = pagerState
-        )
+        if(ads.size > 1) {
+            DotsIndicator(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .height(8.dp),
+                dotCount = ads.size,
+                type = ShiftIndicatorType(dotsGraphic = DotGraphic(color = MaterialTheme.colorScheme.primary)),
+                pagerState = pagerState
+            )
+        }
     }
 }
 

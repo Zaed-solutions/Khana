@@ -16,7 +16,7 @@ import org.zaed.khana.presentation.auth.component.googleSignInOption
 import org.zaed.khana.presentation.auth.component.rememberFirebaseAuthLauncher
 import org.zaed.khana.presentation.auth.login.LoginUiState
 import org.zaed.khana.presentation.auth.login.LoginViewModel
-import org.zaed.khana.ui.theme.KhanaTheme
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun SignUpScreen(

@@ -12,8 +12,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.parameters
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.Product
-import org.zaed.khana.data.source.remote.model.request.ProductRequest
 import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
@@ -23,13 +23,19 @@ import org.zaed.khana.data.util.Result
 class ProductRemoteDataSourceImpl(
     private val httpClient: HttpClient,
 ) : ProductRemoteDataSource {
-    override suspend fun fetchProductById(request: ProductRequest.FetchProductById): Result<Product, ProductResult> {
+    override suspend fun fetchProductById(productId: String): Result<Product, ProductResult> {
         return try{
             val response = httpClient.get {
                 endPoint(EndPoint.Product.FetchProductById.route)
+                parameter("productId", productId)
             }
             if(response.status == HttpStatusCode.OK){
-                Result.success(response.body<Product>())
+                val responseData = response.body<GenericResponse<Product>>().data
+                if(responseData != null){
+                    Result.success(responseData)
+                } else {
+                    Result.failure(ProductResult.FETCH_PRODUCTS_FAILED)
+                }
             } else {
                 Result.failure(ProductResult.FETCH_PRODUCTS_FAILED)
             }
@@ -39,13 +45,20 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun checkIfIsProductWishlisted(request: ProductRequest.CheckIfIsProductWishlisted): Result<Boolean, ProductResult> {
+    override suspend fun checkIfIsProductWishlisted(userId: String, productId: String): Result<Boolean, ProductResult> {
         return try{
             val response = httpClient.get {
                 endPoint(EndPoint.Product.CheckIfProductIsWishlisted.route)
+                parameter("userId", userId)
+                parameter("productId", productId)
             }
             if(response.status == HttpStatusCode.OK){
-                Result.success(response.body<Boolean>())
+                val responseData = response.body<GenericResponse<Boolean>>().data
+                if(responseData != null){
+                    Result.success(responseData)
+                } else {
+                    Result.failure(ProductResult.CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED)
+                }
             } else {
                 Result.failure(ProductResult.CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED)
             }
@@ -63,8 +76,12 @@ class ProductRemoteDataSourceImpl(
                 endPoint(EndPoint.Product.FetchLabels.route)
             }
             if(response.status == HttpStatusCode.OK) {
-                Log.d("ProductRemoteDataSourceImpl", "fetchLabels: response: ${response.body<GenericResponse<List<String>>>().data}")
-                emit(Result.success(response.body<GenericResponse<List<String>>>().data ?: emptyList()))
+                val responseData = response.body<GenericResponse<List<String>>>().data
+                if(responseData != null){
+                    emit(Result.success(responseData))
+                } else {
+                    emit(Result.failure(ProductResult.FETCH_LABELS_FAILED))
+                }
             } else {
                 emit(Result.failure(ProductResult.FETCH_LABELS_FAILED))
             }
@@ -80,7 +97,12 @@ class ProductRemoteDataSourceImpl(
                 endPoint(EndPoint.Product.FetchFlashSaleEndTime.route)
             }
             if(response.status == HttpStatusCode.OK){
-                Result.success(response.body<GenericResponse<Long>>().data?: 0)
+                val responseData = response.body<GenericResponse<Long>>().data
+                if(responseData != null){
+                    Result.success(responseData)
+                } else {
+                    Result.failure(ProductResult.FETCH_FLASH_SALE_END_TIME_FAILED)
+                }
             } else {
                 Result.failure(ProductResult.FETCH_FLASH_SALE_END_TIME_FAILED)
             }
@@ -90,37 +112,43 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    override fun fetchProductsByLabel(request: ProductRequest.FetchProductsByLabelRequest): Flow<Result<List<Product>, ProductResult>> = flow {
+    override fun fetchProductsByLabel(label: String): Flow<Result<List<Product>, ProductResult>> = flow {
         emit(Result.Loading)
         try {
             val response = httpClient.get {
                 endPoint(EndPoint.Product.FetchProductsByLabel.route)
-                parameter("label", request.label)
+                parameter("label", label)
             }
-            Log.d("ProductRemoteDataSourceImpl", "fetchProductsByLabel: request: ${response}}")
             if(response.status == HttpStatusCode.OK) {
-                Log.d("ProductRemoteDataSourceImpl", "fetchProductsByLabel: response ok: ${response.body<GenericResponse<List<Product>>>().data}")
-                emit(Result.success(response.body<GenericResponse<List<Product>>>().data ?: emptyList()))
+                val responseData = response.body<GenericResponse<List<Product>>>().data
+                if(responseData != null){
+                    emit(Result.success(responseData))
+                } else {
+                    emit(Result.failure(ProductResult.FETCH_PRODUCTS_FAILED))
+                }
             } else {
-                Log.d("ProductRemoteDataSourceImpl", "fetchProductsByLabel: response not ok: ${response}}")
                 emit(Result.failure(ProductResult.FETCH_PRODUCTS_FAILED))
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("ProductRemoteDataSourceImpl", "fetchProductsByLabel: ${e.message}")
             emit(Result.failure(ProductResult.SERVER_ERROR))
         }
     }
 
-    override fun fetchWishlistedProductsIds(request: ProductRequest.FetchWishlistedProductsIds): Flow<Result<List<String>, ProductResult>> = flow {
+    override fun fetchWishlistedProductsIds(userId: String): Flow<Result<List<String>, ProductResult>> = flow {
         emit(Result.Loading)
         try {
             val response = httpClient.get {
                 endPoint(EndPoint.Product.FetchWishlistedProductsIds.route)
-                parameter("userId", request.userId)
+                parameter("userId", userId)
             }
             if(response.status == HttpStatusCode.OK) {
-                emit(Result.success(response.body<GenericResponse<List<String>>>().data ?: emptyList()))
+                val responseData = response.body<GenericResponse<List<String>>>().data
+                if(responseData != null){
+                    emit(Result.success(responseData))
+                } else {
+                    emit(Result.failure(ProductResult.FETCH_WISHLISTED_PRODUCTS_FAILED))
+                }
             } else {
                 emit(Result.failure(ProductResult.FETCH_WISHLISTED_PRODUCTS_FAILED))
             }
@@ -130,12 +158,12 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun addWishlistedProduct(request: ProductRequest.AddWishlistedProduct): Result<Unit, ProductResult> {
+    override suspend fun addWishlistedProduct(userId: String, productId: String): Result<Unit, ProductResult> {
         return try {
             val response = httpClient.post {
                 endPoint(EndPoint.Product.AddWishlistedProduct.route)
-                parameter("productId", request.productId)
-                parameter("userId", request.userId)
+                parameter("productId", productId)
+                parameter("userId", userId)
             }
             if(response.status == HttpStatusCode.OK){
                 Result.success(Unit)
@@ -148,12 +176,12 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun removeWishlistedProduct(request: ProductRequest.RemoveWishlistedProduct): Result<Unit, ProductResult>{
+    override suspend fun removeWishlistedProduct(userId: String, productId: String): Result<Unit, ProductResult>{
         return try {
             val response = httpClient.delete {
                 endPoint(EndPoint.Product.RemoveWishlistedProduct.route)
-                parameter("productId", request.productId)
-                parameter("userId", request.userId)
+                parameter("productId", productId)
+                parameter("userId", userId)
             }
             if(response.status == HttpStatusCode.OK){
                 Result.success(Unit)
@@ -166,15 +194,20 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun addItemToCart(request: ProductRequest.AddItemToCart): Result<Unit, ProductResult> {
+    override suspend fun addItemToCart(productId: String, userId: String, productColor: Color, productSize: String): Result<Unit, ProductResult> {
         return try {
             val response = httpClient.post {
                 endPoint(EndPoint.Product.AddItemToCart.route)
-                setBody(request)
+                parameter("productId", productId)
+                parameter("userId", userId)
+                parameter("productColorName", productColor.name)
+                parameter("productColorHex", productColor.hex)
+                parameter("productSize", productSize)
             }
             if(response.status == HttpStatusCode.OK){
                 Result.success(Unit)
             } else {
+                Log.d("ProductRemoteDataSourceImpl", "addItemToCart: ${response}")
                 Result.failure(ProductResult.ADD_ITEM_TO_CART_FAILED)
             }
         } catch (e: Exception) {
