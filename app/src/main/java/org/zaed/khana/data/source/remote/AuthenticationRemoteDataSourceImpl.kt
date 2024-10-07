@@ -1,12 +1,9 @@
-package org.zaed.khana.data.auth.source.remote
+package org.zaed.khana.data.source.remote
 
-import android.net.Uri
-import android.util.Log
-import org.zaed.khana.data.auth.source.remote.model.User
+import org.zaed.khana.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -19,7 +16,6 @@ import io.ktor.http.contentType
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.GenericResponse
 

@@ -31,8 +31,8 @@ sealed class EndPoint(val route: String) {
         data object FetchWishlistedProductsIds: EndPoint("/products/wishListProductsIdByUserId")
         data object AddWishlistedProduct: EndPoint("/products/WishlistedProduct")
         data object RemoveWishlistedProduct: EndPoint("/products/WishlistedProduct")
-        data object CheckIfProductIsWishlisted: EndPoint("/CheckIfProductIsWishlisted")
-        data object FetchProductById: EndPoint("/fetchProductById")
-        data object AddItemToCart: EndPoint("/addItemToCart")
+        data object CheckIfProductIsWishlisted: EndPoint("/products/checkIfIsProductWishlisted")
+        data object FetchProductById: EndPoint("/products/byId")
+        data object AddItemToCart: EndPoint("/cart/addToCart")
     }
 }

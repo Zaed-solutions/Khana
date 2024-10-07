@@ -14,8 +14,7 @@ import org.zaed.khana.presentation.auth.component.LoginScreenContent
 import org.zaed.khana.presentation.auth.component.SignInWithFacebook
 import org.zaed.khana.presentation.auth.component.googleSignInOption
 import org.zaed.khana.presentation.auth.component.rememberFirebaseAuthLauncher
-
-import org.zaed.khana.ui.theme.KhanaTheme
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 
 @Composable
