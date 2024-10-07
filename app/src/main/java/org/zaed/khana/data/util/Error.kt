@@ -16,6 +16,7 @@ fun Error.userMessage(): String {
         is AdvertisementResult -> userMessage
         is CategoryResult -> userMessage
         is ProductResult -> userMessage
+        is CartResult -> userMessage
     }
 }
 
@@ -29,6 +30,7 @@ fun Error.isNotIdle(): Boolean {
         is PasswordFieldError -> return this != PasswordFieldError.IDLE
         is NameFieldError -> return this != NameFieldError.IDLE
         is TermsAndConditionsError -> return this != TermsAndConditionsError.IDLE
+        is CartResult -> this != CartResult.IDLE
     }
 }
 
@@ -84,6 +86,18 @@ enum class ProductResult(val userMessage: String) : Error {
     ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     ADD_WISHLISTED_PRODUCTS_FAILED("Failed to add wishlisted product"),
     REMOVE_WISHLISTED_PRODUCTS_FAILED("Failed to remove wishlisted product"),
+    NETWORK_ERROR("Failed to connect to the network"),
+    SERVER_ERROR("Server error"),
+}
+@Serializable
+enum class CartResult(val userMessage: String) : Error {
+    IDLE(""),
+    FETCH_CART_ITEMS_FAILED("Failed to fetch cart items"),
+    FETCH_DELIVERY_FEE_FAILED("Failed to fetch delivery fee"),
+    ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
+    REMOVE_ITEM_FROM_CART_FAILED("Failed to remove the item from the cart"),
+    UPDATE_ITEM_QUANTITY_FAILED("Failed to update the item quantity"),
+    APPLY_PROMO_CODE_FAILED("Failed to apply promo code"),
     NETWORK_ERROR("Failed to connect to the network"),
     SERVER_ERROR("Server error"),
 }

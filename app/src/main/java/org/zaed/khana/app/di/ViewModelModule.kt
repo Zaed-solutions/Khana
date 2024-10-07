@@ -7,6 +7,7 @@ import org.zaed.khana.presentation.auth.signup.SignUpViewModel
 import org.zaed.khana.presentation.home.HomeViewModel
 import org.zaed.khana.presentation.productdetails.ProductDetailsViewModel
 import org.zaed.khana.presentation.wishlist.WishlistViewModel
+import org.zaed.khana.presentation.cart.CartViewModel
 
 val viewModelModule = module {
     viewModelOf(::LoginViewModel)
@@ -14,4 +15,5 @@ val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::ProductDetailsViewModel)
     viewModelOf(::WishlistViewModel)
+    viewModelOf(::CartViewModel)
 }

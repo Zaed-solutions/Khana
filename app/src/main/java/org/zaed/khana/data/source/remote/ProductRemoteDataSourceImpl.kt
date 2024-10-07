@@ -195,28 +195,6 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun addItemToCart(productId: String, userId: String, productColor: Color, productSize: String): Result<Unit, ProductResult> {
-        return try {
-            val response = httpClient.post {
-                endPoint(EndPoint.Product.AddItemToCart.route)
-                parameter("productId", productId)
-                parameter("userId", userId)
-                parameter("productColorName", productColor.name)
-                parameter("productColorHex", productColor.hex)
-                parameter("productSize", productSize)
-            }
-            if(response.status == HttpStatusCode.OK){
-                Result.success(Unit)
-            } else {
-                Log.d("ProductRemoteDataSourceImpl", "addItemToCart: ${response}")
-                Result.failure(ProductResult.ADD_ITEM_TO_CART_FAILED)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure(ProductResult.SERVER_ERROR)
-        }
-    }
-
     override fun fetchWishlistedProducts(userId: String): Flow<Result<List<Product>, ProductResult>> =
         flow {
             emit(Result.Loading)

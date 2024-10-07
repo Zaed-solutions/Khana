@@ -3,6 +3,7 @@ package org.zaed.khana.presentation.productdetails
 import org.zaed.khana.data.model.User
 import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.Product
+import org.zaed.khana.data.util.Error
 import org.zaed.khana.data.util.ProductResult
 
 data class ProductDetailsUiState(
@@ -12,5 +13,5 @@ data class ProductDetailsUiState(
     val product: Product = Product(),
     val selectedSize: String = "",
     val selectedColor: Color = Color(),
-    val result: ProductResult = ProductResult.IDLE
+    val result: Error = ProductResult.IDLE
 )

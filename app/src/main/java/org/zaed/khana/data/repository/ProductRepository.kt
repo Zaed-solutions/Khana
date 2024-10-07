@@ -20,5 +20,4 @@ interface ProductRepository {
     ): Result<Unit, ProductResult>
 
     suspend fun fetchFlashSaleEndTime(): Result<Long, ProductResult>
-    suspend fun addItemToCart(userId: String, productId: String, productColor: Color, productSize: String): Result<Unit, ProductResult>
 }

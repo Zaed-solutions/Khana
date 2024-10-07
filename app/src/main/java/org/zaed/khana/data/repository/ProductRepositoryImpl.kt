@@ -47,13 +47,4 @@ class ProductRepositoryImpl(
     override suspend fun fetchFlashSaleEndTime(): Result<Long, ProductResult> {
         return productRemoteSource.fetchFlashSaleEndTime()
     }
-
-    override suspend fun addItemToCart(
-        userId: String,
-        productId: String,
-        productColor: Color,
-        productSize: String
-    ): Result<Unit, ProductResult> {
-        return productRemoteSource.addItemToCart(productId = productId, userId = userId, productColor = productColor, productSize = productSize)
-    }
 }

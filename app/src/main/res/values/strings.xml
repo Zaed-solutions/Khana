@@ -36,4 +36,11 @@
     <string name="resend_code">Resend code</string>
     <string name="your_new_password_must_be_different_from_previously_used_passwords">Your new password must be different from previously used passwords.</string>
     <string name="my_wishlist">My Wishlist</string>
+    <string name="my_cart">My Cart</string>
+    <string name="yes_remove">Yes, Remove</string>
+    <string name="remove_from_cart">Remove from Cart?</string>
+    <string name="cancel">Cancel</string>
+    <string name="proceed_to_checkout">Proceed to Checkout</string>
+    <string name="promo_code">Promo Code</string>
+    <string name="apply">Apply</string>
 </resources>
