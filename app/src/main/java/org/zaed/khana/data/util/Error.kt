@@ -13,7 +13,6 @@ fun Error.userMessage(): String {
         is PasswordFieldError -> this.userMessage
         is NameFieldError -> this.userMessage
         is TermsAndConditionsError -> this.userMessage
-        is AuthResults -> userMessage
         is AdvertisementResult -> userMessage
         is CategoryResult -> userMessage
         is ProductResult -> userMessage
@@ -22,18 +21,9 @@ fun Error.userMessage(): String {
 
 fun Error.isNotIdle(): Boolean {
     return when (this) {
-        is AuthResults -> this !in listOf(
-            AuthResults.IDLE,
-            AuthResults.INVALID_EMAIL,
-            AuthResults.INVALID_NAME,
-            AuthResults.INVALID_PASSWORD,
-            AuthResults.PASSWORD_DOES_NOT_MATCH
-        )
-
         is AdvertisementResult -> this != AdvertisementResult.IDLE
         is CategoryResult -> this != CategoryResult.IDLE
         is ProductResult -> this != ProductResult.IDLE
-    when(this){
         is AuthResults -> return this != AuthResults.IDLE
         is EmailFieldError -> return this != EmailFieldError.IDLE
         is PasswordFieldError -> return this != PasswordFieldError.IDLE
@@ -43,13 +33,14 @@ fun Error.isNotIdle(): Boolean {
 }
 
 @Serializable
-enum class EmailFieldError(val userMessage: String):Error{
+enum class EmailFieldError(val userMessage: String):Error {
     IDLE(""),
     INVALID_EMAIL("Invalid Email"),
     EMAIL_FIELD_IS_EMPTY("Email field is empty"),
     EMAIL_NOT_REGISTERED("Email not registered"),
     EMAIL_ALREADY_REGISTERED("Email already registered"),
     RESET_EMAIL_SENT("Reset Email Sent"),
+}
 @Serializable
 enum class AdvertisementResult(val userMessage: String) : Error {
     IDLE(""),
@@ -57,7 +48,6 @@ enum class AdvertisementResult(val userMessage: String) : Error {
     NETWORK_ERROR("Failed to connect to the network"),
 }
 
-}
 @Serializable
 enum class NameFieldError(val userMessage: String):Error{
     IDLE(""),
