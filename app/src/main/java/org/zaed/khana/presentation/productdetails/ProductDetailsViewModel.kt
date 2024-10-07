@@ -15,7 +15,7 @@ import org.zaed.khana.data.util.ProductResult
 
 class ProductDetailsViewModel(
     private val productRepo: ProductRepository,
-    private val authRepo: AuthenticationRepository
+    private val authRepo: AuthenticationRepository,
     private val cartRepo: CartRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductDetailsUiState())
@@ -87,7 +87,7 @@ class ProductDetailsViewModel(
     private fun addItemToCart() {
         viewModelScope.launch {
             with(uiState.value) {
-                cartRepo.addItemToCart(currentUserId, productId, selectedColor, selectedSize)
+                cartRepo.addItemToCart(currentUser.id, productId, selectedColor, selectedSize)
                     .onSuccess {
                         _uiState.update { it.copy(result = ProductResult.IDLE) }
                     }.onFailure { error ->

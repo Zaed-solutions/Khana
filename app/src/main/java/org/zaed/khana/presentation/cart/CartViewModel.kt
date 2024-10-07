@@ -7,33 +7,44 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.CartRepository
 
 class CartViewModel(
     private val cartRepo: CartRepository,
+    private val authRepo: AuthenticationRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CartUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-        //TODO: get current user id
+//        fetchCurrentUser()
         fetchUserCartItems()
         fetchDeliveryFee()
     }
 
+    private fun fetchCurrentUser(){
+        viewModelScope.launch {
+            authRepo.getSignedInUser().onSuccessWithData { user ->
+                _uiState.update { it.copy(currentUser = user) }
+                fetchUserCartItems()
+                fetchDeliveryFee()
+            }.onFailure {
+                Log.e("CartViewModel:fetchCurrentUser", it.userMessage)
+            }
+        }
+    }
+
     private fun fetchUserCartItems() {
         viewModelScope.launch {
-            cartRepo.fetchUserCartItems(uiState.value.currentUserId).collect { result ->
+            cartRepo.fetchUserCartItems(uiState.value.currentUser.id).collect { result ->
                 result.onSuccessWithData { items ->
                     _uiState.update { it.copy(cartItems = items) }
-                }.onLoading {
-                    //TODO: show loading
                 }.onFailure {
                     Log.e(
                         "${this@CartViewModel::class.simpleName}:fetchUserCartItems",
                         it.userMessage
                     )
-                    //TODO: show error message
                 }
             }
         }
@@ -41,7 +52,7 @@ class CartViewModel(
 
     private fun fetchDeliveryFee() {
         viewModelScope.launch {
-            cartRepo.fetchDeliverFee(uiState.value.currentUserId)
+            cartRepo.fetchDeliverFee(uiState.value.currentUser.id)
                 .onSuccessWithData { fee ->
                     _uiState.update { it.copy(deliveryFee = fee) }
                 }.onFailure {
@@ -49,7 +60,6 @@ class CartViewModel(
                         "${this@CartViewModel::class.simpleName}:fetchDeliveryFee",
                         it.userMessage
                     )
-                    //TODO: show error message
                 }
         }
     }
@@ -83,7 +93,6 @@ class CartViewModel(
                     _uiState.value = uiState.value.copy(discountPercentage = discountPercentage)
                 }.onFailure {
                     Log.e("${this@CartViewModel::class.simpleName}:applyPromoCode", it.userMessage)
-                    //TODO: show error message
                 }
         }
     }
@@ -92,7 +101,7 @@ class CartViewModel(
         viewModelScope.launch {
             val item = uiState.value.cartItems.find { it.productId == productId } ?: return@launch
             val newQuantity = item.quantity + 1
-            cartRepo.updateItemQuantity(productId, newQuantity)
+            cartRepo.updateItemQuantity(item.id, newQuantity)
                 .onSuccess {
                     val updatedItems = uiState.value.cartItems.map {
                         if (it.productId == productId) {
@@ -107,7 +116,6 @@ class CartViewModel(
                         "${this@CartViewModel::class.simpleName}:incrementItemQuantity",
                         it.userMessage
                     )
-                    //TODO: show error message
                 }
         }
     }
@@ -116,7 +124,7 @@ class CartViewModel(
         viewModelScope.launch {
             val item = uiState.value.cartItems.find { it.productId == productId } ?: return@launch
             val newQuantity = item.quantity - 1
-            cartRepo.updateItemQuantity(productId, newQuantity)
+            cartRepo.updateItemQuantity(item.id, newQuantity)
                 .onSuccess {
                     val updatedItems = uiState.value.cartItems.map {
                         if (it.productId == productId) {
@@ -131,7 +139,6 @@ class CartViewModel(
                         "${this@CartViewModel::class.simpleName}:decrementItemQuantity",
                         it.userMessage
                     )
-                    //TODO: show error message
                 }
         }
     }

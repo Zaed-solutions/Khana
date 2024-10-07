@@ -22,12 +22,12 @@ sealed class EndPoint(val route: String) {
         data object FetchAdvertisement: EndPoint("/advertisements/all")
     }
     object Cart {
-        data object AddItemToCart: EndPoint("/addItemToCart")
-        data object FetchPromoCodeDiscountPercentage: EndPoint("/fetchPromoCodeDiscountPercentage")
-        data object UpdateItemQuantity: EndPoint("/updateItemQuantity")
-        data object RemoveCartItem: EndPoint("/removeCartItem")
-        data object FetchUserCartItems: EndPoint("/fetchUserCartItems")
-        data object FetchDeliveryFee: EndPoint("/fetchDeliveryFee")
+        data object AddItemToCart: EndPoint("/cart/addToCart")
+        data object FetchPromoCodeDiscountPercentage: EndPoint("/cart/promoCodeDiscountPercentage")
+        data object UpdateItemQuantity: EndPoint("/cart/updateItemQuantity")
+        data object RemoveCartItem: EndPoint("/cart/removeCartItem")
+        data object FetchUserCartItems: EndPoint("/cart/userCartItems")
+        data object FetchDeliveryFee: EndPoint("/cart/deliveryFee")
     }
     object Category{
         data object FetchCategories: EndPoint("/categories/all")
@@ -42,6 +42,5 @@ sealed class EndPoint(val route: String) {
         data object RemoveWishlistedProduct: EndPoint("/products/WishlistedProduct")
         data object CheckIfProductIsWishlisted: EndPoint("/products/checkIfIsProductWishlisted")
         data object FetchProductById: EndPoint("/products/byId")
-        data object AddItemToCart: EndPoint("/cart/addToCart")
     }
 }
