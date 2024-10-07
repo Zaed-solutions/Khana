@@ -7,11 +7,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.zaed.khana.data.auth.repository.AuthenticationRepository
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.AdvertisementRepository
 import org.zaed.khana.data.repository.CategoryRepository
 import org.zaed.khana.data.repository.ProductRepository
-import org.zaed.khana.data.util.Result
 
 class HomeViewModel(
     private val advertisementRepo: AdvertisementRepository,

@@ -40,7 +40,7 @@ class ProductDetailsViewModel(
 
     private fun checkIfIsWishlisted(productId: String) {
         viewModelScope.launch {
-            productRepo.checkIfIsProductWishlisted(uiState.value.currentUserId, productId)
+            productRepo.checkIfIsProductWishlisted(uiState.value.currentUser.id, productId)
                 .onSuccessWithData { isWishlisted ->
                     _uiState.update { it.copy(isWishlisted = isWishlisted) }
                 }.onFailure { error ->
@@ -74,7 +74,7 @@ class ProductDetailsViewModel(
     private fun addItemToCart() {
         viewModelScope.launch {
             with(uiState.value) {
-                productRepo.addItemToCart(currentUserId, productId, selectedColor, selectedSize)
+                productRepo.addItemToCart(currentUser.id, productId, selectedColor, selectedSize)
                     .onSuccess {
                         _uiState.update { it.copy(result = ProductResult.IDLE) }
                     }.onFailure { error ->
@@ -90,7 +90,7 @@ class ProductDetailsViewModel(
             if (uiState.value.isWishlisted) {
                 productRepo.removeWishlistedProduct(
                     productId = productId,
-                    userId = uiState.value.currentUserId
+                    userId = uiState.value.currentUser.id
                 ).onSuccess {
                     _uiState.update { it.copy(isWishlisted = false, result = ProductResult.IDLE) }
                 }.onFailure { error ->
@@ -100,7 +100,7 @@ class ProductDetailsViewModel(
             } else {
                 productRepo.addWishlistedProduct(
                     productId = productId,
-                    userId = uiState.value.currentUserId
+                    userId = uiState.value.currentUser.id
                 ).onSuccess {
                     _uiState.update { it.copy(isWishlisted = true, result = ProductResult.IDLE) }
                 }.onFailure { error ->
