@@ -44,15 +44,17 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun CartScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
+    onNavigateToCheckout: () -> Unit,
     viewModel: CartViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     CartScreenContent(
+        modifier = modifier,
         cartItems = state.cartItems,
         onAction = { action ->
             when (action) {
                 CartUiAction.OnBackPressed -> onBackPressed()
-                CartUiAction.OnProceedToCheckout -> TODO("navigate to checkout")
+                CartUiAction.OnProceedToCheckout -> onNavigateToCheckout()
                 else -> viewModel.handleUiAction(action)
             }
         },
@@ -93,7 +95,9 @@ private fun CartScreenContent(
                     }
                 },
                 actions = {
-                    TextButton(onClick = {
+                    TextButton(
+                        enabled = cartItems.isNotEmpty(),
+                        onClick = {
                         isItemSwiped = false
                         showBottomSheet = true
                     }) {

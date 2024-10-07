@@ -20,13 +20,13 @@ class WishlistViewModel(
 
     init {
         fetchCurrentUser()
-        getWishlistedProducts()
     }
 
     private fun fetchCurrentUser(){
         viewModelScope.launch {
             authRepo.getSignedInUser().onSuccessWithData { user ->
                 _uiState.update { it.copy(currentUser = user) }
+                getWishlistedProducts()
             }.onFailure {
                 Log.e("WishlistViewModel:fetchCurrentUser", it.userMessage)
             }

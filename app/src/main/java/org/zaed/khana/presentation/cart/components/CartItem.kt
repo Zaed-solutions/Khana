@@ -1,6 +1,5 @@
 package org.zaed.khana.presentation.cart.components
 
-import android.icu.text.DecimalFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,9 +46,12 @@ fun CartItem(
                 contentDescription = null,
             )
         }
-        Column (
-            modifier = Modifier.fillMaxWidth().heightIn(max = 100.dp).padding(start = 8.dp)
-        ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 100.dp)
+                .padding(start = 8.dp)
+        ) {
             Text(
                 text = "${item.productColor.name} ${item.productName}",
                 style = MaterialTheme.typography.titleMedium
@@ -57,16 +59,19 @@ fun CartItem(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom
-            ){
+            ) {
                 Column {
-                    Text(text = "Size: ${item.productSize}", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "Size: ${item.productSize}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                     Text(
                         text = price.toMoney(),
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                if(showControlQuantitySection){
+                if (showControlQuantitySection) {
                     Column {
                         ItemQuantityController(
                             quantity = item.quantity,
@@ -87,7 +92,13 @@ private fun CartItemPreview() {
     KhanaTheme {
         CartItem(
             modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
-            item = CartItem(quantity = 1, productName = "Jacket", productColor = Color(name = "Brown"), productSize = "XL", productBasePrice = 83.97f),
+            item = CartItem(
+                quantity = 1,
+                productName = "Jacket",
+                productColor = Color(name = "Brown"),
+                productSize = "XL",
+                productBasePrice = 83.97f
+            ),
             onIncrementQuantity = { /*TODO*/ },
             onDecrementQuantity = { /*TODO*/ })
     }

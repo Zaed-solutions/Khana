@@ -18,9 +18,7 @@ class CartViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-//        fetchCurrentUser()
-        fetchUserCartItems()
-        fetchDeliveryFee()
+        fetchCurrentUser()
     }
 
     private fun fetchCurrentUser(){
