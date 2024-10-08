@@ -1,5 +1,6 @@
 package org.zaed.khana.data.source.remote
 
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.zaed.khana.data.model.Category
 import org.zaed.khana.data.source.remote.util.EndPoint
+import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
 import org.zaed.khana.data.util.CategoryResult
 import org.zaed.khana.data.util.Result
@@ -24,7 +26,7 @@ class CategoryRemoteDataSourceImpl(
                 endPoint(EndPoint.Category.FetchCategories.route)
             }
             if(response.status == HttpStatusCode.OK) {
-                emit(Result.success(response.body<List<Category>>()))
+                emit(Result.success(response.body<GenericResponse<List<Category>>>().data ?: emptyList()))
             }
         } catch (e: Exception) {
             e.printStackTrace()

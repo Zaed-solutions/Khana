@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -30,7 +31,7 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    onNavigateToFiltersScreen: () -> Unit,
+    onNavigateToFilterScreen: () -> Unit,
     onNavigateToNotificationsScreen: () -> Unit,
     onNavigateToProductDetailsScreen: (String) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
@@ -47,19 +48,11 @@ fun HomeScreen(
         products = state.products,
         wishlistedProducts = state.wishlistedProductsIds,
         onAction = { action ->
-            when(action){
-                HomeUiAction.OnFiltersButtonClicked -> {
-                    onNavigateToFiltersScreen()
-                }
-                HomeUiAction.OnNotificationButtonClicked -> {
-                    onNavigateToNotificationsScreen()
-                }
-                is HomeUiAction.OnProductClicked -> {
-                    onNavigateToProductDetailsScreen(action.productId)
-                }
-                is HomeUiAction.OnSearchClicked -> {
-                    onNavigateToSearchScreen()
-                }
+            when (action) {
+                HomeUiAction.OnFiltersButtonClicked -> onNavigateToFilterScreen()
+                HomeUiAction.OnNotificationButtonClicked -> onNavigateToNotificationsScreen()
+                is HomeUiAction.OnProductClicked -> onNavigateToProductDetailsScreen(action.productId)
+                is HomeUiAction.OnSearchClicked -> onNavigateToSearchScreen()
                 else -> viewModel.handleUiAction(action)
             }
         }
@@ -82,11 +75,12 @@ private fun HomeContent(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     Scaffold(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier.padding(paddingValues),
-            contentPadding = PaddingValues(all = 16.dp)
+            contentPadding = PaddingValues(all = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
                 LocationAndNotificationsSection(
@@ -99,22 +93,18 @@ private fun HomeContent(
             item {
                 SearchAndFiltersSection(
                     onFiltersButtonClicked = { onAction(HomeUiAction.OnFiltersButtonClicked) },
-                    onChangeSearchingStatus = { if(it) onAction(HomeUiAction.OnSearchClicked) }
+                    onChangeSearchingStatus = { if (it) onAction(HomeUiAction.OnSearchClicked) }
                 )
             }
-            //ads pager
             item {
                 AdvertisementSection(ads = ads)
             }
-            //categories
             item {
                 CategoriesSection(categories)
             }
-            //flash sale (optional)
             item {
                 FlashSaleSection(flashSaleEndsAtEpochSeconds)
             }
-            //items
             item {
                 LabelFilterSection(
                     labels = labels,
@@ -138,20 +128,33 @@ private fun HomeContent(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun HomeScreenContentPreview() {
-    val ads = listOf(Advertisement(title = "Test Advertisement 1", "Test Description 1", ""), Advertisement(title = "Test Advertisement 2", "Test Description 2", ""))
-    val categories = listOf(Category("","Jacket"), Category("","Shirt"), Category("","Pants"), Category("","Shoes"), )
-    val products = listOf(Product(name = "Product 1", rating = 4.3f, basePrice = 130f), Product(name = "Product 2", rating = 1.6f, basePrice = 236f), Product(name = "Product 3", rating = 4.1f, basePrice = 99.99f), Product(name = "Product 4", rating = 3.2f, basePrice = 350f), )
+    val ads = listOf(
+        Advertisement(title = "Test Advertisement 1"),
+        Advertisement(title = "Test Advertisement 2")
+    )
+    val categories = listOf(
+        Category("", "Jacket"),
+        Category("", "Shirt"),
+        Category("", "Pants"),
+        Category("", "Shoes"),
+    )
+    val products = listOf(
+        Product(name = "Product 1", rating = 4.3f, basePrice = 130f),
+        Product(name = "Product 2", rating = 1.6f, basePrice = 236f),
+        Product(name = "Product 3", rating = 4.1f, basePrice = 99.99f),
+        Product(name = "Product 4", rating = 3.2f, basePrice = 350f),
+    )
     KhanaTheme {
         HomeContent(
             hasNewNotification = true,
             ads = ads,
             categories = categories,
-            flashSaleEndsAtEpochSeconds = Clock.System.now().epochSeconds+30000,
+            flashSaleEndsAtEpochSeconds = Clock.System.now().epochSeconds + 30000,
             labels = listOf("All", "Newest", "Popular", "Men", "Women"),
             selectedLabel = "All",
             products = products,
             wishlistedProducts = emptyList(),
-            onAction ={}
+            onAction = {}
         )
     }
 }

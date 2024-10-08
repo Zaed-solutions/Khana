@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "33060051650",
+    "project_id": "khana-d3a45",
+    "storage_bucket": "khana-d3a45.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33060051650:android:9b14f9c89860eb7c71795b",
+        "android_client_info": {
+          "package_name": "org.zaed.khana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33060051650-4m941fc6csbumnim0c342pq6cg41cuik.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.zaed.khana",
+            "certificate_hash": "7304c1a6bf1b48bed535dc6c6e316cf7d5f2203e"
+          }
+        },
+        {
+          "client_id": "33060051650-hq5mt4v3liovok4p56l1icivrof993u9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBegg6jQPmKqrpsuTy12r0PS68WID98UGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "33060051650-hq5mt4v3liovok4p56l1icivrof993u9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
