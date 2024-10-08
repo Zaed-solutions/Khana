@@ -23,31 +23,11 @@ fun ShippingAddressSection(
     onChangeAddressClicked: () -> Unit
 ) {
     CheckoutScreenSection(title = stringResource(R.string.shipping_address)) {
-        ListItem(
-            modifier = modifier.fillMaxWidth(),
-            headlineContent = {
-                Text(
-                    text = shippingAddress.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    maxLines = 1
-                )
-            },
-            supportingContent = {
-                Text(
-                    text = shippingAddress.getDisplayAddress(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2
-                )
-            },
-            leadingContent = {
-                Icon(imageVector = Icons.Default.LocationOn, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-            },
-            trailingContent = {
-                TextButton(onClick = { onChangeAddressClicked() }) {
-                    Text(text = stringResource(R.string.change))
-                }
+        ShippingAddressItem(shippingAddress = shippingAddress) {
+            TextButton(onClick = { onChangeAddressClicked() }) {
+                Text(text = stringResource(R.string.change))
             }
-        )
+        }
     }
 }
 
@@ -58,15 +38,8 @@ private fun ShippingAddressSectionPreview() {
         val shippingAddress = ShippingAddress(
             title = "Home",
             country = "Egypt",
-            governorate = "Cairo",
-            district = "Nasr City",
-            area = "El Nozha",
-            streetName = "El Thawra",
-            buildingNumber = "123",
-            nearestLandmark = "Nearby",
-            additionalNotes = "Notes",
+            city = "Cairo",
             phoneNumber = "01000000000",
-            fullName = "John Doe"
         )
         ShippingAddressSection(shippingAddress = shippingAddress) {
 

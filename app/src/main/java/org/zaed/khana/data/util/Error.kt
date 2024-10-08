@@ -17,6 +17,7 @@ fun Error.userMessage(): String {
         is CategoryResult -> userMessage
         is ProductResult -> userMessage
         is CartResult -> userMessage
+        is CheckoutResult -> userMessage
     }
 }
 
@@ -31,6 +32,7 @@ fun Error.isNotIdle(): Boolean {
         is NameFieldError -> return this != NameFieldError.IDLE
         is TermsAndConditionsError -> return this != TermsAndConditionsError.IDLE
         is CartResult -> this != CartResult.IDLE
+        is CheckoutResult -> this != CheckoutResult.IDLE
     }
 }
 
@@ -120,4 +122,12 @@ enum class AuthResults(val userMessage: String) : Error {
     SERVER_ERROR("Server error"),
     NETWORK_ERROR("Network error"),
     USER_NOT_FOUND("User not found"),
+}
+@Serializable
+enum class CheckoutResult(val userMessage: String) : Error {
+    IDLE(""),
+    FETCH_SHIPPING_ADDRESSES_FAILED("Failed to fetch shipping addresses"),
+    ADD_SHIPPING_ADDRESS_FAILED("Failed to add shipping address"),
+    SERVER_ERROR("Failed to fetch shipping addresses"),
+    NETWORK_ERROR("Failed to connect to the network"),
 }

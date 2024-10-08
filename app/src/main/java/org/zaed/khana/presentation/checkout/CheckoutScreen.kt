@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.checkout
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,43 +8,59 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
+import org.zaed.khana.data.model.CartItem
 import org.zaed.khana.data.model.ShippingAddress
 import org.zaed.khana.data.model.ShippingType
-import org.zaed.khana.presentation.checkout.components.CheckoutScreenSection
+import org.zaed.khana.presentation.checkout.components.AddAddressBottomSheet
+import org.zaed.khana.presentation.checkout.components.OrderListSection
+import org.zaed.khana.presentation.checkout.components.ShippingAddressBottomSheet
 import org.zaed.khana.presentation.checkout.components.ShippingAddressSection
+import org.zaed.khana.presentation.checkout.components.ShippingTypeBottomSheet
 import org.zaed.khana.presentation.checkout.components.ShippingTypeSection
 
 @Composable
 fun CheckoutScreen(
     modifier: Modifier = Modifier,
     viewModel: CheckoutViewModel = koinViewModel(),
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onNavigateToPaymentScreen: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     CheckoutScreenContent(
+        modifier = modifier,
         shippingAddress = state.selectedShippingAddress,
         shippingType = state.selectedShippingType,
-        onAction = {/*TODO*/}
+        addresses = state.shippingAddresses,
+        cartItems = state.cartItems,
+        onAction = { action ->
+            when (action) {
+                CheckoutUiAction.OnBackPressed -> onBackPressed()
+                CheckoutUiAction.OnContinueToPayment -> onNavigateToPaymentScreen()
+                else -> viewModel.handleUiAction(action)
+            }
+        }
     )
 }
 
@@ -52,9 +69,13 @@ fun CheckoutScreen(
 private fun CheckoutScreenContent(
     modifier: Modifier = Modifier,
     shippingAddress: ShippingAddress,
+    addresses: List<ShippingAddress>,
     shippingType: ShippingType,
+    cartItems: List<CartItem>,
     onAction: (CheckoutUiAction) -> Unit
 ) {
+    val sheetState = rememberModalBottomSheetState()
+    var shownBottomSheet by remember { mutableStateOf(ShownBottomSheet.NONE) }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -73,37 +94,97 @@ private fun CheckoutScreenContent(
             )
         },
         bottomBar = {
-            Surface (
+            Surface(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
+                shape = RoundedCornerShape(
+                    topStart = 16.dp,
+                    topEnd = 16.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                ),
                 shadowElevation = 8.dp
             ) {
-                Button(onClick = { /*TODO*/ }, modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()) {
+                Button(
+                    onClick = { onAction(CheckoutUiAction.OnContinueToPayment) },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                ) {
                     Text(text = stringResource(R.string.continue_to_payment))
                 }
             }
         }
     ) { paddingValues ->
-        Column (
+        Column(
             modifier
                 .fillMaxWidth()
                 .padding(paddingValues)
-        ){
-            //Shipping address
+        ) {
             ShippingAddressSection(
                 shippingAddress = shippingAddress,
-                onChangeAddressClicked = { /*TODO*/ }
+                onChangeAddressClicked = { shownBottomSheet = ShownBottomSheet.SHIPPING_ADDRESS }
             )
-            //shipping type
             ShippingTypeSection(
                 shippingType = shippingType,
-                onChangeTypeClicked = { /*TODO*/ }
+                onChangeTypeClicked = { shownBottomSheet = ShownBottomSheet.SHIPPING_TYPE }
             )
-            TODO()
+            OrderListSection(cartItems = cartItems)
+        }
+        if(shownBottomSheet != ShownBottomSheet.NONE){
+            ModalBottomSheet(
+                onDismissRequest = { shownBottomSheet = ShownBottomSheet.NONE },
+                sheetState = sheetState
+            ) {
+                AnimatedContent(targetState = shownBottomSheet, label = "") { state ->
+                    when (state) {
+                        ShownBottomSheet.SHIPPING_ADDRESS -> {
+                            ShippingAddressBottomSheet(
+                                selectedAddress = shippingAddress,
+                                addresses = addresses,
+                                onChangeShippingAddress = { address ->
+                                    onAction(CheckoutUiAction.OnChangeShippingAddress(address))
+                                    shownBottomSheet = ShownBottomSheet.NONE
+                                },
+                                onAddNewAddressClicked = {
+                                    shownBottomSheet = ShownBottomSheet.ADD_ADDRESS
+                                }
+                            )
+                        }
+
+                        ShownBottomSheet.SHIPPING_TYPE -> {
+                            ShippingTypeBottomSheet(
+                                selectedType = shippingType,
+                                onChangeShippingType = { type ->
+                                    onAction(CheckoutUiAction.OnChangeShippingType(type))
+                                    shownBottomSheet = ShownBottomSheet.NONE
+                                }
+                            )
+                        }
+
+                        ShownBottomSheet.ADD_ADDRESS -> {
+                            AddAddressBottomSheet(
+                                onAddAddress = { address ->
+                                    onAction(CheckoutUiAction.OnAddShippingAddress(address))
+                                    shownBottomSheet = ShownBottomSheet.SHIPPING_ADDRESS
+                                },
+                                onCancel = {
+                                    shownBottomSheet = ShownBottomSheet.SHIPPING_ADDRESS
+                                }
+                            )
+                        }
+
+                        else -> Unit
+                    }
+                }
+            }
         }
 
     }
 }
 
+private enum class ShownBottomSheet {
+    NONE,
+    SHIPPING_ADDRESS,
+    ADD_ADDRESS,
+    SHIPPING_TYPE
+}

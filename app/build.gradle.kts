@@ -96,6 +96,7 @@ dependencies {
     implementation(libs.ktor.client.core)
     implementation(libs.kotlin.compose.compiler.plugin)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.compose.navigation)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)

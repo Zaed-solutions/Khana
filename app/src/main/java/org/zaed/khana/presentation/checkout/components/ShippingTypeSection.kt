@@ -26,28 +26,15 @@ fun ShippingTypeSection(
     shippingType: ShippingType,
     onChangeTypeClicked: () -> Unit
 ) {
-    CheckoutScreenSection(title = stringResource(R.string.shipping_address)) {
-        ListItem(
+    CheckoutScreenSection(
+        modifier = modifier.fillMaxWidth(),
+        title = stringResource(R.string.shipping_address)
+    ) {
+        ShippingTypeItem(
             modifier = modifier.fillMaxWidth(),
-            headlineContent = {
-                Text(
-                    text = shippingType.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    maxLines = 1
-                )
-            },
-            supportingContent = {
-                Text(
-                    text = shippingType.getEstimatedDeliveryDate(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2
-                )
-            },
-            leadingContent = {
-                Icon(imageVector = Icons.Default.LocalShipping, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-            },
+            shippingType = shippingType,
             trailingContent = {
-                TextButton(onClick = { onChangeTypeClicked() }) {
+                TextButton(onClick = onChangeTypeClicked) {
                     Text(text = stringResource(R.string.change))
                 }
             }
