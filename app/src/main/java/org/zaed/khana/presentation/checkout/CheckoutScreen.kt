@@ -45,9 +45,14 @@ fun CheckoutScreen(
     modifier: Modifier = Modifier,
     viewModel: CheckoutViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
-    onNavigateToPaymentScreen: () -> Unit
+    onNavigateToPaymentScreen: (String) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(key1 = state.isOrderPlaced) {
+        if (state.isOrderPlaced) {
+            onNavigateToPaymentScreen(state.orderId)
+        }
+    }
     CheckoutScreenContent(
         modifier = modifier,
         shippingAddress = state.selectedShippingAddress,
@@ -57,7 +62,6 @@ fun CheckoutScreen(
         onAction = { action ->
             when (action) {
                 CheckoutUiAction.OnBackPressed -> onBackPressed()
-                CheckoutUiAction.OnContinueToPayment -> onNavigateToPaymentScreen()
                 else -> viewModel.handleUiAction(action)
             }
         }
@@ -105,7 +109,7 @@ private fun CheckoutScreenContent(
                 shadowElevation = 8.dp
             ) {
                 Button(
-                    onClick = { onAction(CheckoutUiAction.OnContinueToPayment) },
+                    onClick = { onAction(CheckoutUiAction.OnContinueToPaymentClicked) },
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth()
@@ -130,7 +134,7 @@ private fun CheckoutScreenContent(
             )
             OrderListSection(cartItems = cartItems)
         }
-        if(shownBottomSheet != ShownBottomSheet.NONE){
+        if (shownBottomSheet != ShownBottomSheet.NONE) {
             ModalBottomSheet(
                 onDismissRequest = { shownBottomSheet = ShownBottomSheet.NONE },
                 sheetState = sheetState

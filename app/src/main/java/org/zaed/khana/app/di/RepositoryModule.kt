@@ -9,6 +9,8 @@ import org.zaed.khana.data.repository.CartRepository
 import org.zaed.khana.data.repository.CartRepositoryImpl
 import org.zaed.khana.data.repository.CategoryRepository
 import org.zaed.khana.data.repository.CategoryRepositoryImpl
+import org.zaed.khana.data.repository.CheckoutRepository
+import org.zaed.khana.data.repository.CheckoutRepositoryImpl
 import org.zaed.khana.data.repository.ProductRepository
 import org.zaed.khana.data.repository.ProductRepositoryImpl
 
@@ -19,4 +21,5 @@ val repositoryModule = module {
     single<CategoryRepository> { CategoryRepositoryImpl(get()) }
     single<ProductRepository> { ProductRepositoryImpl(get()) }
     single<CartRepository> { CartRepositoryImpl(get()) }
+    single<CheckoutRepository> { CheckoutRepositoryImpl(get()) }
 }
