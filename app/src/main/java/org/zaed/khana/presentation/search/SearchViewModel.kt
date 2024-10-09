@@ -20,7 +20,7 @@ class SearchViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-//        fetchCurrentUser()
+        fetchCurrentUser()
         fetchRecentSearches()
     }
 
