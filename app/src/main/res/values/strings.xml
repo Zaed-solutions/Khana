@@ -43,4 +43,7 @@
     <string name="proceed_to_checkout">Proceed to Checkout</string>
     <string name="promo_code">Promo Code</string>
     <string name="apply">Apply</string>
+    <string name="coupons">Coupons</string>
+    <string name="best_offers_for_you">Best offers for you</string>
+    <string name="copy_code">COPY CODE</string>
 </resources>
