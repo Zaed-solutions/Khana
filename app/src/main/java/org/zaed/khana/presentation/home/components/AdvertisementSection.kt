@@ -1,8 +1,8 @@
 package org.zaed.khana.presentation.home.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
@@ -29,9 +28,7 @@ fun AdvertisementSection(
     })
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .clip(MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.background),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalPager(state = pagerState) { page ->
@@ -39,12 +36,16 @@ fun AdvertisementSection(
                 advertisement = ads[page]
             )
         }
-        DotsIndicator(
-            modifier = Modifier.padding(vertical = 8.dp),
-            dotCount = ads.size,
-            type = ShiftIndicatorType(dotsGraphic = DotGraphic(color = MaterialTheme.colorScheme.primary)),
-            pagerState = pagerState
-        )
+        if(ads.size > 1) {
+            DotsIndicator(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .height(8.dp),
+                dotCount = ads.size,
+                type = ShiftIndicatorType(dotsGraphic = DotGraphic(color = MaterialTheme.colorScheme.primary)),
+                pagerState = pagerState
+            )
+        }
     }
 }
 

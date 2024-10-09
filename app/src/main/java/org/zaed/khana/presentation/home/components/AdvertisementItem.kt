@@ -3,7 +3,9 @@ package org.zaed.khana.presentation.home.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -12,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,16 +29,19 @@ fun AdvertisementItem(
     advertisement: Advertisement,
     modifier: Modifier = Modifier
 ) {
-    Box (
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
-    ){
+            .clip(MaterialTheme.shapes.large)
+            .height(150.dp)
+    ) {
         SubcomposeAsyncImage(
             model = advertisement.backgroundImageUrl,
             contentDescription = "ad background",
-            modifier = Modifier.align(Alignment.Center),
-            contentScale = ContentScale.FillBounds
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop
         ) {
             val state = painter.state
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
@@ -44,16 +50,18 @@ fun AdvertisementItem(
                 SubcomposeAsyncImageContent()
             }
         }
-        Column (
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ){
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+        ) {
             Text(
                 text = advertisement.title,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = advertisement.description,
-                style = MaterialTheme.typography.bodyLarge
+                text = advertisement.description.wrapText(21),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f)
             )
             Button(onClick = { /*TODO*/ }, shape = MaterialTheme.shapes.large) {
                 Text(text = "Shop Now")
@@ -65,8 +73,30 @@ fun AdvertisementItem(
 @Preview(showBackground = true)
 @Composable
 private fun AdvertisementItemPreview() {
-    val ad = Advertisement(title = "Test Advertisement", description = "Test Descriptions", backgroundImageUrl = "https://www.test.com/test.jpg")
+    val ad = Advertisement(
+        title = "Test Advertisement",
+        description = "Test Descriptions",
+        backgroundImageUrl = "https://www.test.com/test.jpg"
+    )
     KhanaTheme {
         AdvertisementItem(modifier = Modifier.padding(16.dp), advertisement = ad)
     }
+}
+
+fun String.wrapText(maxCharsPerLine: Int): String {
+    val words = this.split(" ")
+    val result = StringBuilder()
+    var currentLineLength = 0
+    for (word in words) {
+        if (currentLineLength + word.length + (if (currentLineLength > 0) 1 else 0) > maxCharsPerLine) {
+            result.append("\n")
+            currentLineLength = 0
+        } else if (currentLineLength > 0) {
+            result.append(" ")
+            currentLineLength++
+        }
+        result.append(word)
+        currentLineLength += word.length
+    }
+    return result.toString()
 }

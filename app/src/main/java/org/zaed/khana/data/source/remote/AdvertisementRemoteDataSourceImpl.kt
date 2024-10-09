@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.zaed.khana.data.model.Advertisement
 import org.zaed.khana.data.source.remote.util.EndPoint
+import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
 import org.zaed.khana.data.util.AdvertisementResult
 import org.zaed.khana.data.util.Result
@@ -24,7 +25,7 @@ class AdvertisementRemoteDataSourceImpl(
                 endPoint(EndPoint.Advertisement.FetchAdvertisement.route)
             }
             if(response.status == HttpStatusCode.OK){
-                emit(Result.success(response.body<List<Advertisement>>()))
+                emit(Result.success(response.body<GenericResponse<List<Advertisement>>>().data?: emptyList()))
             }
         } catch (e: Exception){
             e.printStackTrace()
