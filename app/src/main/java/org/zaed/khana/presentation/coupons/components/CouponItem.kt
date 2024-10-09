@@ -16,11 +16,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.zaed.khana.R
 import org.zaed.khana.data.model.Coupon
 import org.zaed.khana.presentation.theme.KhanaTheme
@@ -53,12 +55,17 @@ fun CouponItem(
                 Text(
                     text = coupon.title,
                     maxLines = 1,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 22.sp
                 )
                 Text(
-                    text = "Add items worth \$${coupon.minAmount} to unlock",
-                    maxLines = 1,)
+                    text = "Add items worth \$${coupon.minAmount.toInt()} to unlock",
+                    maxLines = 1,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
                 Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
@@ -69,7 +76,9 @@ fun CouponItem(
                     Text(
                         text = coupon.description,
                         maxLines = 1,
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp
                     )
                 }
             }
@@ -81,7 +90,8 @@ fun CouponItem(
                 Text(
                     modifier = Modifier.padding(vertical= 8.dp),
                     text = stringResource(R.string.copy_code),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 20.sp
                 )
             }
         }
@@ -94,10 +104,10 @@ private fun CouponItemPreview() {
     KhanaTheme {
         CouponItem(coupon = Coupon(
             title = "WELCOME200",
-            description = "GET 50% OFF for combo",
+            description = "GET 50% OFF",
             code = "WELCOME200",
             discountPercentage = 20f,
-            minAmount = 28f
+            minAmount = 2f
         )) {
 
         }

@@ -13,10 +13,15 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -25,9 +30,13 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.Coupon
+import org.zaed.khana.data.util.CartResult
+import org.zaed.khana.data.util.ProductResult
+import org.zaed.khana.data.util.userMessage
 import org.zaed.khana.presentation.coupons.components.CouponItem
 import org.zaed.khana.presentation.theme.KhanaTheme
 
@@ -38,16 +47,12 @@ fun CouponsScreen(
     onBackPressed: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val clipboardManager: ClipboardManager = LocalClipboardManager.current
     CouponsScreenContent(
         modifier = modifier,
         coupons = state.coupons,
         onAction = { action ->
             when (action) {
                 CouponsUiAction.OnBackPressed -> onBackPressed()
-                is CouponsUiAction.OnCopyCouponCode -> {
-                    clipboardManager.setText(AnnotatedString(action.code))
-                }
             }
         }
     )
@@ -60,8 +65,12 @@ private fun CouponsScreenContent(
     coupons: List<Coupon>,
     onAction: (CouponsUiAction) -> Unit,
 ) {
+    val clipboardManager: ClipboardManager = LocalClipboardManager.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(R.string.coupons)) },
@@ -84,13 +93,21 @@ private fun CouponsScreenContent(
                 .padding(paddingValues)
         ) {
             item {
-                Text(text = stringResource(R.string.best_offers_for_you))
+                Text(text = stringResource(R.string.best_offers_for_you), style = MaterialTheme.typography.headlineSmall)
             }
             items(coupons.size) { index ->
                 val coupon = coupons[index]
                 CouponItem(
                     coupon = coupon,
-                    onCopyCouponCode = { onAction(CouponsUiAction.OnCopyCouponCode(it)) }
+                    onCopyCouponCode = { code ->
+                        clipboardManager.setText(AnnotatedString(code))
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Copied coupon code to clipboard!",
+                                withDismissAction = true
+                            )
+                        }
+                    }
                 )
             }
         }
