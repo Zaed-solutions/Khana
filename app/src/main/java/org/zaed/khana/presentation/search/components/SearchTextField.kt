@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -38,6 +39,9 @@ fun SearchTextField(
         onValueChange = {
             onSearchQueryChanged(it)
         },
+        placeholder = {
+            Text(text = "Search")
+        },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search, contentDescription = "Search"
@@ -59,6 +63,7 @@ fun SearchTextField(
         ),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus(true)
+            onDoneClicked()
         }),
 
         )

@@ -29,7 +29,7 @@ fun RecentSearchItem(
             .clickable { onItemClick(item) }) {
         Text(
             text = item,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.titleSmall,
             maxLines = 1,
             modifier = Modifier
                 .weight(1f)

@@ -46,4 +46,6 @@
     <string name="coupons">Coupons</string>
     <string name="best_offers_for_you">Best offers for you</string>
     <string name="copy_code">COPY CODE</string>
+    <string name="clear_all">Clear All</string>
+    <string name="recent">Recent</string>
 </resources>

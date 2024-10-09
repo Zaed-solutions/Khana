@@ -56,10 +56,10 @@ fun SearchResultList(
             ) {
                 Text(
                     text = "Result for \"$searchQuery\"",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.weight(1f)
                 )
-                Text(text = "${products.size} found", style = MaterialTheme.typography.titleLarge)
+                Text(text = "${products.size} found", style = MaterialTheme.typography.titleMedium)
             }
         }
         items(products.size) { index ->

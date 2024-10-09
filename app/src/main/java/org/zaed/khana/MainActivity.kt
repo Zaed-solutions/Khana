@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.zaed.khana.presentation.cart.CartScreen
 import org.zaed.khana.presentation.coupons.CouponsScreen
+import org.zaed.khana.presentation.search.SearchScreen
 import org.zaed.khana.presentation.theme.KhanaTheme
 import org.zaed.khana.presentation.wishlist.WishlistScreen
 
@@ -19,7 +20,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KhanaTheme {
-                CouponsScreen {}
+                SearchScreen(onBackPressed = { /*TODO*/ }) {
+
+                }
             }
         }
     }

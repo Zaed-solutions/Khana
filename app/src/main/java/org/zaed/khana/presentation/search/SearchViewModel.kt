@@ -7,31 +7,41 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.ProductRepository
 import org.zaed.khana.data.repository.SearchRepository
 
 class SearchViewModel(
     private val productRepo: ProductRepository,
-    private val searchRepo: SearchRepository
+    private val searchRepo: SearchRepository,
+    private val authRepo: AuthenticationRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-//        TODO("get currentUserId")
-        fetchWishlistedProductIds()
+//        fetchCurrentUser()
         fetchRecentSearches()
+    }
+
+    private fun fetchCurrentUser() {
+        viewModelScope.launch {
+            authRepo.getSignedInUser().onSuccessWithData { user ->
+                _uiState.update { it.copy(currentUser = user) }
+                fetchWishlistedProductIds()
+            }.onFailure {
+                Log.e("ProductDetailsViewModel:fetchCurrentUser", it.userMessage)
+            }
+        }
     }
 
     private fun fetchWishlistedProductIds() {
         viewModelScope.launch {
-            productRepo.fetchWishlistedProductsIds(uiState.value.currentUserId).collect { result ->
+            productRepo.fetchWishlistedProductsIds(uiState.value.currentUser.id).collect { result ->
                 result.onSuccessWithData { ids ->
                     _uiState.update { it.copy(wishlistedProductsIds = ids) }
                 }.onFailure { error ->
                     Log.e("SearchViewModel:fetchWishlistedProductIds", error.userMessage)
-                }.onLoading {
-                    //TODO: handle loading
                 }
             }
         }
@@ -42,10 +52,9 @@ class SearchViewModel(
             searchRepo.fetchRecentSearches().collect { result ->
                 result.onSuccessWithData { searches ->
                     _uiState.update { it.copy(recentSearches = searches) }
+                    Log.d("SearchViewModel:fetchRecentSearches", "Recent searches fetched: $searches")
                 }.onFailure { error ->
                     Log.e("SearchViewModel:fetchRecentSearches", error.userMessage)
-                }.onLoading {
-                    //TODO: handle loading
                 }
             }
         }
@@ -66,6 +75,7 @@ class SearchViewModel(
         viewModelScope.launch {
             searchRepo.addRecentSearch(query).onSuccess {
                 _uiState.update { it.copy(recentSearches = uiState.value.recentSearches.plus(query)) }
+                Log.d("SearchViewModel:addRecentSearch", "Recent search added: $query")
             }.onFailure { error ->
                 Log.e("SearchViewModel:addRecentSearch", error.userMessage)
             }
@@ -115,7 +125,7 @@ class SearchViewModel(
             if (uiState.value.wishlistedProductsIds.contains(productId)) {
                 productRepo.removeWishlistedProduct(
                     productId = productId,
-                    userId = uiState.value.currentUserId
+                    userId = uiState.value.currentUser.id
                 ).onSuccess {
                     _uiState.update {
                         it.copy(
@@ -130,7 +140,7 @@ class SearchViewModel(
             } else {
                 productRepo.addWishlistedProduct(
                     productId = productId,
-                    userId = uiState.value.currentUserId
+                    userId = uiState.value.currentUser.id
                 ).onSuccess {
                     _uiState.update {
                         it.copy(

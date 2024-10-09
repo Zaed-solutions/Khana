@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.search
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ fun SearchScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     SearchScreenContent(
+        modifier = modifier,
         products = state.products,
         wishlistedProductsIds = state.wishlistedProductsIds,
         recentSearches = state.recentSearches,
@@ -76,6 +78,7 @@ private fun SearchScreenContent(
     val isSearching by remember {
         derivedStateOf { searchQuery.isNotBlank() }
     }
+    Log.d("SearchScreenContent", "searchQuery: $searchQuery, isSearching: $isSearching")
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -89,7 +92,8 @@ private fun SearchScreenContent(
                             contentDescription = "back button"
                         )
                     }
-                })
+                }
+            )
         },
         modifier = modifier.fillMaxSize()
     ) { paddingValues ->
@@ -106,7 +110,7 @@ private fun SearchScreenContent(
                     searchQuery = query
                     onAction(SearchUiAction.OnSearchQueryChanged(query))
                 },
-                onDoneClicked = { onAction(SearchUiAction.OnSearchQueryChanged(searchQuery)) },
+                onDoneClicked = { onAction(SearchUiAction.OnAddRecentSearchItem(searchQuery)) },
                 searchQuery = searchQuery
             )
             AnimatedContent(targetState = isSearching, label = "Search Tabs") { state ->
