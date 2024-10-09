@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import org.zaed.khana.data.model.Product
 import org.zaed.khana.data.source.local.RecentSearchLocalDataSource
 import org.zaed.khana.data.source.remote.ProductRemoteDataSource
-import org.zaed.khana.data.source.remote.model.request.ProductRequest
 import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.Result
 import org.zaed.khana.data.util.SearchResult
@@ -30,7 +29,6 @@ class SearchRepositoryImpl(
     }
 
     override fun fetchSearchResult(query: String): Flow<Result<List<Product>, ProductResult>> {
-        val request = ProductRequest.SearchProductsByTitle(query)
-        return productRemoteSource.searchProductsByTitle(request)
+        return productRemoteSource.searchProductsByTitle(query)
     }
 }
