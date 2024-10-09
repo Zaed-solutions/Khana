@@ -40,7 +40,7 @@ class RecentSearchLocalDataSourceImpl(
         return try {
             realm.writeBlocking {
                 val result =
-                    realm.query<RecentSearchEntity>("query == $0", query).find().firstOrNull()
+                    this.query<RecentSearchEntity>("query == $0", query).find().firstOrNull()
                 if (result != null) {
                     delete(result)
                 }
