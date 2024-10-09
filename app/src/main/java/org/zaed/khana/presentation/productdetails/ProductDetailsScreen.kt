@@ -1,6 +1,7 @@
 package org.zaed.khana.presentation.productdetails
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,8 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.Color
+import org.zaed.khana.data.util.CartResult
+import org.zaed.khana.data.util.Error
 import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.isNotIdle
+import org.zaed.khana.data.util.userMessage
 import org.zaed.khana.presentation.home.components.ColorSelectionSection
 import org.zaed.khana.presentation.productdetails.components.ImagesPreviewPager
 import org.zaed.khana.presentation.productdetails.components.ProductDetailsBottomBar
@@ -43,6 +47,7 @@ fun ProductDetailsScreen(
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     ProductDetailsScreenContent(
+        modifier = modifier,
         onAction = { action ->
             when (action) {
                 is ProductDetailsUiAction.OnBackPressed -> onBackPressed()
@@ -80,15 +85,15 @@ private fun ProductDetailsScreenContent(
     availableColors: List<Color>,
     selectedColor: Color,
     price: Float,
-    actionResult: ProductResult
+    actionResult: Error
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = actionResult) {
         if (actionResult.isNotIdle()) {
             snackbarHostState.showSnackbar(
-                message = actionResult.userMessage,
+                message = actionResult.userMessage(),
                 actionLabel = when (actionResult) {
-                    ProductResult.ADD_ITEM_TO_CART_FAILED,
+                    CartResult.ADD_ITEM_TO_CART_FAILED,
                     ProductResult.ADD_WISHLISTED_PRODUCTS_FAILED -> "Retry"
                     else -> null
                 }
@@ -97,7 +102,7 @@ private fun ProductDetailsScreenContent(
                     SnackbarResult.Dismissed -> {}
                     SnackbarResult.ActionPerformed -> {
                         when (actionResult) {
-                            ProductResult.ADD_ITEM_TO_CART_FAILED -> {
+                            CartResult.ADD_ITEM_TO_CART_FAILED -> {
                                 onAction(
                                     ProductDetailsUiAction.OnAddToCartClicked
                                 )
@@ -134,7 +139,7 @@ private fun ProductDetailsScreenContent(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             ImagesPreviewPager(imagesUrls = imagesUrls)
             ProductInformationSection(
@@ -142,19 +147,19 @@ private fun ProductDetailsScreenContent(
                 description = description,
                 category = category,
                 rating = rating,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp)
             )
             SizeSelectionSection(
                 availableSizes = availableSizes,
                 selectedSize = selectedSize,
                 onSelectSize = { size -> onAction(ProductDetailsUiAction.OnSelectSize(size)) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 8.dp)
             )
             ColorSelectionSection(
                 availableColors = availableColors,
                 selectedColor = selectedColor,
                 onSelectColor = { hexColor -> onAction(ProductDetailsUiAction.OnSelectColor(hexColor)) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 8.dp)
             )
         }
     }

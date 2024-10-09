@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.util.toMoney
 
 @Composable
 fun ProductDetailsBottomBar(
@@ -44,7 +45,7 @@ fun ProductDetailsBottomBar(
         ) {
             Column{
                 Text(text = stringResource(R.string.total_price))
-                Text(text = "\$${DecimalFormat("#.00").format(price)}")
+                Text(text = price.toMoney())
             }
             Button(onClick = { onAddToCartClicked() }) {
                 Icon(

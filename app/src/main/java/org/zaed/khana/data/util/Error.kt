@@ -8,29 +8,45 @@ sealed interface Error
 
 fun Error.userMessage(): String {
     return when (this) {
-        is AuthResults -> userMessage
+        is AuthResults -> this.userMessage
+        is EmailFieldError -> this.userMessage
+        is PasswordFieldError -> this.userMessage
+        is NameFieldError -> this.userMessage
+        is TermsAndConditionsError -> this.userMessage
         is AdvertisementResult -> userMessage
         is CategoryResult -> userMessage
         is ProductResult -> userMessage
+        is CartResult -> userMessage
+        is CouponResult -> userMessage
+        is SearchResult -> userMessage
     }
 }
 
 fun Error.isNotIdle(): Boolean {
     return when (this) {
-        is AuthResults -> this !in listOf(
-            AuthResults.IDLE,
-            AuthResults.INVALID_EMAIL,
-            AuthResults.INVALID_NAME,
-            AuthResults.INVALID_PASSWORD,
-            AuthResults.PASSWORD_DOES_NOT_MATCH
-        )
-
         is AdvertisementResult -> this != AdvertisementResult.IDLE
         is CategoryResult -> this != CategoryResult.IDLE
         is ProductResult -> this != ProductResult.IDLE
+        is AuthResults -> return this != AuthResults.IDLE
+        is EmailFieldError -> return this != EmailFieldError.IDLE
+        is PasswordFieldError -> return this != PasswordFieldError.IDLE
+        is NameFieldError -> return this != NameFieldError.IDLE
+        is TermsAndConditionsError -> return this != TermsAndConditionsError.IDLE
+        is CartResult -> this != CartResult.IDLE
+        is CouponResult -> this != ProductResult.IDLE
+        is SearchResult -> this != SearchResult.IDLE
     }
 }
 
+@Serializable
+enum class EmailFieldError(val userMessage: String):Error {
+    IDLE(""),
+    INVALID_EMAIL("Invalid Email"),
+    EMAIL_FIELD_IS_EMPTY("Email field is empty"),
+    EMAIL_NOT_REGISTERED("Email not registered"),
+    EMAIL_ALREADY_REGISTERED("Email already registered"),
+    RESET_EMAIL_SENT("Reset Email Sent"),
+}
 @Serializable
 enum class AdvertisementResult(val userMessage: String) : Error {
     IDLE(""),
@@ -39,9 +55,45 @@ enum class AdvertisementResult(val userMessage: String) : Error {
 }
 
 @Serializable
+enum class NameFieldError(val userMessage: String):Error{
+    IDLE(""),
+    INVALID_NAME("Invalid Name"),
+    NAME_FIELD_IS_EMPTY("Name field is empty"),
+}
+@Serializable
+enum class TermsAndConditionsError(val userMessage: String):Error{
+    IDLE(""),
+    TERMS_AND_CONDITIONS_NOT_ACCEPTED("Terms and conditions not accepted"),
+}
+@Serializable
+enum class PasswordFieldError(val userMessage: String):Error {
+    IDLE(""),
+    INVALID_PASSWORD("Invalid Password"),
+    PASSWORD_FIELD_IS_EMPTY("Password field is empty"),
+    PASSWORD_DOES_NOT_MATCH("Password does not match"),
+}
+@Serializable
 enum class CategoryResult(val userMessage: String) : Error {
     IDLE(""),
     SERVER_ERROR("Failed to fetch categories"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+@Serializable
+enum class CouponResult(val userMessage: String) : Error {
+    IDLE(""),
+    FAILED_TO_FETCH_COUPONS("Failed to fetch coupons"),
+    SERVER_ERROR("Failed to fetch coupons"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+
+@Serializable
+enum class SearchResult(val userMessage: String) : Error {
+    IDLE(""),
+    FAILED_TO_CLEAR_RECENT_SEARCHES("Failed to clear recent searches"),
+    FAILED_TO_ADD_RECENT_SEARCHES("Failed to add recent search"),
+    FAILED_TO_DELETE_RECENT_SEARCH("Failed to delete recent search"),
+    FAILED_TO_FETCH_RECENT_SEARCHES("Failed to fetch recent searches"),
+    SERVER_ERROR("Failed to fetch search results"),
     NETWORK_ERROR("Failed to connect to the network"),
 }
 
@@ -51,11 +103,24 @@ enum class ProductResult(val userMessage: String) : Error {
     FETCH_LABELS_FAILED("Failed to fetch product labels"),
     CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED("Failed to check whether product is wishlisted"),
     FETCH_FLASH_SALE_END_TIME_FAILED("Failed to fetch flash sale end time"),
+    SEARCH_PRODUCTS_BY_TITLE_FAILED("Failed to search products by title"),
     FETCH_PRODUCTS_FAILED("Failed to fetch products"),
     FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),
     ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     ADD_WISHLISTED_PRODUCTS_FAILED("Failed to add wishlisted product"),
     REMOVE_WISHLISTED_PRODUCTS_FAILED("Failed to remove wishlisted product"),
+    NETWORK_ERROR("Failed to connect to the network"),
+    SERVER_ERROR("Server error"),
+}
+@Serializable
+enum class CartResult(val userMessage: String) : Error {
+    IDLE(""),
+    FETCH_CART_ITEMS_FAILED("Failed to fetch cart items"),
+    FETCH_DELIVERY_FEE_FAILED("Failed to fetch delivery fee"),
+    ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
+    REMOVE_ITEM_FROM_CART_FAILED("Failed to remove the item from the cart"),
+    UPDATE_ITEM_QUANTITY_FAILED("Failed to update the item quantity"),
+    APPLY_PROMO_CODE_FAILED("Failed to apply promo code"),
     NETWORK_ERROR("Failed to connect to the network"),
     SERVER_ERROR("Server error"),
 }
