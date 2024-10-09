@@ -15,20 +15,16 @@ class CouponsViewModel(
     private val _uiState = MutableStateFlow(CouponsUiState())
     val uiState = _uiState.asStateFlow()
     init {
-        //fetch current user id
         fetchCoupons()
     }
     private fun fetchCoupons() {
         viewModelScope.launch {
-            couponRepo.fetchCoupons(uiState.value.currentUserId).collect { result ->
+            couponRepo.fetchCoupons().collect { result ->
                 result.onSuccessWithData { coupons ->
                     _uiState.update { it.copy(coupons = coupons) }
-                }.onLoading {
-                    //TODO: handle loading
                 }.onFailure { error ->
                     Log.e("CouponsViewModel:fetchCoupons", error.userMessage)
                 }
-
             }
         }
     }

@@ -79,6 +79,7 @@ enum class CategoryResult(val userMessage: String) : Error {
 @Serializable
 enum class CouponResult(val userMessage: String) : Error {
     IDLE(""),
+    FAILED_TO_FETCH_COUPONS("Failed to fetch coupons"),
     SERVER_ERROR("Failed to fetch coupons"),
     NETWORK_ERROR("Failed to connect to the network"),
 }

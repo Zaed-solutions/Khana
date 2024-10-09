@@ -33,7 +33,7 @@ sealed class EndPoint(val route: String) {
         data object FetchCategories: EndPoint("/categories/all")
     }
     object Coupon{
-        data object FetchCoupon: EndPoint("/fetchCoupons")
+        data object FetchCoupon: EndPoint("/coupons/all")
     }
     object Product{
         data object FetchWishlistedProducts: EndPoint("/products/wishListProductsByUserId")

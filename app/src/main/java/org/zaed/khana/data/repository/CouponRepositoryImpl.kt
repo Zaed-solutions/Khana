@@ -9,7 +9,7 @@ import org.zaed.khana.data.util.Result
 class CouponRepositoryImpl(
     private val couponRemoteDataSource: CouponRemoteDataSource
 ) : CouponRepository {
-    override fun fetchCoupons(userId: String): Flow<Result<List<Coupon>, CouponResult>> {
+    override fun fetchCoupons(): Flow<Result<List<Coupon>, CouponResult>> {
         return couponRemoteDataSource.fetchCoupons()
     }
 }
