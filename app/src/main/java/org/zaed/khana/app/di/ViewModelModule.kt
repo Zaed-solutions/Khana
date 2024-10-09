@@ -9,6 +9,7 @@ import org.zaed.khana.presentation.productdetails.ProductDetailsViewModel
 import org.zaed.khana.presentation.wishlist.WishlistViewModel
 import org.zaed.khana.presentation.cart.CartViewModel
 import org.zaed.khana.presentation.coupons.CouponsViewModel
+import org.zaed.khana.presentation.search.SearchViewModel
 
 val viewModelModule = module {
     viewModelOf(::LoginViewModel)
@@ -18,4 +19,5 @@ val viewModelModule = module {
     viewModelOf(::ProductDetailsViewModel)
     viewModelOf(::WishlistViewModel)
     viewModelOf(::CartViewModel)
+    viewModelOf(::SearchViewModel)
 }

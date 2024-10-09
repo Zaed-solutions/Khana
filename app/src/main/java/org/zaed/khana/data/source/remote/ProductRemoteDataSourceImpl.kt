@@ -1,18 +1,14 @@
 package org.zaed.khana.data.source.remote
 
-import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
-import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.parameters
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.Product
 import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.GenericResponse
@@ -212,6 +208,29 @@ class ProductRemoteDataSourceImpl(
                     }
                 } else {
                     emit(Result.failure(ProductResult.FETCH_WISHLISTED_PRODUCTS_FAILED))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Result.failure(ProductResult.SERVER_ERROR))
+            }
+        }
+    override fun searchProductsByTitle(query: String): Flow<Result<List<Product>, ProductResult>> =
+        flow {
+            emit(Result.Loading)
+            try {
+                val response = httpClient.get {
+                    endPoint(EndPoint.Product.SearchProductsByName.route)
+                    parameter("name", query)
+                }
+                if (response.status == HttpStatusCode.OK) {
+                    val responseData = response.body<GenericResponse<List<Product>>>().data
+                    if (responseData != null) {
+                        emit(Result.success(responseData))
+                    } else {
+                        emit(Result.failure(ProductResult.SEARCH_PRODUCTS_BY_TITLE_FAILED))
+                    }
+                } else {
+                    emit(Result.failure(ProductResult.SEARCH_PRODUCTS_BY_TITLE_FAILED))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

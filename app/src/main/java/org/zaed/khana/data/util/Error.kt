@@ -18,6 +18,7 @@ fun Error.userMessage(): String {
         is ProductResult -> userMessage
         is CartResult -> userMessage
         is CouponResult -> userMessage
+        is SearchResult -> userMessage
     }
 }
 
@@ -33,6 +34,7 @@ fun Error.isNotIdle(): Boolean {
         is TermsAndConditionsError -> return this != TermsAndConditionsError.IDLE
         is CartResult -> this != CartResult.IDLE
         is CouponResult -> this != ProductResult.IDLE
+        is SearchResult -> this != SearchResult.IDLE
     }
 }
 
@@ -85,11 +87,23 @@ enum class CouponResult(val userMessage: String) : Error {
 }
 
 @Serializable
+enum class SearchResult(val userMessage: String) : Error {
+    IDLE(""),
+    FAILED_TO_CLEAR_RECENT_SEARCHES("Failed to clear recent searches"),
+    FAILED_TO_ADD_RECENT_SEARCHES("Failed to add recent search"),
+    FAILED_TO_DELETE_RECENT_SEARCH("Failed to delete recent search"),
+    FAILED_TO_FETCH_RECENT_SEARCHES("Failed to fetch recent searches"),
+    SERVER_ERROR("Failed to fetch search results"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+
+@Serializable
 enum class ProductResult(val userMessage: String) : Error {
     IDLE(""),
     FETCH_LABELS_FAILED("Failed to fetch product labels"),
     CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED("Failed to check whether product is wishlisted"),
     FETCH_FLASH_SALE_END_TIME_FAILED("Failed to fetch flash sale end time"),
+    SEARCH_PRODUCTS_BY_TITLE_FAILED("Failed to search products by title"),
     FETCH_PRODUCTS_FAILED("Failed to fetch products"),
     FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),
     ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
