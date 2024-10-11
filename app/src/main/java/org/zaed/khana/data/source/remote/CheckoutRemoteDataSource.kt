@@ -1,4 +1,4 @@
-package org.zaed.khana.data.source
+package org.zaed.khana.data.source.remote
 
 import kotlinx.coroutines.flow.Flow
 import org.zaed.khana.data.model.Order

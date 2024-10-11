@@ -109,7 +109,7 @@ class CheckoutViewModel(
             val order = Order(
                 userId = _uiState.value.currentUser.id,
                 shippingAddress = _uiState.value.selectedShippingAddress,
-                shippingType = _uiState.value.selectedShippingType,
+                shippingType = _uiState.value.selectedShippingType.title,
                 cartItemsIds = _uiState.value.cartItems.map { it.id },
             )
             checkoutRepo.placeOrder(

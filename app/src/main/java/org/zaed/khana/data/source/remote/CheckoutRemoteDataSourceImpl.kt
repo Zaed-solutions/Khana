@@ -1,4 +1,4 @@
-package org.zaed.khana.data.source
+package org.zaed.khana.data.source.remote
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

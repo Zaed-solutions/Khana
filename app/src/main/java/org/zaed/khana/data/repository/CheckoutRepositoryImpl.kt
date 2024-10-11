@@ -3,7 +3,7 @@ package org.zaed.khana.data.repository
 import kotlinx.coroutines.flow.Flow
 import org.zaed.khana.data.model.Order
 import org.zaed.khana.data.model.ShippingAddress
-import org.zaed.khana.data.source.CheckoutRemoteDataSource
+import org.zaed.khana.data.source.remote.CheckoutRemoteDataSource
 import org.zaed.khana.data.source.remote.model.request.CheckoutRequest
 import org.zaed.khana.data.util.CheckoutResult
 import org.zaed.khana.data.util.Result

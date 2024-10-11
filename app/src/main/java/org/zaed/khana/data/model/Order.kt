@@ -8,7 +8,7 @@ data class Order(
     val userId: String = "",
     val cartItemsIds: List<String> = emptyList(),
     val shippingAddress: ShippingAddress = ShippingAddress(),
-    val shippingType: ShippingType = ShippingType.ECONOMY,
-    val paymentStatus: PaymentStatus = PaymentStatus.NOT_SET,
-    val orderStatus: OrderStatus = OrderStatus.PENDING,
+    val shippingType: String = ShippingType.ECONOMY.title,
+    val paymentStatus: String = PaymentStatus.NOT_SET.name,
+    val orderStatus: String = OrderStatus.PENDING.name,
 )
