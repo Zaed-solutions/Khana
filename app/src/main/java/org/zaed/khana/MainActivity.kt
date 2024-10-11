@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.zaed.khana.presentation.cart.CartScreen
+import org.zaed.khana.presentation.category.CategoryScreen
 import org.zaed.khana.presentation.coupons.CouponsScreen
 import org.zaed.khana.presentation.search.SearchScreen
 import org.zaed.khana.presentation.theme.KhanaTheme
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KhanaTheme {
-                SearchScreen(onBackPressed = { /*TODO*/ }) {
+                CategoryScreen(category = "Footwear", onBackPressed = { /*TODO*/ }) {
 
                 }
             }
