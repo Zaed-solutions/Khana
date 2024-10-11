@@ -128,7 +128,7 @@ class HomeViewModel(
     }
     private fun updateSortedByOptions(sortedByOption: String){
         viewModelScope.launch {
-            _uiState.update { it.copy(filter = it.filter.copy(sortedBy = SortByFilterOption.entries.first { it.displayName == sortedByOption })) }
+            _uiState.update { it.copy(filter = it.filter.copy(sortedBy = sortedByOption)) }
             fetchProducts()
         }
     }

@@ -31,14 +31,14 @@ class FilterViewModel : ViewModel() {
     private fun updateSortedByFilter(sortingOption: SortByFilterOption) {
         viewModelScope.launch {
             _uiState.value =
-                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(sortedBy = sortingOption))
+                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(sortedBy = sortingOption.displayName))
         }
     }
 
     private fun updateReviewsFilter(reviews: ReviewsFilterOption) {
         viewModelScope.launch {
             _uiState.value =
-                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(reviews = reviews))
+                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(reviews = reviews.displayName))
         }
     }
 
@@ -52,14 +52,14 @@ class FilterViewModel : ViewModel() {
     private fun updateGenderFilter(gender: GenderFilterOption) {
         viewModelScope.launch {
             _uiState.value =
-                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(gender = gender))
+                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(gender = gender.displayName))
         }
     }
 
     private fun updateBrandFilter(brand: BrandFilterOption) {
         viewModelScope.launch {
             _uiState.value =
-                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(brand = brand))
+                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(brand = brand.displayName))
         }
     }
 
