@@ -100,7 +100,7 @@ enum class SearchResult(val userMessage: String) : Error {
 @Serializable
 enum class ProductResult(val userMessage: String) : Error {
     IDLE(""),
-    FETCH_LABELS_FAILED("Failed to fetch product labels"),
+    FETCH_SORTED_BY_OPTIONS_FAILED("Failed to fetch product sorted by options"),
     CHECK_IF_PRODUCT_IS_WISHLISTED_FAILED("Failed to check whether product is wishlisted"),
     FETCH_FLASH_SALE_END_TIME_FAILED("Failed to fetch flash sale end time"),
     SEARCH_PRODUCTS_BY_TITLE_FAILED("Failed to search products by title"),

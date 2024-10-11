@@ -9,7 +9,7 @@ import org.zaed.khana.data.util.Result
 interface ProductRepository {
     suspend fun fetchProductById(id: String): Result<Product, ProductResult>
     suspend fun checkIfIsProductWishlisted(userId: String, productId: String):Result<Boolean, ProductResult>
-    fun fetchLabels():  Flow<Result<List<String>, ProductResult>>
+    fun fetchSortedByOptions():  Flow<Result<List<String>, ProductResult>>
     fun fetchProductsByFilter(filter: ProductFilter): Flow<Result<List<Product>, ProductResult>>
     fun fetchWishlistedProductsIds(userId: String): Flow<Result<List<String>, ProductResult>>
     fun fetchWishlistedProducts(userId: String): Flow<Result<List<Product>, ProductResult>>

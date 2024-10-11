@@ -21,12 +21,12 @@ enum class SortByFilterOption(val displayName: String) {
 }
 
 @Serializable
-enum class ReviewsFilterOption(val displayName: String) {
-    ALL("All"),
-    FOUR_STARS_AND_ABOVE("4 and above"),
-    THREE_STARS_AND_ABOVE("3 and above"),
-    TWO_STARS_AND_ABOVE("2 and above"),
-    ONE_STAR_AND_ABOVE("1 and above")
+enum class ReviewsFilterOption(val displayName: String, val minRating: Float) {
+    ALL("All", 0f),
+    FOUR_STARS_AND_ABOVE("4 and above", 4f),
+    THREE_STARS_AND_ABOVE("3 and above", 3f),
+    TWO_STARS_AND_ABOVE("2 and above", 2f),
+    ONE_STAR_AND_ABOVE("1 and above", 1f)
 }
 
 

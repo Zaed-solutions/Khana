@@ -79,7 +79,7 @@ class HomeViewModel(
 
     private fun fetchSorterByOptions(){
         viewModelScope.launch {
-            productRepo.fetchLabels().collect{ result ->
+            productRepo.fetchSortedByOptions().collect{ result ->
                 result.onSuccessWithData { options ->
                     _uiState.update { it.copy(sorterByOptions = options) }
                     fetchProducts()

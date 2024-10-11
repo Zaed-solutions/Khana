@@ -14,6 +14,7 @@ data class ProductFilter(
     val brand: BrandFilterOption = BrandFilterOption.ALL,
     val gender: GenderFilterOption = GenderFilterOption.ALL,
     val sortedBy: SortByFilterOption = SortByFilterOption.LATEST,
-    val priceRange: Pair<MinimumPrice, MaximumPrice> = Pair(0, 9999),
+    val minPrice: Int = 0,
+    val maxPrice: Int = 9999,
     val reviews: ReviewsFilterOption = ReviewsFilterOption.ALL
 )

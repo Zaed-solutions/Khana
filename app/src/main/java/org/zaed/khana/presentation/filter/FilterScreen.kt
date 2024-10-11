@@ -96,7 +96,7 @@ fun FilterScreenContent(
                 }
             }
             FilterSection(title = stringResource(R.string.pricing_range)) {
-                PricingRangeFilterContent(priceRange = filter.priceRange) {
+                PricingRangeFilterContent(priceRange = Pair(filter.minPrice, filter.maxPrice)) {
                     onAction(FilterUiAction.OnUpdatePriceRange(it))
                 }
             }

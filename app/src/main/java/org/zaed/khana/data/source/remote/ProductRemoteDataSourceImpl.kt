@@ -66,22 +66,21 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    //fetch labels displayed above products in home screen as list of strings(e.g.: All, Newest, Popular, Man, Woman,.. etc)
-    override fun fetchLabels(): Flow<Result<List<String>, ProductResult>> = flow {
+    override fun fetchSortedByOptions(): Flow<Result<List<String>, ProductResult>> = flow {
         emit(Result.Loading)
         try {
             val response = httpClient.get {
-                endPoint(EndPoint.Product.FetchLabels.route)
+                endPoint(EndPoint.Product.FetchSortedByOptions.route)
             }
             if(response.status == HttpStatusCode.OK) {
                 val responseData = response.body<GenericResponse<List<String>>>().data
                 if(responseData != null){
                     emit(Result.success(responseData))
                 } else {
-                    emit(Result.failure(ProductResult.FETCH_LABELS_FAILED))
+                    emit(Result.failure(ProductResult.FETCH_SORTED_BY_OPTIONS_FAILED))
                 }
             } else {
-                emit(Result.failure(ProductResult.FETCH_LABELS_FAILED))
+                emit(Result.failure(ProductResult.FETCH_SORTED_BY_OPTIONS_FAILED))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -115,7 +114,7 @@ class ProductRemoteDataSourceImpl(
         emit(Result.Loading)
         try {
             val response = httpClient.get {
-                endPoint(EndPoint.Product.FetchProductsByLabel.route)
+                endPoint(EndPoint.Product.FetchProductsByFilter.route)
                 setBody{
                     filter
                 }

@@ -45,7 +45,7 @@ class FilterViewModel : ViewModel() {
     private fun updatePricingRange(range: Pair<MinimumPrice, MaximumPrice>) {
         viewModelScope.launch {
             _uiState.value =
-                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(priceRange = range))
+                _uiState.value.copy(productFilter = _uiState.value.productFilter.copy(minPrice = range.first, maxPrice = range.second))
         }
     }
 
