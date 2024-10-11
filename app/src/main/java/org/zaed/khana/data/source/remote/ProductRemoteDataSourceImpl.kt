@@ -6,10 +6,12 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.zaed.khana.data.model.Product
+import org.zaed.khana.data.model.ProductFilter
 import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
@@ -109,12 +111,14 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    override fun fetchProductsByLabel(label: String): Flow<Result<List<Product>, ProductResult>> = flow {
+    override fun fetchProductsByFilter(filter: ProductFilter): Flow<Result<List<Product>, ProductResult>> = flow {
         emit(Result.Loading)
         try {
             val response = httpClient.get {
                 endPoint(EndPoint.Product.FetchProductsByLabel.route)
-                parameter("label", label)
+                setBody{
+                    filter
+                }
             }
             if(response.status == HttpStatusCode.OK) {
                 val responseData = response.body<GenericResponse<List<Product>>>().data

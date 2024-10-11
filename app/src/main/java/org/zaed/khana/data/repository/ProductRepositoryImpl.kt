@@ -3,6 +3,7 @@ package org.zaed.khana.data.repository
 import kotlinx.coroutines.flow.Flow
 import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.Product
+import org.zaed.khana.data.model.ProductFilter
 import org.zaed.khana.data.source.remote.ProductRemoteDataSource
 import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.Result
@@ -25,8 +26,8 @@ class ProductRepositoryImpl(
         return productRemoteSource.fetchLabels()
     }
 
-    override fun fetchProductsByLabel(label: String):Flow<Result<List<Product>, ProductResult>> {
-        return productRemoteSource.fetchProductsByLabel(label = label)
+    override fun fetchProductsByFilter(filter: ProductFilter):Flow<Result<List<Product>, ProductResult>> {
+        return productRemoteSource.fetchProductsByFilter(filter = filter)
     }
 
     override fun fetchWishlistedProductsIds(userId: String): Flow<Result<List<String>, ProductResult>> {
