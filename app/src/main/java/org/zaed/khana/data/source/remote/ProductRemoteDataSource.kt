@@ -12,6 +12,7 @@ interface ProductRemoteDataSource {
     fun fetchSortedByOptions(): Flow<Result<List<String>, ProductResult>>
     suspend fun fetchFlashSaleEndTime(): Result<Long, ProductResult>
     fun fetchProductsByFilter(filter: ProductFilter): Flow<Result<List<Product>, ProductResult>>
+    fun fetchProductsByCategory(category: String): Flow<Result<List<Product>, ProductResult>>
     fun fetchWishlistedProductsIds(userId: String): Flow<Result<List<String>, ProductResult>>
     suspend fun addWishlistedProduct(userId: String, productId: String): Result<Unit, ProductResult>
     suspend fun removeWishlistedProduct(userId: String, productId: String): Result<Unit, ProductResult>

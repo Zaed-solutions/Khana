@@ -29,6 +29,10 @@ class ProductRepositoryImpl(
         return productRemoteSource.fetchProductsByFilter(filter = filter)
     }
 
+    override fun fetchProductsByCategory(category: String): Flow<Result<List<Product>, ProductResult>> {
+        return productRemoteSource.fetchProductsByCategory(category = category)
+    }
+
     override fun fetchWishlistedProductsIds(userId: String): Flow<Result<List<String>, ProductResult>> {
         return productRemoteSource.fetchWishlistedProductsIds(userId = userId)
     }

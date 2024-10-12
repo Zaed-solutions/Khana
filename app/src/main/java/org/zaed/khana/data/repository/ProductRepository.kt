@@ -11,6 +11,7 @@ interface ProductRepository {
     suspend fun checkIfIsProductWishlisted(userId: String, productId: String):Result<Boolean, ProductResult>
     fun fetchSortedByOptions():  Flow<Result<List<String>, ProductResult>>
     fun fetchProductsByFilter(filter: ProductFilter): Flow<Result<List<Product>, ProductResult>>
+    fun fetchProductsByCategory(category: String): Flow<Result<List<Product>, ProductResult>>
     fun fetchWishlistedProductsIds(userId: String): Flow<Result<List<String>, ProductResult>>
     fun fetchWishlistedProducts(userId: String): Flow<Result<List<Product>, ProductResult>>
     suspend fun addWishlistedProduct(productId: String, userId: String): Result<Unit, ProductResult>

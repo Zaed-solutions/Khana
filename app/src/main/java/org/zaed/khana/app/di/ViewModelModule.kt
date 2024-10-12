@@ -11,6 +11,7 @@ import org.zaed.khana.presentation.wishlist.WishlistViewModel
 import org.zaed.khana.presentation.cart.CartViewModel
 import org.zaed.khana.presentation.coupons.CouponsViewModel
 import org.zaed.khana.presentation.search.SearchViewModel
+import org.zaed.khana.presentation.category.CategoryViewModel
 
 val viewModelModule = module {
     viewModelOf(::LoginViewModel)
@@ -22,4 +23,5 @@ val viewModelModule = module {
     viewModelOf(::CartViewModel)
     viewModelOf(::SearchViewModel)
     viewModelOf(::FilterViewModel)
+    viewModelOf(::CategoryViewModel)
 }
