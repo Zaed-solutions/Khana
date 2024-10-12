@@ -50,7 +50,7 @@ fun HomeScreen(
         categories = state.categories,
         flashSaleEndsAtEpochSeconds = state.flashSaleEndsAtEpochSeconds,
         sortedByOptions = state.sorterByOptions,
-        selectedLabel = state.filter.sortedBy.displayName,
+        selectedLabel = state.filter.sortedBy,
         products = state.products,
         wishlistedProducts = state.wishlistedProductsIds,
         onAction = { action ->

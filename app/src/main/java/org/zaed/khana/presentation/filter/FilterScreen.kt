@@ -19,6 +19,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.ProductFilter
+import org.zaed.khana.data.util.BrandFilterOption
+import org.zaed.khana.data.util.GenderFilterOption
+import org.zaed.khana.data.util.ReviewsFilterOption
+import org.zaed.khana.data.util.SortByFilterOption
 import org.zaed.khana.presentation.filter.component.BrandsFilterContent
 import org.zaed.khana.presentation.filter.component.FilterBottomBar
 import org.zaed.khana.presentation.filter.component.FilterSection
@@ -80,18 +84,18 @@ fun FilterScreenContent(
         ) {
 
             FilterSection(title = stringResource(R.string.brands)) {
-                BrandsFilterContent(selectedBrand = filter.brand) {
+                BrandsFilterContent(selectedBrand = BrandFilterOption.entries.first{it.displayName == filter.brand}) {
                     onAction(FilterUiAction.OnUpdateBrandFilter(it))
                 }
             }
             FilterSection(title = stringResource(R.string.gender)) {
-                GenderFilterContent(selectedGender = filter.gender) {
+                GenderFilterContent(selectedGender = GenderFilterOption.entries.first{it.displayName == filter.gender}) {
                     onAction(FilterUiAction.OnUpdateGenderFilter(it))
                 }
             }
 
             FilterSection(title = stringResource(R.string.sort_by)) {
-                SortByFilterContent(selectedSortingOption = filter.sortedBy) {
+                SortByFilterContent(selectedSortingOption = SortByFilterOption.entries.first{it.displayName == filter.sortedBy}) {
                     onAction(FilterUiAction.OnUpdateSortingOption(it))
                 }
             }
@@ -101,7 +105,7 @@ fun FilterScreenContent(
                 }
             }
             FilterSection(title = stringResource(R.string.reviews)) {
-                ReviewsFilterContent(selectedReviewsOption = filter.reviews) {
+                ReviewsFilterContent(selectedReviewsOption = ReviewsFilterOption.entries.first{it.displayName == filter.reviews}) {
                     onAction(FilterUiAction.OnUpdateReviewsFilter(it))
                 }
             }

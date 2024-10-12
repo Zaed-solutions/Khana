@@ -113,11 +113,11 @@ class ProductRemoteDataSourceImpl(
     override fun fetchProductsByFilter(filter: ProductFilter): Flow<Result<List<Product>, ProductResult>> = flow {
         emit(Result.Loading)
         try {
-            val response = httpClient.get {
+            val response = httpClient.post {
                 endPoint(EndPoint.Product.FetchProductsByFilter.route)
-                setBody{
+                setBody(
                     filter
-                }
+                    )
             }
             if(response.status == HttpStatusCode.OK) {
                 val responseData = response.body<GenericResponse<List<Product>>>().data
