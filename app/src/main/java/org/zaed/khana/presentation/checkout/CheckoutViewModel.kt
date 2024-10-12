@@ -79,11 +79,12 @@ class CheckoutViewModel(
 
     private fun addShippingAddress(newAddress: ShippingAddress) {
         viewModelScope.launch {
-            checkoutRepo.addShippingAddress(_uiState.value.currentUser.id, newAddress).onSuccess {
+            checkoutRepo.addShippingAddress(newAddress.copy(userId = _uiState.value.currentUser.id)).onSuccessWithData { addressId ->
+                val updatedAddress = newAddress.copy(id = addressId)
                 _uiState.update {
                     it.copy(
-                        shippingAddresses = it.shippingAddresses + newAddress,
-                        selectedShippingAddress = newAddress
+                        shippingAddresses = it.shippingAddresses + updatedAddress,
+                        selectedShippingAddress = updatedAddress
                     )
                 }
             }.onFailure {

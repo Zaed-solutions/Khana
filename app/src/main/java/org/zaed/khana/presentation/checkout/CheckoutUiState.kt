@@ -8,6 +8,7 @@ import org.zaed.khana.data.model.User
 data class CheckoutUiState(
     val currentUser: User = User(),
     val shippingAddresses: List<ShippingAddress> = emptyList(),
+    val totalPrice: Float = 0f,
     val cartItems: List<CartItem> = emptyList(),
     val selectedShippingAddress: ShippingAddress = ShippingAddress(),
     val selectedShippingType: ShippingType = ShippingType.ECONOMY,

@@ -86,7 +86,7 @@ class CartViewModel(
 
     private fun applyPromoCode(code: String) {
         viewModelScope.launch {
-            cartRepo.fetchPromoCodeDiscountPercentage(code)
+            cartRepo.applyPromoCode(code, uiState.value.cartItems.map { it.id })
                 .onSuccessWithData { discountPercentage ->
                     _uiState.value = uiState.value.copy(discountPercentage = discountPercentage)
                 }.onFailure {

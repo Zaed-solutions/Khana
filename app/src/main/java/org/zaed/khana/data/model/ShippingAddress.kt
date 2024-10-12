@@ -4,6 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ShippingAddress(
+    val id: String = "",
+    val userId: String = "",
     val title: String = "",
     val country: String = "",
     val city: String = "",

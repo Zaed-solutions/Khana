@@ -12,5 +12,6 @@ data class CartItem(
     val productColor: Color = Color(),
     val productSize: String = "",
     val productBasePrice: Float = 0f,
+    val appliedDiscountPercentage: Float = 0f,
     val quantity: Int = 0,
 )

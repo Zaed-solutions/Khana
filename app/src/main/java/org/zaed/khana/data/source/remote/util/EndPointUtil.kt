@@ -23,7 +23,7 @@ sealed class EndPoint(val route: String) {
 
     object Cart {
         data object AddItemToCart : EndPoint("/cart/addToCart")
-        data object FetchPromoCodeDiscountPercentage : EndPoint("/cart/promoCodeDiscountPercentage")
+        data object ApplyPromoCode : EndPoint("/cart/applyPromoCode")
         data object UpdateItemQuantity : EndPoint("/cart/updateItemQuantity")
         data object RemoveCartItem : EndPoint("/cart/removeCartItem")
         data object FetchUserCartItems : EndPoint("/cart/userCartItems")
@@ -48,7 +48,7 @@ sealed class EndPoint(val route: String) {
 
     object Checkout {
         data object FetchShippingAddresses : EndPoint("/addresses/byUserId")
-        data object AddShippingAddress : EndPoint("/addresses/add")
-        data object PlaceOrder : EndPoint("/orders/place")
+        data object AddShippingAddress : EndPoint("/addresses/insert")
+        data object PlaceOrder : EndPoint("/orders/insert")
     }
 }

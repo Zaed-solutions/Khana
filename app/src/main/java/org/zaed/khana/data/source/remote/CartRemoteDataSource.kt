@@ -14,7 +14,7 @@ interface CartRemoteDataSource {
         productSize: String
     ): Result<Unit, CartResult>
 
-    suspend fun fetchPromoCodeDiscountPercentage(promoCode: String): Result<Float, CartResult>
+    suspend fun applyPromoCode(promoCode: String, cartItemsIds: List<String>): Result<Float, CartResult>
     suspend fun updateItemQuantity(cartItemId: String, newQuantity: Int): Result<Unit, CartResult>
     suspend fun removeCartItem(cartItemId: String): Result<Unit, CartResult>
     fun fetchUserCartItems(userId: String): Flow<Result<List<CartItem>, CartResult>>

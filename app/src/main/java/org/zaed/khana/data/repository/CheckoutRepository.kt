@@ -9,9 +9,8 @@ import org.zaed.khana.data.util.Result
 interface CheckoutRepository {
     fun fetchShippingAddresses(userId: String): Flow<Result<List<ShippingAddress>, CheckoutResult>>
     suspend fun addShippingAddress(
-        userId: String,
         shippingAddress: ShippingAddress
-    ): Result<Unit, CheckoutResult>
+    ): Result<String, CheckoutResult>
 
     suspend fun placeOrder(order: Order): Result<String, CheckoutResult>
 }

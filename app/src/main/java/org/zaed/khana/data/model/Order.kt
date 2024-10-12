@@ -11,4 +11,5 @@ data class Order(
     val shippingType: String = ShippingType.ECONOMY.title,
     val paymentStatus: String = PaymentStatus.NOT_SET.name,
     val orderStatus: String = OrderStatus.PENDING.name,
+    val totalPrice: Float = 0f,
 )

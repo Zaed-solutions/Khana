@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.zaed.khana.data.model.Order
 import org.zaed.khana.data.model.ShippingAddress
-import org.zaed.khana.data.source.remote.model.request.CheckoutRequest
 import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
@@ -46,15 +45,20 @@ class CheckoutRemoteDataSourceImpl(
         }
 
     override suspend fun addShippingAddress(
-        requestBody: CheckoutRequest.AddShippingAddress
-    ): Result<Unit, CheckoutResult> {
+        requestBody: ShippingAddress
+    ): Result<String, CheckoutResult> {
         return try {
             val request = httpClient.post {
                 endPoint(EndPoint.Checkout.AddShippingAddress.route)
                 setBody(requestBody)
             }
             if (request.status == HttpStatusCode.OK) {
-                Result.Success(Unit)
+                val responseData = request.body<GenericResponse<String>>().data
+                if (responseData != null) {
+                    Result.Success(responseData)
+                } else {
+                    Result.Error(CheckoutResult.ADD_SHIPPING_ADDRESS_FAILED)
+                }
             } else {
                 Result.Error(CheckoutResult.ADD_SHIPPING_ADDRESS_FAILED)
             }
@@ -67,7 +71,7 @@ class CheckoutRemoteDataSourceImpl(
     override suspend fun placeOrder(order: Order): Result<String, CheckoutResult> {
         return try {
             val request = httpClient.post {
-                endPoint(EndPoint.Checkout.AddShippingAddress.route)
+                endPoint(EndPoint.Checkout.PlaceOrder.route)
                 setBody(order)
             }
             if (request.status == HttpStatusCode.OK) {
