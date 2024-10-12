@@ -41,8 +41,8 @@ sealed class EndPoint(val route: String) {
     object Product {
         data object FetchWishlistedProducts : EndPoint("/products/wishListProductsByUserId")
         data object FetchFlashSaleEndTime : EndPoint("/products/FlashSaleEndTime")
-        data object FetchLabels : EndPoint("/products/labels")
-        data object FetchProductsByLabel : EndPoint("/products/byLabel")
+        data object FetchSortedByOptions : EndPoint("/products/sortedByOptions")
+        data object FetchProductsByFilter : EndPoint("/products/byFilter")
         data object FetchProductsByCategory : EndPoint("/products/byCategory")
         data object FetchWishlistedProductsIds :
             EndPoint("/products/wishListProductsIdByUserId")

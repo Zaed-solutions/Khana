@@ -6,10 +6,12 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.zaed.khana.data.model.Product
+import org.zaed.khana.data.model.ProductFilter
 import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
@@ -64,22 +66,21 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    //fetch labels displayed above products in home screen as list of strings(e.g.: All, Newest, Popular, Man, Woman,.. etc)
-    override fun fetchLabels(): Flow<Result<List<String>, ProductResult>> = flow {
+    override fun fetchSortedByOptions(): Flow<Result<List<String>, ProductResult>> = flow {
         emit(Result.Loading)
         try {
             val response = httpClient.get {
-                endPoint(EndPoint.Product.FetchLabels.route)
+                endPoint(EndPoint.Product.FetchSortedByOptions.route)
             }
             if(response.status == HttpStatusCode.OK) {
                 val responseData = response.body<GenericResponse<List<String>>>().data
                 if(responseData != null){
                     emit(Result.success(responseData))
                 } else {
-                    emit(Result.failure(ProductResult.FETCH_LABELS_FAILED))
+                    emit(Result.failure(ProductResult.FETCH_SORTED_BY_OPTIONS_FAILED))
                 }
             } else {
-                emit(Result.failure(ProductResult.FETCH_LABELS_FAILED))
+                emit(Result.failure(ProductResult.FETCH_SORTED_BY_OPTIONS_FAILED))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -109,12 +110,14 @@ class ProductRemoteDataSourceImpl(
         }
     }
 
-    override fun fetchProductsByLabel(label: String): Flow<Result<List<Product>, ProductResult>> = flow {
+    override fun fetchProductsByFilter(filter: ProductFilter): Flow<Result<List<Product>, ProductResult>> = flow {
         emit(Result.Loading)
         try {
-            val response = httpClient.get {
-                endPoint(EndPoint.Product.FetchProductsByLabel.route)
-                parameter("label", label)
+            val response = httpClient.post {
+                endPoint(EndPoint.Product.FetchProductsByFilter.route)
+                setBody(
+                    filter
+                    )
             }
             if(response.status == HttpStatusCode.OK) {
                 val responseData = response.body<GenericResponse<List<Product>>>().data

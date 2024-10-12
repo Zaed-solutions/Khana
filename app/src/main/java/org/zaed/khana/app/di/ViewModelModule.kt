@@ -4,6 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 import org.zaed.khana.presentation.auth.login.LoginViewModel
 import org.zaed.khana.presentation.auth.signup.SignUpViewModel
+import org.zaed.khana.presentation.filter.FilterViewModel
 import org.zaed.khana.presentation.home.HomeViewModel
 import org.zaed.khana.presentation.productdetails.ProductDetailsViewModel
 import org.zaed.khana.presentation.wishlist.WishlistViewModel
@@ -21,5 +22,6 @@ val viewModelModule = module {
     viewModelOf(::WishlistViewModel)
     viewModelOf(::CartViewModel)
     viewModelOf(::SearchViewModel)
+    viewModelOf(::FilterViewModel)
     viewModelOf(::CategoryViewModel)
 }
