@@ -9,10 +9,14 @@ import org.zaed.khana.data.repository.CartRepository
 import org.zaed.khana.data.repository.CartRepositoryImpl
 import org.zaed.khana.data.repository.CategoryRepository
 import org.zaed.khana.data.repository.CategoryRepositoryImpl
+import org.zaed.khana.data.repository.CouponRepository
+import org.zaed.khana.data.repository.CouponRepositoryImpl
 import org.zaed.khana.data.repository.CheckoutRepository
 import org.zaed.khana.data.repository.CheckoutRepositoryImpl
 import org.zaed.khana.data.repository.ProductRepository
 import org.zaed.khana.data.repository.ProductRepositoryImpl
+import org.zaed.khana.data.repository.SearchRepository
+import org.zaed.khana.data.repository.SearchRepositoryImpl
 
 val repositoryModule = module {
     single <AuthenticationRepository>{ AuthenticationRepositoryImpl(get()) }
@@ -20,6 +24,8 @@ val repositoryModule = module {
     single<AdvertisementRepository> { AdvertisementRepositoryImpl(get()) }
     single<CategoryRepository> { CategoryRepositoryImpl(get()) }
     single<ProductRepository> { ProductRepositoryImpl(get()) }
+    single<CouponRepository> { CouponRepositoryImpl(get()) }
     single<CartRepository> { CartRepositoryImpl(get()) }
+    single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
     single<CheckoutRepository> { CheckoutRepositoryImpl(get()) }
 }

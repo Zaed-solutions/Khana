@@ -7,10 +7,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.zaed.khana.data.model.ProductFilter
 import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.AdvertisementRepository
 import org.zaed.khana.data.repository.CategoryRepository
 import org.zaed.khana.data.repository.ProductRepository
+import org.zaed.khana.data.util.SortByFilterOption
 
 class HomeViewModel(
     private val advertisementRepo: AdvertisementRepository,
@@ -20,12 +22,13 @@ class HomeViewModel(
 ): ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
-    init{
+    fun init(filter: ProductFilter){
+        _uiState.update { it.copy(filter = filter) }
         fetchCurrentUser()
         fetchAdvertisements()
         fetchCategories()
         fetchFlashSaleEndTime()
-        fetchLabels()
+        fetchSorterByOptions()
     }
 
     private fun fetchCurrentUser(){
@@ -74,11 +77,11 @@ class HomeViewModel(
         }
     }
 
-    private fun fetchLabels(){
+    private fun fetchSorterByOptions(){
         viewModelScope.launch {
-            productRepo.fetchLabels().collect{ result ->
-                result.onSuccessWithData { labels ->
-                    _uiState.update { it.copy(labels = labels) }
+            productRepo.fetchSortedByOptions().collect{ result ->
+                result.onSuccessWithData { options ->
+                    _uiState.update { it.copy(sorterByOptions = options) }
                     fetchProducts()
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchLabels", error.userMessage)
@@ -89,7 +92,7 @@ class HomeViewModel(
 
     private fun fetchProducts(){
         viewModelScope.launch {
-            productRepo.fetchProductsByLabel(uiState.value.selectedLabel).collect{ result ->
+            productRepo.fetchProductsByFilter(uiState.value.filter).collect{ result ->
                 Log.d("HomeViewModel:fetchProducts", result.toString())
                 result.onSuccessWithData { products ->
                     _uiState.update { it.copy(products = products) }
@@ -114,8 +117,8 @@ class HomeViewModel(
 
     fun handleUiAction(action: HomeUiAction){
         when(action){
-            is HomeUiAction.OnSelectLabel -> {
-                updateSelectedLabel(action.label)
+            is HomeUiAction.OnUpdateSortedByOption -> {
+                updateSortedByOptions(action.sortedByOption)
             }
             is HomeUiAction.OnWishlistProduct -> {
                 wishlistProduct(action.productId)
@@ -123,9 +126,9 @@ class HomeViewModel(
             else -> Unit
         }
     }
-    private fun updateSelectedLabel(label: String){
+    private fun updateSortedByOptions(sortedByOption: String){
         viewModelScope.launch {
-            _uiState.update { it.copy(selectedLabel = label) }
+            _uiState.update { it.copy(filter = it.filter.copy(sortedBy = sortedByOption)) }
             fetchProducts()
         }
     }

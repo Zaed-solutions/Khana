@@ -26,7 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.Product
-import org.zaed.khana.presentation.home.components.LabelFilterSection
+import org.zaed.khana.presentation.home.components.SortedByFilterSection
 import org.zaed.khana.presentation.home.components.ProductItem
 import org.zaed.khana.presentation.theme.KhanaTheme
 
@@ -82,10 +82,10 @@ private fun WishlistScreenContent(
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
-            LabelFilterSection(
-                labels = categories,
-                selectedLabel = selectedCategory,
-                onSelectLabel = { category ->
+            SortedByFilterSection(
+                sortedByOption = categories,
+                selectedOption = selectedCategory,
+                onSelectOption = { category ->
                     onAction(WishlistUiAction.OnCategoryClicked(category))
                 }
             )

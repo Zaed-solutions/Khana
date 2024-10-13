@@ -10,6 +10,13 @@
     <string name="select_color">Select Color :</string>
     <string name="total_price">Total Price</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="filter">Filter</string>
+    <string name="brands">Brands</string>
+    <string name="gender">Gender</string>
+    <string name="sort_by">Sort by</string>
+    <string name="pricing_range">Pricing range</string>
+    <string name="reviews">Reviews</string>
+    <string name="reset_filters">Reset Filters</string>
     <string name="checkout">Checkout</string>
     <string name="change">Change</string>
     <string name="shipping_address">Shipping Address</string>
@@ -46,6 +53,11 @@
     <string name="cancel">Cancel</string>
     <string name="proceed_to_checkout">Proceed to Checkout</string>
     <string name="promo_code">Promo Code</string>
+    <string name="coupons">Coupons</string>
+    <string name="best_offers_for_you">Best offers for you</string>
+    <string name="copy_code">COPY CODE</string>
+    <string name="clear_all">Clear All</string>
+    <string name="recent">Recent</string>
     <string name="apply">Apply</string>
     <string name="add_new_shipping_address">Add New Shipping Address</string>
     <string name="title">Title</string>
