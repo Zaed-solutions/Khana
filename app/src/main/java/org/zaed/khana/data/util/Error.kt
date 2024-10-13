@@ -19,6 +19,7 @@ fun Error.userMessage(): String {
         is CartResult -> userMessage
         is CouponResult -> userMessage
         is SearchResult -> userMessage
+        is CheckoutResult -> userMessage
     }
 }
 
@@ -35,11 +36,12 @@ fun Error.isNotIdle(): Boolean {
         is CartResult -> this != CartResult.IDLE
         is CouponResult -> this != ProductResult.IDLE
         is SearchResult -> this != SearchResult.IDLE
+        is CheckoutResult -> this != CheckoutResult.IDLE
     }
 }
 
 @Serializable
-enum class EmailFieldError(val userMessage: String):Error {
+enum class EmailFieldError(val userMessage: String) : Error {
     IDLE(""),
     INVALID_EMAIL("Invalid Email"),
     EMAIL_FIELD_IS_EMPTY("Email field is empty"),
@@ -47,6 +49,7 @@ enum class EmailFieldError(val userMessage: String):Error {
     EMAIL_ALREADY_REGISTERED("Email already registered"),
     RESET_EMAIL_SENT("Reset Email Sent"),
 }
+
 @Serializable
 enum class AdvertisementResult(val userMessage: String) : Error {
     IDLE(""),
@@ -55,23 +58,26 @@ enum class AdvertisementResult(val userMessage: String) : Error {
 }
 
 @Serializable
-enum class NameFieldError(val userMessage: String):Error{
+enum class NameFieldError(val userMessage: String) : Error {
     IDLE(""),
     INVALID_NAME("Invalid Name"),
     NAME_FIELD_IS_EMPTY("Name field is empty"),
 }
+
 @Serializable
-enum class TermsAndConditionsError(val userMessage: String):Error{
+enum class TermsAndConditionsError(val userMessage: String) : Error {
     IDLE(""),
     TERMS_AND_CONDITIONS_NOT_ACCEPTED("Terms and conditions not accepted"),
 }
+
 @Serializable
-enum class PasswordFieldError(val userMessage: String):Error {
+enum class PasswordFieldError(val userMessage: String) : Error {
     IDLE(""),
     INVALID_PASSWORD("Invalid Password"),
     PASSWORD_FIELD_IS_EMPTY("Password field is empty"),
     PASSWORD_DOES_NOT_MATCH("Password does not match"),
 }
+
 @Serializable
 enum class CategoryResult(val userMessage: String) : Error {
     IDLE(""),
@@ -112,6 +118,7 @@ enum class ProductResult(val userMessage: String) : Error {
     NETWORK_ERROR("Failed to connect to the network"),
     SERVER_ERROR("Server error"),
 }
+
 @Serializable
 enum class CartResult(val userMessage: String) : Error {
     IDLE(""),
@@ -143,4 +150,14 @@ enum class AuthResults(val userMessage: String) : Error {
     SERVER_ERROR("Server error"),
     NETWORK_ERROR("Network error"),
     USER_NOT_FOUND("User not found"),
+}
+
+@Serializable
+enum class CheckoutResult(val userMessage: String) : Error {
+    IDLE(""),
+    FETCH_SHIPPING_ADDRESSES_FAILED("Failed to fetch shipping addresses"),
+    PLACE_ORDER_FAILED("Failed to place order"),
+    ADD_SHIPPING_ADDRESS_FAILED("Failed to add shipping address"),
+    SERVER_ERROR("Failed to fetch shipping addresses"),
+    NETWORK_ERROR("Failed to connect to the network"),
 }

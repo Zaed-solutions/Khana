@@ -7,7 +7,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
-import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,17 +16,17 @@ import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
 import org.zaed.khana.data.util.CartResult
-import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.Result
 
 class CartRemoteDataSourceImpl(
     private val httpClient: HttpClient,
 ) : CartRemoteDataSource {
-    override suspend fun fetchPromoCodeDiscountPercentage(promoCode: String): Result<Float, CartResult> {
+    override suspend fun applyPromoCode(promoCode: String, cartItemsIds: List<String>): Result<Float, CartResult> {
         return try{
             val response = httpClient.get {
-                endPoint(EndPoint.Cart.FetchPromoCodeDiscountPercentage.route)
+                endPoint(EndPoint.Cart.ApplyPromoCode.route)
                 parameter("promoCode", promoCode)
+                parameter("cartItemsIds", cartItemsIds)
             }
             if(response.status == HttpStatusCode.OK){
                 val responseData = response.body<GenericResponse<Float>>().data
