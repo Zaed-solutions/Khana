@@ -19,8 +19,8 @@ class CartRepositoryImpl(
     ): Result<Unit, CartResult> {
         return cartRemoteSource.addItemToCart(productId = productId, userId = userId, productColor = productColor, productSize = productSize)
     }
-    override suspend fun fetchPromoCodeDiscountPercentage(promoCode: String): Result<Float, CartResult> {
-        return cartRemoteSource.fetchPromoCodeDiscountPercentage(promoCode)
+    override suspend fun applyPromoCode(promoCode: String, cartItemsIds: List<String>): Result<Float, CartResult> {
+        return cartRemoteSource.applyPromoCode(promoCode, cartItemsIds)
     }
 
     override suspend fun fetchDeliverFee(userId: String): Result<Float, CartResult> {

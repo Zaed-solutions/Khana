@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -18,10 +19,11 @@ import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.Advertisement
 import org.zaed.khana.data.model.Category
 import org.zaed.khana.data.model.Product
+import org.zaed.khana.data.model.ProductFilter
 import org.zaed.khana.presentation.home.components.AdvertisementSection
 import org.zaed.khana.presentation.home.components.CategoriesSection
 import org.zaed.khana.presentation.home.components.FlashSaleSection
-import org.zaed.khana.presentation.home.components.LabelFilterSection
+import org.zaed.khana.presentation.home.components.SortedByFilterSection
 import org.zaed.khana.presentation.home.components.LocationAndNotificationsSection
 import org.zaed.khana.presentation.home.components.ProductItems
 import org.zaed.khana.presentation.home.components.SearchAndFiltersSection
@@ -31,20 +33,24 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
+    productFilter: ProductFilter = ProductFilter(),
     onNavigateToFilterScreen: () -> Unit,
     onNavigateToNotificationsScreen: () -> Unit,
     onNavigateToProductDetailsScreen: (String) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(key1 = true) {
+        viewModel.init(productFilter)
+    }
     HomeContent(
         modifier = modifier,
         hasNewNotification = state.hasNewNotification,
         ads = state.ads,
         categories = state.categories,
         flashSaleEndsAtEpochSeconds = state.flashSaleEndsAtEpochSeconds,
-        labels = state.labels,
-        selectedLabel = state.selectedLabel,
+        sortedByOptions = state.sorterByOptions,
+        selectedLabel = state.filter.sortedBy,
         products = state.products,
         wishlistedProducts = state.wishlistedProductsIds,
         onAction = { action ->
@@ -65,7 +71,7 @@ private fun HomeContent(
     ads: List<Advertisement>,
     categories: List<Category>,
     flashSaleEndsAtEpochSeconds: Long,
-    labels: List<String>,
+    sortedByOptions: List<String>,
     selectedLabel: String,
     products: List<Product>,
     wishlistedProducts: List<String>,
@@ -106,10 +112,10 @@ private fun HomeContent(
                 FlashSaleSection(flashSaleEndsAtEpochSeconds)
             }
             item {
-                LabelFilterSection(
-                    labels = labels,
-                    selectedLabel = selectedLabel,
-                    onSelectLabel = { onAction(HomeUiAction.OnSelectLabel(it)) }
+                SortedByFilterSection(
+                    sortedByOption = sortedByOptions,
+                    selectedOption = selectedLabel,
+                    onSelectOption = { onAction(HomeUiAction.OnUpdateSortedByOption(it)) }
                 )
             }
             item {
@@ -150,7 +156,7 @@ private fun HomeScreenContentPreview() {
             ads = ads,
             categories = categories,
             flashSaleEndsAtEpochSeconds = Clock.System.now().epochSeconds + 30000,
-            labels = listOf("All", "Newest", "Popular", "Men", "Women"),
+            sortedByOptions = listOf("All", "Newest", "Popular", "Men", "Women"),
             selectedLabel = "All",
             products = products,
             wishlistedProducts = emptyList(),

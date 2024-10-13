@@ -23,7 +23,7 @@ sealed class EndPoint(val route: String) {
 
     object Cart {
         data object AddItemToCart : EndPoint("/cart/addToCart")
-        data object FetchPromoCodeDiscountPercentage : EndPoint("/cart/promoCodeDiscountPercentage")
+        data object ApplyPromoCode : EndPoint("/cart/applyPromoCode")
         data object UpdateItemQuantity : EndPoint("/cart/updateItemQuantity")
         data object RemoveCartItem : EndPoint("/cart/removeCartItem")
         data object FetchUserCartItems : EndPoint("/cart/userCartItems")
@@ -41,8 +41,8 @@ sealed class EndPoint(val route: String) {
     object Product {
         data object FetchWishlistedProducts : EndPoint("/products/wishListProductsByUserId")
         data object FetchFlashSaleEndTime : EndPoint("/products/FlashSaleEndTime")
-        data object FetchLabels : EndPoint("/products/labels")
-        data object FetchProductsByLabel : EndPoint("/products/byLabel")
+        data object FetchSortedByOptions : EndPoint("/products/sortedByOptions")
+        data object FetchProductsByFilter : EndPoint("/products/byFilter")
         data object FetchProductsByCategory : EndPoint("/products/byCategory")
         data object FetchWishlistedProductsIds :
             EndPoint("/products/wishListProductsIdByUserId")
@@ -53,5 +53,11 @@ sealed class EndPoint(val route: String) {
             EndPoint("/products/checkIfIsProductWishlisted")
         data object SearchProductsByName : EndPoint("/products/byName")
         data object FetchProductById : EndPoint("/products/byId")
+    }
+
+    object Checkout {
+        data object FetchShippingAddresses : EndPoint("/addresses/byUserId")
+        data object AddShippingAddress : EndPoint("/addresses/insert")
+        data object PlaceOrder : EndPoint("/orders/insert")
     }
 }

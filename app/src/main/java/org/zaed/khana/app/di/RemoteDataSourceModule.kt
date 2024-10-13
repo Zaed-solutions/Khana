@@ -10,6 +10,8 @@ import kotlinx.serialization.json.Json
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import org.koin.dsl.module
+import org.zaed.khana.data.source.remote.CheckoutRemoteDataSource
+import org.zaed.khana.data.source.remote.CheckoutRemoteDataSourceImpl
 import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSource
 import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSourceImpl
 import org.zaed.khana.data.source.remote.AdvertisementRemoteDataSource
@@ -46,6 +48,7 @@ val remoteDataSourceModule = module {
     single<ProductRemoteDataSource> { ProductRemoteDataSourceImpl(get()) }
     single<CouponRemoteDataSource> { CouponRemoteDataSourceImpl(get()) }
     single<CartRemoteDataSource> { CartRemoteDataSourceImpl(get()) }
+    single<CheckoutRemoteDataSource> { CheckoutRemoteDataSourceImpl(get()) }
     single<HttpClient> {
         HttpClient {
             install(ContentNegotiation) {
