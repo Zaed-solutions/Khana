@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.Order
 import org.zaed.khana.data.model.ShippingAddress
 import org.zaed.khana.data.model.ShippingType
+import org.zaed.khana.data.model.User
 import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.CartRepository
 import org.zaed.khana.data.repository.CheckoutRepository

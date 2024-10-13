@@ -1,10 +1,16 @@
 package org.zaed.khana.presentation.checkout
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -13,6 +19,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -80,6 +87,8 @@ private fun CheckoutScreenContent(
 ) {
     val sheetState = rememberModalBottomSheetState()
     var shownBottomSheet by remember { mutableStateOf(ShownBottomSheet.NONE) }
+    val bottomSheetModifier = Modifier
+        .windowInsetsPadding(WindowInsets.ime)
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -106,7 +115,7 @@ private fun CheckoutScreenContent(
                     bottomStart = 0.dp,
                     bottomEnd = 0.dp
                 ),
-                shadowElevation = 8.dp
+                shadowElevation = 24.dp
             ) {
                 Button(
                     onClick = { onAction(CheckoutUiAction.OnContinueToPaymentClicked) },
@@ -114,7 +123,9 @@ private fun CheckoutScreenContent(
                         .padding(16.dp)
                         .fillMaxWidth()
                 ) {
-                    Text(text = stringResource(R.string.continue_to_payment))
+                    Text(
+                        text = stringResource(R.string.continue_to_payment),
+                        style = MaterialTheme.typography.titleLarge)
                 }
             }
         }
@@ -122,7 +133,8 @@ private fun CheckoutScreenContent(
         Column(
             modifier
                 .fillMaxWidth()
-                .padding(paddingValues)
+                .padding(paddingValues),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             ShippingAddressSection(
                 shippingAddress = shippingAddress,
@@ -137,12 +149,14 @@ private fun CheckoutScreenContent(
         if (shownBottomSheet != ShownBottomSheet.NONE) {
             ModalBottomSheet(
                 onDismissRequest = { shownBottomSheet = ShownBottomSheet.NONE },
+                windowInsets = WindowInsets.ime.only(WindowInsetsSides.Bottom),
                 sheetState = sheetState
             ) {
                 AnimatedContent(targetState = shownBottomSheet, label = "") { state ->
                     when (state) {
                         ShownBottomSheet.SHIPPING_ADDRESS -> {
                             ShippingAddressBottomSheet(
+                                modifier = bottomSheetModifier,
                                 selectedAddress = shippingAddress,
                                 addresses = addresses,
                                 onChangeShippingAddress = { address ->
@@ -157,6 +171,7 @@ private fun CheckoutScreenContent(
 
                         ShownBottomSheet.SHIPPING_TYPE -> {
                             ShippingTypeBottomSheet(
+                                modifier = bottomSheetModifier,
                                 selectedType = shippingType,
                                 onChangeShippingType = { type ->
                                     onAction(CheckoutUiAction.OnChangeShippingType(type))
@@ -167,6 +182,7 @@ private fun CheckoutScreenContent(
 
                         ShownBottomSheet.ADD_ADDRESS -> {
                             AddAddressBottomSheet(
+                                modifier = bottomSheetModifier,
                                 onAddAddress = { address ->
                                     onAction(CheckoutUiAction.OnAddShippingAddress(address))
                                     shownBottomSheet = ShownBottomSheet.SHIPPING_ADDRESS

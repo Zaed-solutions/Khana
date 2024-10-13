@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.zaed.khana.presentation.cart.CartScreen
+import org.zaed.khana.presentation.checkout.CheckoutScreen
 import org.zaed.khana.presentation.theme.KhanaTheme
 import org.zaed.khana.presentation.wishlist.WishlistScreen
 
@@ -18,7 +19,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KhanaTheme {
-                CartScreen(onBackPressed = { /*TODO*/ }, onNavigateToCheckout = { /*TODO*/ })
+                CheckoutScreen(onBackPressed = { /*TODO*/ }) {
+
+                }
             }
         }
     }
