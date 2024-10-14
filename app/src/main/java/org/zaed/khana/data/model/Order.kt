@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 data class Order(
     val id: String = "",
     val userId: String = "",
-    val cartItemsIds: List<String> = emptyList(),
+    val cartItems: List<CartItem> = emptyList(),
     val shippingAddress: ShippingAddress = ShippingAddress(),
     val shippingType: String = ShippingType.ECONOMY.title,
     val paymentStatus: String = PaymentStatus.NOT_SET.name,
-    val orderStatus: String = OrderStatus.PENDING.name,
+    val orderStatus: String = OrderStatus.AWAITING_CONFIRMATION.name,
     val totalPrice: Float = 0f,
 )

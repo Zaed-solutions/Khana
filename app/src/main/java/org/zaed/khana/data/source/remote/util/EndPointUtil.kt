@@ -55,9 +55,12 @@ sealed class EndPoint(val route: String) {
         data object FetchProductById : EndPoint("/products/byId")
     }
 
-    object Checkout {
+    object ShippingAddress {
         data object FetchShippingAddresses : EndPoint("/addresses/byUserId")
         data object AddShippingAddress : EndPoint("/addresses/insert")
+    }
+    object Order{
         data object PlaceOrder : EndPoint("/orders/insert")
+        data object FetchUserOrders : EndPoint("/orders/byUserId")
     }
 }
