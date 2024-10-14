@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.productdetails.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,7 @@ import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
 import com.tbuonomo.viewpagerdotsindicator.compose.type.ShiftIndicatorType
 import org.zaed.khana.presentation.theme.KhanaTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagesPreviewPager(
     modifier: Modifier = Modifier,
