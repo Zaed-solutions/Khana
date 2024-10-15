@@ -64,7 +64,7 @@ fun MyOrdersScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyOrdersScreenContent(
+private fun MyOrdersScreenContent(
     modifier: Modifier = Modifier,
     onAction: (MyOrdersUiAction) -> Unit,
     items: List<OrderedCartItem>,

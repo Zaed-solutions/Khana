@@ -33,8 +33,9 @@ fun PlacedOrderItem(
     quantity: Int,
     size: String,
     price: Float,
-    buttonText: String,
-    onButtonClicked: () -> Unit
+    showButton: Boolean = true,
+    buttonText: String = "",
+    onButtonClicked: () -> Unit = {}
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -75,13 +76,15 @@ fun PlacedOrderItem(
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
-                Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    onClick = { onButtonClicked() },
-                    modifier = Modifier.height(32.dp),
-                    contentPadding = PaddingValues(horizontal = 8.dp)
-                ) {
-                    Text(text = buttonText)
+                if(showButton){
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        onClick = { onButtonClicked() },
+                        modifier = Modifier.height(32.dp),
+                        contentPadding = PaddingValues(horizontal = 8.dp)
+                    ) {
+                        Text(text = buttonText)
+                    }
                 }
             }
         }

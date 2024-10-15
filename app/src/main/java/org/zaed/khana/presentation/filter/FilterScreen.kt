@@ -50,7 +50,7 @@ fun FilterScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterScreenContent(
+private fun FilterScreenContent(
     modifier: Modifier = Modifier,
     filter: ProductFilter,
     onAction: (FilterUiAction) -> Unit,

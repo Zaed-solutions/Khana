@@ -69,7 +69,7 @@ fun LeaveReviewScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LeaveReviewScreenContent(
+private fun LeaveReviewScreenContent(
     modifier: Modifier = Modifier,
     item: CartItem,
     rating: Int,

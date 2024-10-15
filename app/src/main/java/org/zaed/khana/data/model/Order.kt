@@ -12,4 +12,6 @@ data class Order(
     val paymentStatus: String = PaymentStatus.NOT_SET.name,
     val orderStatus: String = OrderStatus.AWAITING_CONFIRMATION.name,
     val totalPrice: Float = 0f,
+    val expectedDeliveryEpochSeconds: Long = 0,
+    val trackingId: String = "",
 )
