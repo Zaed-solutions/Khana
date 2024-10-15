@@ -65,4 +65,5 @@
     <string name="address">Address</string>
     <string name="phone_number">Phone Number</string>
     <string name="add">Add</string>
+    <string name="size_qty">Size: %1$s | Qty: %2$s</string>
 </resources>

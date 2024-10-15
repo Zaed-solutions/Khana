@@ -10,8 +10,8 @@ import kotlinx.serialization.json.Json
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import org.koin.dsl.module
-import org.zaed.khana.data.source.remote.CheckoutRemoteDataSource
-import org.zaed.khana.data.source.remote.CheckoutRemoteDataSourceImpl
+import org.zaed.khana.data.source.remote.ShippingAddressRemoteDataSource
+import org.zaed.khana.data.source.remote.ShippingAddressRemoteDataSourceImpl
 import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSource
 import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSourceImpl
 import org.zaed.khana.data.source.remote.AdvertisementRemoteDataSource
@@ -22,6 +22,8 @@ import org.zaed.khana.data.source.remote.CategoryRemoteDataSource
 import org.zaed.khana.data.source.remote.CategoryRemoteDataSourceImpl
 import org.zaed.khana.data.source.remote.CouponRemoteDataSource
 import org.zaed.khana.data.source.remote.CouponRemoteDataSourceImpl
+import org.zaed.khana.data.source.remote.OrderRemoteDataSource
+import org.zaed.khana.data.source.remote.OrderRemoteDataSourceImpl
 import org.zaed.khana.data.source.remote.ProductRemoteDataSource
 import org.zaed.khana.data.source.remote.ProductRemoteDataSourceImpl
 import kotlin.time.Duration.Companion.seconds
@@ -48,7 +50,8 @@ val remoteDataSourceModule = module {
     single<ProductRemoteDataSource> { ProductRemoteDataSourceImpl(get()) }
     single<CouponRemoteDataSource> { CouponRemoteDataSourceImpl(get()) }
     single<CartRemoteDataSource> { CartRemoteDataSourceImpl(get()) }
-    single<CheckoutRemoteDataSource> { CheckoutRemoteDataSourceImpl(get()) }
+    single<ShippingAddressRemoteDataSource> { ShippingAddressRemoteDataSourceImpl(get()) }
+    single<OrderRemoteDataSource> { OrderRemoteDataSourceImpl(get()) }
     single<HttpClient> {
         HttpClient {
             install(ContentNegotiation) {

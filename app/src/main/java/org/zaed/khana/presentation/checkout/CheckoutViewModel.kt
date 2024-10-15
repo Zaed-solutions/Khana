@@ -10,14 +10,15 @@ import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.Order
 import org.zaed.khana.data.model.ShippingAddress
 import org.zaed.khana.data.model.ShippingType
-import org.zaed.khana.data.model.User
 import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.CartRepository
-import org.zaed.khana.data.repository.CheckoutRepository
+import org.zaed.khana.data.repository.OrderRepository
+import org.zaed.khana.data.repository.ShippingAddressRepository
 
 class CheckoutViewModel(
     private val authRepo: AuthenticationRepository,
-    private val checkoutRepo: CheckoutRepository,
+    private val addressRepo: ShippingAddressRepository,
+    private val orderRepo: OrderRepository,
     private val cartRepo: CartRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CheckoutUiState())
@@ -41,7 +42,7 @@ class CheckoutViewModel(
 
     private fun fetchUserShippingAddresses() {
         viewModelScope.launch {
-            checkoutRepo.fetchShippingAddresses(_uiState.value.currentUser.id).collect { result ->
+            addressRepo.fetchShippingAddresses(_uiState.value.currentUser.id).collect { result ->
                 result.onSuccessWithData { data ->
                     _uiState.update {
                         it.copy(
@@ -80,15 +81,16 @@ class CheckoutViewModel(
 
     private fun addShippingAddress(newAddress: ShippingAddress) {
         viewModelScope.launch {
-            checkoutRepo.addShippingAddress(newAddress.copy(userId = _uiState.value.currentUser.id)).onSuccessWithData { addressId ->
-                val updatedAddress = newAddress.copy(id = addressId)
-                _uiState.update {
-                    it.copy(
-                        shippingAddresses = it.shippingAddresses + updatedAddress,
-                        selectedShippingAddress = updatedAddress
-                    )
-                }
-            }.onFailure {
+            addressRepo.addShippingAddress(newAddress.copy(userId = _uiState.value.currentUser.id))
+                .onSuccessWithData { addressId ->
+                    val updatedAddress = newAddress.copy(id = addressId)
+                    _uiState.update {
+                        it.copy(
+                            shippingAddresses = it.shippingAddresses + updatedAddress,
+                            selectedShippingAddress = updatedAddress
+                        )
+                    }
+                }.onFailure {
                 Log.e("CheckoutViewModel:addShippingAddress", it.userMessage)
             }
         }
@@ -112,9 +114,9 @@ class CheckoutViewModel(
                 userId = _uiState.value.currentUser.id,
                 shippingAddress = _uiState.value.selectedShippingAddress,
                 shippingType = _uiState.value.selectedShippingType.title,
-                cartItemsIds = _uiState.value.cartItems.map { it.id },
+                cartItems = _uiState.value.cartItems
             )
-            checkoutRepo.placeOrder(
+            orderRepo.placeOrder(
                 order = order
             ).onSuccess {
                 _uiState.update { it.copy(orderId = it.orderId, isOrderPlaced = true) }
