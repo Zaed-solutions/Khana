@@ -66,4 +66,10 @@
     <string name="phone_number">Phone Number</string>
     <string name="add">Add</string>
     <string name="size_qty">Size: %1$s | Qty: %2$s</string>
+    <string name="leave_review">Leave Review</string>
+    <string name="submit">Submit</string>
+    <string name="reorder">Reorder</string>
+    <string name="how_is_your_order">How is your order?</string>
+    <string name="add_detailed_review">Add detailed review</string>
+    <string name="enter_here">Enter here</string>
 </resources>
