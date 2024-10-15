@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.OrderStatus
+import org.zaed.khana.data.model.OrderedCartItem
 import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.OrderRepository
 
@@ -48,6 +49,10 @@ class MyOrdersViewModel(
     fun handleUiAction(action: MyOrdersUiAction) {
         when (action) {
             is MyOrdersUiAction.OnChangeTab -> updateDisplayedItems(action.tab)
+            is MyOrdersUiAction.OnReorderItemClicked -> {
+                //TODO
+            }
+
             else -> Unit
         }
     }
@@ -57,17 +62,38 @@ class MyOrdersViewModel(
             val items = when (tab) {
                 OrdersTabs.ACTIVE -> {
                     _uiState.value.orders.filter { it.orderStatus == OrderStatus.SHIPPED.name || it.orderStatus == OrderStatus.CONFIRMED.name }
-                        .flatMap { it.cartItems }
+                        .flatMap { order ->
+                            order.cartItems.map { cartItem ->
+                                OrderedCartItem(
+                                    orderId = order.id,
+                                    data = cartItem
+                                )
+                            }
+                        }
                 }
 
                 OrdersTabs.COMPLETED -> {
                     _uiState.value.orders.filter { it.orderStatus == OrderStatus.DELIVERED.name }
-                        .flatMap { it.cartItems }
+                        .flatMap { order ->
+                            order.cartItems.map { cartItem ->
+                                OrderedCartItem(
+                                    orderId = order.id,
+                                    data = cartItem
+                                )
+                            }
+                        }
                 }
 
                 OrdersTabs.CANCELLED -> {
                     _uiState.value.orders.filter { it.orderStatus == OrderStatus.CANCELLED.name }
-                        .flatMap { it.cartItems }
+                        .flatMap { order ->
+                            order.cartItems.map { cartItem ->
+                                OrderedCartItem(
+                                    orderId = order.id,
+                                    data = cartItem
+                                )
+                            }
+                        }
                 }
             }
             _uiState.value = uiState.value.copy(displayedItems = items)
