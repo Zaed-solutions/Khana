@@ -10,16 +10,16 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.zaed.khana.data.model.CartItem
+import org.zaed.khana.data.model.OrderedCartItem
 import org.zaed.khana.presentation.myorders.OrdersTabs
 
 @Composable
 fun PlacedOrdersList(
     modifier: Modifier = Modifier,
     selectedTab: OrdersTabs,
-    items: List<CartItem>,
-    onTrackOrderClicked: (String) -> Unit,
-    onLeaveReviewClicked: (String) -> Unit,
+    items: List<OrderedCartItem>,
+    onTrackOrderClicked: (String, String) -> Unit,
+    onLeaveReviewClicked: (String, String) -> Unit,
     onReorderClicked: (String) -> Unit
 ) {
     LazyColumn(
@@ -30,24 +30,24 @@ fun PlacedOrdersList(
         items(items.size) { index ->
             val item = items[index]
             PlacedOrderItem(
-                thumbnailUrl = item.productThumbnail,
-                title = item.productColor.name + " " + item.productName,
-                quantity = item.quantity,
-                size = item.productSize,
-                price = item.productBasePrice,
+                thumbnailUrl = item.data.productThumbnail,
+                title = item.data.productColor.name + " " + item.data.productName,
+                quantity = item.data.quantity,
+                size = item.data.productSize,
+                price = item.data.productBasePrice,
                 buttonText = selectedTab.buttonText,
             ) {
                 when (selectedTab) {
                     OrdersTabs.ACTIVE -> {
-                        onTrackOrderClicked(item.id)
+                        onTrackOrderClicked(item.orderId, item.data.id)
                     }
 
                     OrdersTabs.COMPLETED -> {
-                        onLeaveReviewClicked(item.id)
+                        onLeaveReviewClicked(item.orderId, item.data.id)
                     }
 
                     OrdersTabs.CANCELLED -> {
-                        onReorderClicked(item.id)
+                        onReorderClicked(item.orderId)
                     }
                 }
             }

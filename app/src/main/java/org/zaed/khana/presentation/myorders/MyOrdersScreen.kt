@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.CartItem
 import org.zaed.khana.data.model.Color
+import org.zaed.khana.data.model.OrderedCartItem
 import org.zaed.khana.presentation.myorders.components.PlacedOrdersList
 import org.zaed.khana.presentation.theme.KhanaTheme
 
@@ -36,6 +37,8 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun MyOrdersScreen(
     modifier: Modifier = Modifier,
     viewModel: MyOrdersViewModel = koinViewModel(),
+    onNavigateToLeaveReview:(String, String) -> Unit,
+    onNavigateToTrackOrder: (String, String) -> Unit,
     onBackPressed: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -45,15 +48,11 @@ fun MyOrdersScreen(
             when (action) {
                 is MyOrdersUiAction.OnBackPressed -> onBackPressed()
                 is MyOrdersUiAction.OnTrackItemClicked -> {
-                    //TODO
+                   onNavigateToTrackOrder(action.orderId, action.itemId)
                 }
 
                 is MyOrdersUiAction.OnLeaveItemReviewClicked -> {
-                    //TODO
-                }
-
-                is MyOrdersUiAction.OnReorderItemClicked -> {
-                    //TODO
+                    onNavigateToLeaveReview(action.orderId, action.itemId)
                 }
 
                 else -> viewModel.handleUiAction(action)
@@ -68,7 +67,7 @@ fun MyOrdersScreen(
 fun MyOrdersScreenContent(
     modifier: Modifier = Modifier,
     onAction: (MyOrdersUiAction) -> Unit,
-    items: List<CartItem>,
+    items: List<OrderedCartItem>,
 ) {
     var selectedTab: OrdersTabs by remember { mutableStateOf(OrdersTabs.ACTIVE) }
     Scaffold(
@@ -118,16 +117,18 @@ fun MyOrdersScreenContent(
                 PlacedOrdersList(
                     selectedTab = selectedTab,
                     items = items,
-                    onTrackOrderClicked = { itemId ->
+                    onTrackOrderClicked = { orderId, itemId ->
                         onAction(
                             MyOrdersUiAction.OnTrackItemClicked(
+                                orderId,
                                 itemId
                             )
                         )
                     },
-                    onLeaveReviewClicked = { itemId ->
+                    onLeaveReviewClicked = { orderId, itemId ->
                         onAction(
                             MyOrdersUiAction.OnLeaveItemReviewClicked(
+                                orderId,
                                 itemId
                             )
                         )
@@ -195,7 +196,7 @@ private fun MyOrdersScreenContentPreview() {
     KhanaTheme {
         MyOrdersScreenContent(
             onAction = {},
-            items = items
+            items = listOf(items.map { OrderedCartItem(orderId = "", data = it) }).flatten()
         )
     }
 }
