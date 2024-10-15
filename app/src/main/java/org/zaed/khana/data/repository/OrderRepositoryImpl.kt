@@ -16,4 +16,8 @@ class OrderRepositoryImpl(
     override suspend fun placeOrder(order: Order): Result<String, OrderResult> {
         return orderRemoteDataSource.placeOrder(order)
     }
+
+    override suspend fun fetchOrderById(orderId: String): Result<Order, OrderResult> {
+        return orderRemoteDataSource.fetchOrderById(orderId)
+    }
 }
