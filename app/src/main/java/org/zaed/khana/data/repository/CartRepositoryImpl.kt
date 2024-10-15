@@ -41,4 +41,8 @@ class CartRepositoryImpl(
     override fun fetchUserCartItems(userId: String): Flow<Result<List<CartItem>, CartResult>> {
         return cartRemoteSource.fetchUserCartItems(userId)
     }
+
+    override suspend fun fetchOrderedCartItem(orderId: String, cartItemId: String): Result<CartItem, CartResult> {
+        return cartRemoteSource.fetchOrderedCartItem(orderId, cartItemId)
+    }
 }

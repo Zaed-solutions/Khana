@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.zaed.khana.data.model.Product
 import org.zaed.khana.data.model.ProductFilter
+import org.zaed.khana.data.model.ProductReview
 import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
@@ -262,4 +263,23 @@ class ProductRemoteDataSourceImpl(
                 emit(Result.failure(ProductResult.SERVER_ERROR))
             }
         }
+
+    override suspend fun addProductReview(review: ProductReview): Result<Unit, ProductResult> {
+        return try {
+            val response = httpClient.post {
+                endPoint(EndPoint.Product.AddProductReview.route)
+                setBody(
+                    review
+                )
+            }
+            if (response.status == HttpStatusCode.OK) {
+                Result.success(Unit)
+            } else {
+                Result.failure(ProductResult.ADD_PRODUCT_REVIEW_FAILED)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(ProductResult.SERVER_ERROR)
+        }
+    }
 }

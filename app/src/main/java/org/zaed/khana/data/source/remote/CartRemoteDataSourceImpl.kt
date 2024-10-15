@@ -151,4 +151,27 @@ class CartRemoteDataSourceImpl(
             Result.failure(CartResult.SERVER_ERROR)
         }
     }
+
+    override suspend fun fetchOrderedCartItem(orderId: String, cartItemId: String): Result<CartItem, CartResult> {
+        return try{
+            val response = httpClient.get {
+                endPoint(EndPoint.Cart.FetchOrderedCartItem.route)
+                parameter("orderId", orderId)
+                parameter("cartItemId", cartItemId)
+            }
+            if(response.status == HttpStatusCode.OK){
+                val responseData = response.body<GenericResponse<CartItem>>().data
+                if(responseData != null){
+                    Result.success(responseData)
+                } else {
+                    Result.failure(CartResult.FETCH_CART_ITEM_FAILED)
+                }
+            } else {
+                Result.failure(CartResult.FETCH_CART_ITEM_FAILED)
+            }
+        } catch(e: Exception){
+            e.printStackTrace()
+            Result.failure(CartResult.SERVER_ERROR)
+        }
+    }
 }

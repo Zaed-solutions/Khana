@@ -19,4 +19,5 @@ interface CartRemoteDataSource {
     suspend fun removeCartItem(cartItemId: String): Result<Unit, CartResult>
     fun fetchUserCartItems(userId: String): Flow<Result<List<CartItem>, CartResult>>
     suspend fun fetchDeliveryFee(userId: String): Result<Float, CartResult>
+    suspend fun fetchOrderedCartItem(orderId: String, cartItemId: String): Result<CartItem, CartResult>
 }

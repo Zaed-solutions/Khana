@@ -117,6 +117,7 @@ enum class ProductResult(val userMessage: String) : Error {
     FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),
     ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     ADD_WISHLISTED_PRODUCTS_FAILED("Failed to add wishlisted product"),
+    ADD_PRODUCT_REVIEW_FAILED("Failed to add product review"),
     REMOVE_WISHLISTED_PRODUCTS_FAILED("Failed to remove wishlisted product"),
     NETWORK_ERROR("Failed to connect to the network"),
     SERVER_ERROR("Server error"),
@@ -126,6 +127,7 @@ enum class ProductResult(val userMessage: String) : Error {
 enum class CartResult(val userMessage: String) : Error {
     IDLE(""),
     FETCH_CART_ITEMS_FAILED("Failed to fetch cart items"),
+    FETCH_CART_ITEM_FAILED("Failed to fetch cart item"),
     FETCH_DELIVERY_FEE_FAILED("Failed to fetch delivery fee"),
     ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     REMOVE_ITEM_FROM_CART_FAILED("Failed to remove the item from the cart"),
