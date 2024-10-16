@@ -14,4 +14,7 @@ data class Order(
     val totalPrice: Float = 0f,
     val expectedDeliveryEpochSeconds: Long = 0,
     val trackingId: String = "",
+    val confirmedEpochSeconds: Long = 0,
+    val shippedEpochSeconds: Long = 0,
+    val deliveredEpochSeconds: Long = 0,
 )
