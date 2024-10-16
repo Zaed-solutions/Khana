@@ -72,4 +72,13 @@
     <string name="how_is_your_order">How is your order?</string>
     <string name="add_detailed_review">Add detailed review</string>
     <string name="enter_here">Enter here</string>
+    <string name="track_order">Track Order</string>
+    <string name="expected_delivery_date">Expected Delivery Date</string>
+    <string name="tracking_id">Tracking ID</string>
+    <string name="order_details">Order Details</string>
+    <string name="order_status">Order Status</string>
+    <string name="order_placed">Order Placed</string>
+    <string name="in_progress">In Progress</string>
+    <string name="shipped">Shipped</string>
+    <string name="delivered">Delivered</string>
 </resources>

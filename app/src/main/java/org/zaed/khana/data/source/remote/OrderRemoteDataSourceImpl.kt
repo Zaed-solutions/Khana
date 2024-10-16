@@ -63,4 +63,26 @@ class OrderRemoteDataSourceImpl (
             emit(Result.Error(OrderResult.NETWORK_ERROR))
         }
     }
+
+    override suspend fun fetchOrderById(orderId: String): Result<Order, OrderResult> {
+        return try {
+            val request = httpClient.post {
+                endPoint(EndPoint.Order.FetchOrderById.route)
+                parameter("orderId",orderId)
+            }
+            if (request.status == HttpStatusCode.OK) {
+                val responseData = request.body<GenericResponse<Order>>().data
+                if (responseData != null) {
+                    Result.Success(responseData)
+                } else {
+                    Result.Error(OrderResult.PLACE_ORDER_FAILED)
+                }
+            } else {
+                Result.Error(OrderResult.SERVER_ERROR)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.Error(OrderResult.NETWORK_ERROR)
+        }
+    }
 }
