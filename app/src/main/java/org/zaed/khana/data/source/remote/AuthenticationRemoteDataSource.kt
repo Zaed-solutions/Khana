@@ -23,6 +23,8 @@ interface AuthenticationRemoteDataSource {
     suspend fun logout(): Result<AuthResults, AuthResults>
     suspend fun deleteAccount(userId: String): Result<Unit, AuthResults>
     suspend fun saveUser(user: User)
+    suspend fun sendOtp(email: String): Boolean
+    suspend fun verifyCode(fullOtp: String, email: String)
 
 
 }

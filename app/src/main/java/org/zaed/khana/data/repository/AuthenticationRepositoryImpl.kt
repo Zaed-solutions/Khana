@@ -47,5 +47,11 @@ class AuthenticationRepositoryImpl(
         remoteDataSource.saveUser(firebaseUser.toUser())
     }
 
+    override suspend fun sendOtp(email: String)
+    =    remoteDataSource.sendOtp(email)
+
+    override suspend fun verifyCode(fullOtp: String, email: String) =
+        remoteDataSource.verifyCode(fullOtp, email)
+
 
 }

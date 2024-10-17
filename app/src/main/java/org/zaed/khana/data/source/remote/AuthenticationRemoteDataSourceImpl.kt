@@ -7,6 +7,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -16,6 +18,7 @@ import io.ktor.http.contentType
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import org.zaed.khana.BuildConfig.BASE_URL
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.GenericResponse
 
@@ -116,10 +119,33 @@ class AuthenticationRemoteDataSourceImpl(
 
     override suspend fun saveUser(user: User) {
         val response = server.post {
-            url("http://192.168.1.4:8080/users/insert")
+            url("$BASE_URL/users/insert")
             setBody(user)
             contentType(ContentType.Application.Json)
         }.body<GenericResponse<Unit>>()
+        println(response)
+    }
+
+    override suspend fun sendOtp(email: String):Boolean {
+        println(email)
+        val url = BASE_URL +"users/sendOtp"
+        println(url)
+        val response = server.get {
+            url(url)
+            parameter("email",email)
+        }.body<GenericResponse<Boolean>>()
+        return response.data ?: false
+    }
+
+    override suspend fun verifyCode(fullOtp: String, email: String) {
+            println(email + fullOtp)
+        val url = BASE_URL +"users/verifyOtp"
+        println(url)
+        val response = server.get {
+            url(url)
+            parameter("email", email)
+            parameter("otp", fullOtp)
+        }.body<GenericResponse<Boolean>>()
         println(response)
     }
 }
