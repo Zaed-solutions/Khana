@@ -24,6 +24,7 @@ fun Error.userMessage(): String {
 
         is ShippingAddressResult -> userMessage
         is OrderResult -> userMessage
+        is SupportResult -> userMessage
     }
 }
 
@@ -44,6 +45,7 @@ fun Error.isNotIdle(): Boolean {
         is ForgetPasswordResult -> this != ForgetPasswordResult.IDLE
         is ShippingAddressResult -> this != ShippingAddressResult.IDLE
         is OrderResult -> this != OrderResult.IDLE
+        is SupportResult -> this != SupportResult.IDLE
     }
 }
 
@@ -185,6 +187,15 @@ enum class OrderResult(val userMessage: String) : Error {
     IDLE(""),
     PLACE_ORDER_FAILED("Failed to place order"),
     FETCH_USER_ORDERS_FAILED("Failed to get user orders"),
+    SERVER_ERROR("Failed to get response from the server"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+
+@Serializable
+enum class SupportResult(val userMessage: String) : Error {
+    IDLE(""),
+    FETCH_FAQS_FAILED("Failed to fetch FAQs"),
+    FETCH_CONTACT_INFO_FAILED("Failed to fetch contact info"),
     SERVER_ERROR("Failed to get response from the server"),
     NETWORK_ERROR("Failed to connect to the network"),
 }

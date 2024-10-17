@@ -81,4 +81,10 @@
     <string name="in_progress">In Progress</string>
     <string name="shipped">Shipped</string>
     <string name="delivered">Delivered</string>
+    <string name="customer_service">Customer Service</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="website">Website</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="instagram">Instagram</string>
 </resources>
