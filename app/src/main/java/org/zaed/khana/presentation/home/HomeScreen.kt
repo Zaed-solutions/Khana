@@ -34,10 +34,10 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
     productFilter: ProductFilter = ProductFilter(),
-    onNavigateToFilterScreen: () -> Unit,
-    onNavigateToNotificationsScreen: () -> Unit,
-    onNavigateToProductDetailsScreen: (String) -> Unit,
-    onNavigateToSearchScreen: () -> Unit,
+    onNavigateToFilterScreen: () -> Unit={},
+    onNavigateToNotificationsScreen: () -> Unit={},
+    onNavigateToProductDetailsScreen: (String) -> Unit={},
+    onNavigateToSearchScreen: () -> Unit={},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = true) {

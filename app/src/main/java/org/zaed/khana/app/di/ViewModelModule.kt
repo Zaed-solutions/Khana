@@ -4,6 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 import org.zaed.khana.presentation.auth.forgetPassword.ForgetPasswordViewModel
 import org.zaed.khana.presentation.auth.login.LoginViewModel
+import org.zaed.khana.presentation.auth.newpassword.NewPasswordViewModel
 import org.zaed.khana.presentation.auth.otp.OtpViewModel
 import org.zaed.khana.presentation.auth.signup.SignUpViewModel
 import org.zaed.khana.presentation.filter.FilterViewModel
@@ -36,4 +37,5 @@ val viewModelModule = module {
     viewModelOf(::TrackOrderViewModel)
     viewModelOf(::ForgetPasswordViewModel)
     viewModelOf(::OtpViewModel)
+    viewModelOf(::NewPasswordViewModel)
 }

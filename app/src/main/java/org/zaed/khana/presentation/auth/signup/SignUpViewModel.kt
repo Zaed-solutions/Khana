@@ -83,7 +83,8 @@ class SignUpViewModel(
         }
     }
 
-    fun onSignUp() {
+    private fun onSignUp() {
+        println("im inside onSignUp vm")
         with(_uiState.value) {
             if (!Validator.EmailValidator.validateAll(email)) {
                 viewModelScope.launch {
@@ -125,7 +126,9 @@ class SignUpViewModel(
         }
         viewModelScope.launch {
             with(_uiState.value) {
+                println("im inside onSignUp vm")
                 authRepo.signUpWithEmail(name, email, password).collect { result ->
+                    println(result)
                     when (result) {
                         is Result.Success -> {
                             updateActionResult(AuthResults.SIGNUP_SUCCESS)
