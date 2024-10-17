@@ -2,7 +2,9 @@ package org.zaed.khana.app.di
 
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
+import org.zaed.khana.presentation.auth.forgetPassword.ForgetPasswordViewModel
 import org.zaed.khana.presentation.auth.login.LoginViewModel
+import org.zaed.khana.presentation.auth.otp.OtpViewModel
 import org.zaed.khana.presentation.auth.signup.SignUpViewModel
 import org.zaed.khana.presentation.filter.FilterViewModel
 import org.zaed.khana.presentation.home.HomeViewModel
@@ -32,4 +34,6 @@ val viewModelModule = module {
     viewModelOf(::MyOrdersViewModel)
     viewModelOf(::LeaveReviewViewModel)
     viewModelOf(::TrackOrderViewModel)
+    viewModelOf(::ForgetPasswordViewModel)
+    viewModelOf(::OtpViewModel)
 }
