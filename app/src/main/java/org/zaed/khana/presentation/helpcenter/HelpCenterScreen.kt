@@ -41,6 +41,11 @@ fun HelpCenterScreen(
     onBackPressed: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    HelpCenterScreenContent(faq = state.faq, faqTags = state.faqTags, contactInfo = state.contactInfo) { action ->
+        when(action){
+            HelpCenterUiAction.OnBackPressed -> onBackPressed()
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
