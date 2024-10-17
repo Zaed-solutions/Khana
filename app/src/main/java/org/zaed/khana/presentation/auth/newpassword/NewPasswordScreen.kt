@@ -107,7 +107,6 @@ fun NewPasswordScreenContent(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Create New Password Button
         Button(
             onClick = { action(NewPasswordUIAction.OnCreateNewPasswordClicked) },
             modifier = Modifier

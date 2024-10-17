@@ -8,6 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import org.zaed.khana.presentation.auth.forgetPassword.ForgetPasswordScreen
+import org.zaed.khana.presentation.auth.otp.OTPVerificationScreen
 import org.zaed.khana.presentation.cart.CartScreen
 import org.zaed.khana.presentation.category.CategoryScreen
 import org.zaed.khana.presentation.coupons.CouponsScreen
@@ -22,30 +24,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KhanaTheme {
-                HomeScreen(
-                    onNavigateToFilterScreen = { /*TODO*/ },
-                    onNavigateToNotificationsScreen = { /*TODO*/ },
-                    onNavigateToProductDetailsScreen = {}
-                ) {
-
-                }
+                OTPVerificationScreen()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    KhanaTheme {
-        Greeting("Android")
     }
 }

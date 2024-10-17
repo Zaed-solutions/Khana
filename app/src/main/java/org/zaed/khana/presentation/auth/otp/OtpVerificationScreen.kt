@@ -15,18 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
-fun OTPVerificationScreen() {
-    var otp1 by remember { mutableStateOf("") }
-    var otp2 by remember { mutableStateOf("") }
-    var otp3 by remember { mutableStateOf("") }
-    var otp4 by remember { mutableStateOf("") }
+fun OTPVerificationScreen(
+    viewModel: OtpViewModel = koinViewModel()
+) {
+    val state by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -37,39 +39,36 @@ fun OTPVerificationScreen() {
     ) {
 
 
-        // Title
         Text(text = stringResource(R.string.verify_code), fontSize = 24.sp)
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Instructions
         Text(text = stringResource(R.string.please_enter_the_code_we_just_sent_to_email))
         Text(text = stringResource(R.string.example_email_com), color = Color.Gray)
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // OTP Input Boxes
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            OTPTextField(value = otp1) { otp1 = it }
-            OTPTextField(value = otp2) { otp2 = it }
-            OTPTextField(value = otp3) { otp3 = it }
-            OTPTextField(value = otp4) { otp4 = it }
+            OTPTextField(value = state.otp1) {  viewModel.handleUiState(OtpUIAction.OnOtp1Changed(it)) }
+            OTPTextField(value = state.otp2) {  viewModel.handleUiState(OtpUIAction.OnOtp2Changed(it)) }
+            OTPTextField(value = state.otp3) {  viewModel.handleUiState(OtpUIAction.OnOtp3Changed(it)) }
+            OTPTextField(value = state.otp4) {  viewModel.handleUiState(OtpUIAction.OnOtp4Changed(it)) }
+
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Resend Code
         Text(
             text = stringResource(R.string.didn_t_receive_otp),
         )
-        TextButton({}) {
+        TextButton({viewModel.handleUiState(OtpUIAction.OnResendOtpClicked)}) {
             Text(
                 text = stringResource(R.string.resend_code),
-                modifier = Modifier.clickable { /* Resend code action */ },
+                modifier = Modifier.clickable { viewModel.handleUiState(OtpUIAction.OnResendOtpClicked)},
                 textDecoration = TextDecoration.Underline
             )
         }
@@ -77,7 +76,7 @@ fun OTPVerificationScreen() {
 
         // Verify Button
         Button(
-            onClick = { /* Handle OTP verification */ },
+            onClick = {viewModel.handleUiState(OtpUIAction.OnVerifyOtpClicked)},
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
@@ -96,7 +95,7 @@ fun OTPTextField(value: String, onValueChange: (String) -> Unit) {
             .size(60.dp)
             .background(Color.White),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        textStyle = LocalTextStyle.current.copy(fontSize = 24.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center),
+        textStyle = LocalTextStyle.current.copy(fontSize = 24.sp, textAlign = TextAlign.Center),
         singleLine = true
     )
 }
@@ -104,5 +103,7 @@ fun OTPTextField(value: String, onValueChange: (String) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun OTPVerificationScreenPreview() {
-    OTPVerificationScreen()
+    KhanaTheme {
+        OTPVerificationScreen()
+    }
 }

@@ -19,7 +19,8 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = koinViewModel()
+    viewModel: LoginViewModel = koinViewModel(),
+    navigateToForgetPasswordScreen :()-> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -45,8 +46,7 @@ fun LoginScreen(
         state = state,
         action = { viewModel.handleUiState(it) },
         //TODO
-        navigateToForgetPassword = {},
-        //TODO
+        navigateToForgetPassword = navigateToForgetPasswordScreen,
         navigateToSignUp = {},
         //TODO
         onSignInWithGoogleClicked = {
