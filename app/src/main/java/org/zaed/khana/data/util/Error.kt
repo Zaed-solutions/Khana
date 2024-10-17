@@ -22,6 +22,8 @@ fun Error.userMessage(): String {
         is CheckoutResult -> userMessage
         is ForgetPasswordResult -> userMessage
 
+        is ShippingAddressResult -> userMessage
+        is OrderResult -> userMessage
     }
 }
 
@@ -40,6 +42,8 @@ fun Error.isNotIdle(): Boolean {
         is SearchResult -> this != SearchResult.IDLE
         is CheckoutResult -> this != CheckoutResult.IDLE
         is ForgetPasswordResult -> this != ForgetPasswordResult.IDLE
+        is ShippingAddressResult -> this != ShippingAddressResult.IDLE
+        is OrderResult -> this != OrderResult.IDLE
     }
 }
 
@@ -87,6 +91,7 @@ enum class CategoryResult(val userMessage: String) : Error {
     SERVER_ERROR("Failed to fetch categories"),
     NETWORK_ERROR("Failed to connect to the network"),
 }
+
 @Serializable
 enum class CouponResult(val userMessage: String) : Error {
     IDLE(""),
@@ -125,6 +130,7 @@ enum class ProductResult(val userMessage: String) : Error {
     FETCH_WISHLISTED_PRODUCTS_FAILED("Failed to fetch wishlisted products"),
     ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     ADD_WISHLISTED_PRODUCTS_FAILED("Failed to add wishlisted product"),
+    ADD_PRODUCT_REVIEW_FAILED("Failed to add product review"),
     REMOVE_WISHLISTED_PRODUCTS_FAILED("Failed to remove wishlisted product"),
     NETWORK_ERROR("Failed to connect to the network"),
     SERVER_ERROR("Server error"),
@@ -134,6 +140,7 @@ enum class ProductResult(val userMessage: String) : Error {
 enum class CartResult(val userMessage: String) : Error {
     IDLE(""),
     FETCH_CART_ITEMS_FAILED("Failed to fetch cart items"),
+    FETCH_CART_ITEM_FAILED("Failed to fetch cart item"),
     FETCH_DELIVERY_FEE_FAILED("Failed to fetch delivery fee"),
     ADD_ITEM_TO_CART_FAILED("Failed to add the item to the cart"),
     REMOVE_ITEM_FROM_CART_FAILED("Failed to remove the item from the cart"),
@@ -164,11 +171,20 @@ enum class AuthResults(val userMessage: String) : Error {
 }
 
 @Serializable
-enum class CheckoutResult(val userMessage: String) : Error {
+enum class ShippingAddressResult(val userMessage: String) : Error {
     IDLE(""),
     FETCH_SHIPPING_ADDRESSES_FAILED("Failed to fetch shipping addresses"),
     PLACE_ORDER_FAILED("Failed to place order"),
     ADD_SHIPPING_ADDRESS_FAILED("Failed to add shipping address"),
-    SERVER_ERROR("Failed to fetch shipping addresses"),
+    SERVER_ERROR("Failed to get response from the server"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+
+@Serializable
+enum class OrderResult(val userMessage: String) : Error {
+    IDLE(""),
+    PLACE_ORDER_FAILED("Failed to place order"),
+    FETCH_USER_ORDERS_FAILED("Failed to get user orders"),
+    SERVER_ERROR("Failed to get response from the server"),
     NETWORK_ERROR("Failed to connect to the network"),
 }

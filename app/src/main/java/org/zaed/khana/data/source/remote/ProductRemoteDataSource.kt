@@ -3,6 +3,7 @@ package org.zaed.khana.data.source.remote
 import kotlinx.coroutines.flow.Flow
 import org.zaed.khana.data.model.Product
 import org.zaed.khana.data.model.ProductFilter
+import org.zaed.khana.data.model.ProductReview
 import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.Result
 
@@ -18,4 +19,5 @@ interface ProductRemoteDataSource {
     suspend fun removeWishlistedProduct(userId: String, productId: String): Result<Unit, ProductResult>
     fun fetchWishlistedProducts(userId: String): Flow<Result<List<Product>, ProductResult>>
     fun searchProductsByTitle(query: String): Flow<Result<List<Product>, ProductResult>>
+    suspend fun addProductReview(review: ProductReview): Result<Unit, ProductResult>
 }

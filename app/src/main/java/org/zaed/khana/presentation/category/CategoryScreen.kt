@@ -58,7 +58,7 @@ fun CategoryScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryScreenContent(
+private fun CategoryScreenContent(
     modifier: Modifier = Modifier,
     category: String,
     wishlistedProductsIds: List<String>,

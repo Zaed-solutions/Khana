@@ -13,4 +13,5 @@ interface CartRepository {
     suspend fun updateItemQuantity(cartItemId: String, newQuantity: Int): Result<Unit, CartResult>
     suspend fun removeCartItem(cartItemId: String): Result<Unit, CartResult>
     fun fetchUserCartItems(userId: String): Flow<Result<List<CartItem>, CartResult>>
+    suspend fun fetchOrderedCartItem(orderId: String, cartItemId: String): Result<CartItem, CartResult>
 }
