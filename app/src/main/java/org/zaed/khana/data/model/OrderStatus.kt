@@ -1,7 +1,7 @@
 package org.zaed.khana.data.model
 
 enum class OrderStatus {
-    PENDING,
+    AWAITING_CONFIRMATION,
     CONFIRMED,
     SHIPPED,
     DELIVERED,

@@ -28,6 +28,7 @@ sealed class EndPoint(val route: String) {
         data object RemoveCartItem : EndPoint("/cart/removeCartItem")
         data object FetchUserCartItems : EndPoint("/cart/userCartItems")
         data object FetchDeliveryFee : EndPoint("/cart/deliveryFee")
+        data object FetchOrderedCartItem : EndPoint("/cart/fetchOrderedCartItem")
     }
 
     object Category {
@@ -53,11 +54,16 @@ sealed class EndPoint(val route: String) {
             EndPoint("/products/checkIfIsProductWishlisted")
         data object SearchProductsByName : EndPoint("/products/byName")
         data object FetchProductById : EndPoint("/products/byId")
+        data object AddProductReview : EndPoint("/products/addProductReview")
     }
 
-    object Checkout {
+    object ShippingAddress {
         data object FetchShippingAddresses : EndPoint("/addresses/byUserId")
         data object AddShippingAddress : EndPoint("/addresses/insert")
+    }
+    object Order{
         data object PlaceOrder : EndPoint("/orders/insert")
+        data object FetchOrderById : EndPoint("/orders/byId")
+        data object FetchUserOrders : EndPoint("/orders/byUserId")
     }
 }
