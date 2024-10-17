@@ -40,7 +40,7 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
-    navigateToProductDetails: (String) -> Unit
+    onNavigateToProductDetails: (String) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     SearchScreenContent(
@@ -55,7 +55,7 @@ fun SearchScreen(
                 }
 
                 is SearchUiAction.OnProductClicked -> {
-                    navigateToProductDetails(action.productId)
+                    onNavigateToProductDetails(action.productId)
                 }
 
                 else -> viewModel.handleUiAction(action)

@@ -23,21 +23,21 @@ import org.zaed.khana.data.model.ProductFilter
 import org.zaed.khana.presentation.home.components.AdvertisementSection
 import org.zaed.khana.presentation.home.components.CategoriesSection
 import org.zaed.khana.presentation.home.components.FlashSaleSection
-import org.zaed.khana.presentation.home.components.SortedByFilterSection
 import org.zaed.khana.presentation.home.components.LocationAndNotificationsSection
 import org.zaed.khana.presentation.home.components.ProductItems
 import org.zaed.khana.presentation.home.components.SearchAndFiltersSection
+import org.zaed.khana.presentation.home.components.SortedByFilterSection
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    productFilter: ProductFilter = ProductFilter(),
-    onNavigateToFilterScreen: () -> Unit={},
-    onNavigateToNotificationsScreen: () -> Unit={},
-    onNavigateToProductDetailsScreen: (String) -> Unit={},
-    onNavigateToSearchScreen: () -> Unit={},
+    productFilter: ProductFilter,
+    onNavigateToFilterScreen: () -> Unit,
+    onNavigateToNotificationsScreen: () -> Unit,
+    onNavigateToProductDetailsScreen: (String) -> Unit,
+    onNavigateToSearchScreen: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = true) {

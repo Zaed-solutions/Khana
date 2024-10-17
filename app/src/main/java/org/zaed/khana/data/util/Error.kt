@@ -19,7 +19,6 @@ fun Error.userMessage(): String {
         is CartResult -> userMessage
         is CouponResult -> userMessage
         is SearchResult -> userMessage
-        is CheckoutResult -> userMessage
         is ForgetPasswordResult -> userMessage
         is ShippingAddressResult -> userMessage
         is OrderResult -> userMessage
@@ -42,7 +41,6 @@ fun Error.isNotIdle(): Boolean {
         is CartResult -> this != CartResult.IDLE
         is CouponResult -> this != ProductResult.IDLE
         is SearchResult -> this != SearchResult.IDLE
-        is CheckoutResult -> this != CheckoutResult.IDLE
         is ForgetPasswordResult -> this != ForgetPasswordResult.IDLE
         is ShippingAddressResult -> this != ShippingAddressResult.IDLE
         is OrderResult -> this != OrderResult.IDLE
