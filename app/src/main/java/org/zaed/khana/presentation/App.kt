@@ -19,6 +19,7 @@ import org.zaed.khana.app.navigation.LoginScreen
 import org.zaed.khana.app.navigation.MyOrdersScreen
 import org.zaed.khana.app.navigation.NewPasswordScreen
 import org.zaed.khana.app.navigation.OtpVerificationScreen
+import org.zaed.khana.app.navigation.PrivacyPolicyScreen
 import org.zaed.khana.app.navigation.ProductDetailsScreen
 import org.zaed.khana.app.navigation.SearchScreen
 import org.zaed.khana.app.navigation.SignUpScreen
@@ -39,6 +40,7 @@ import org.zaed.khana.presentation.helpcenter.HelpCenterScreen
 import org.zaed.khana.presentation.home.HomeScreen
 import org.zaed.khana.presentation.leavereview.LeaveReviewScreen
 import org.zaed.khana.presentation.myorders.MyOrdersScreen
+import org.zaed.khana.presentation.privacy.PrivacyPolicyScreen
 import org.zaed.khana.presentation.productdetails.ProductDetailsScreen
 import org.zaed.khana.presentation.search.SearchScreen
 import org.zaed.khana.presentation.trackorder.TrackOrderScreen
@@ -224,6 +226,13 @@ fun App() {
                 },
                 onNavigateToProductDetails = { productId ->
                     navController.navigate(ProductDetailsScreen(productId = productId))
+                }
+            )
+        }
+        composable<PrivacyPolicyScreen> {
+            PrivacyPolicyScreen(
+                onBackPressed = {
+                    navController.popBackStack()
                 }
             )
         }
