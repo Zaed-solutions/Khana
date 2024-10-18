@@ -41,6 +41,7 @@ sealed class EndPoint(val route: String) {
     object Support {
         data object FetchFAQ : EndPoint("/support/faqs")
         data object FetchContactInfo : EndPoint("/support/contactInfo")
+        data object FetchLegalInfo : EndPoint("/support/legalInfo")
     }
 
     object Product {

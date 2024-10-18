@@ -6,6 +6,7 @@ import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
 import org.zaed.khana.data.model.ContactInfo
 import org.zaed.khana.data.model.FAQ
+import org.zaed.khana.data.model.LegalInfo
 import org.zaed.khana.data.source.remote.util.EndPoint
 import org.zaed.khana.data.source.remote.util.GenericResponse
 import org.zaed.khana.data.source.remote.util.endPoint
@@ -50,6 +51,27 @@ class SupportRemoteDataSourceImpl(
                 }
             } else {
                 Result.Error(SupportResult.FETCH_CONTACT_INFO_FAILED)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.Error(SupportResult.SERVER_ERROR)
+        }
+    }
+
+    override suspend fun fetchLegalInfo(): Result<LegalInfo, SupportResult> {
+        return try{
+            val response = httpClient.get {
+                endPoint(EndPoint.Support.FetchLegalInfo.route)
+            }
+            if(response.status == HttpStatusCode.OK){
+                val responseData = response.body<GenericResponse<LegalInfo>>().data
+                if(responseData != null){
+                    Result.success(responseData)
+                } else {
+                    Result.Error(SupportResult.FETCH_LEGAL_INFO_FAILED)
+                }
+            } else {
+                Result.Error(SupportResult.FETCH_LEGAL_INFO_FAILED)
             }
         } catch (e: Exception) {
             e.printStackTrace()

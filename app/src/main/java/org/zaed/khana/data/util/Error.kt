@@ -196,6 +196,7 @@ enum class OrderResult(val userMessage: String) : Error {
 enum class SupportResult(val userMessage: String) : Error {
     IDLE(""),
     FETCH_FAQS_FAILED("Failed to fetch FAQs"),
+    FETCH_LEGAL_INFO_FAILED("Failed to fetch Legal Info"),
     FETCH_CONTACT_INFO_FAILED("Failed to fetch contact info"),
     SERVER_ERROR("Failed to get response from the server"),
     NETWORK_ERROR("Failed to connect to the network"),

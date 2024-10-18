@@ -4,55 +4,58 @@ import kotlinx.serialization.Serializable
 import org.zaed.khana.data.model.ProductFilter
 
 @Serializable
-object ForgetPasswordScreen
+data object ForgetPasswordScreen
 
 @Serializable
 data class OtpVerificationScreen(val email: String)
 
 @Serializable
-object LoginScreen
+data object LoginScreen
 
 @Serializable
-object SignUpScreen
+data object SignUpScreen
 
 @Serializable
-object NewPasswordScreen
+data object NewPasswordScreen
 
 @Serializable
 data class HomeScreen(val filter: ProductFilter = ProductFilter())
 
 @Serializable
-object CartScreen
+data object CartScreen
 
 @Serializable
 data class CategoryScreen(val category: String)
 
 @Serializable
-object CheckoutScreen
+data object CheckoutScreen
 
 @Serializable
-object CouponsScreen
+data object CouponsScreen
 
 @Serializable
-object FilterScreen
+data object FilterScreen
 
 @Serializable
-object HelpCenterScreen
+data object HelpCenterScreen
 
 @Serializable
 data class LeaveReviewScreen(val orderId: String, val cartItemId: String)
 
 @Serializable
-object MyOrdersScreen
+data object MyOrdersScreen
 
 @Serializable
 data class ProductDetailsScreen(val productId: String)
 
 @Serializable
-object SearchScreen
+data object SearchScreen
 
 @Serializable
 data class TrackOrderScreen(val orderId: String, val cartItemId: String)
 
 @Serializable
-object WishlistScreen
+data object WishlistScreen
+
+@Serializable
+data object PrivacyPolicyScreen
