@@ -67,7 +67,8 @@ class AuthenticationRemoteDataSourceImpl(
         email: String,
         password: String
     ): Flow<org.zaed.khana.data.util.Result<FirebaseUser, AuthResults>> = callbackFlow {
-        org.zaed.khana.data.util.Result.Loading
+        println("inside signup with email$email")
+        trySend(org.zaed.khana.data.util.Result.Loading)
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 auth.currentUser?.updateProfile(
@@ -137,7 +138,7 @@ class AuthenticationRemoteDataSourceImpl(
         return response.data ?: false
     }
 
-    override suspend fun verifyCode(fullOtp: String, email: String) {
+    override suspend fun verifyCode(fullOtp: String, email: String):Boolean {
             println(email + fullOtp)
         val url = BASE_URL +"users/verifyOtp"
         println(url)
@@ -146,6 +147,6 @@ class AuthenticationRemoteDataSourceImpl(
             parameter("email", email)
             parameter("otp", fullOtp)
         }.body<GenericResponse<Boolean>>()
-        println(response)
+        return response.data ?: false
     }
 }

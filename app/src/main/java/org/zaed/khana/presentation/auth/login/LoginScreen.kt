@@ -2,6 +2,7 @@ package org.zaed.khana.presentation.auth.login
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -10,6 +11,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
 import org.koin.androidx.compose.koinViewModel
+import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.presentation.auth.component.LoginScreenContent
 import org.zaed.khana.presentation.auth.component.SignInWithFacebook
 import org.zaed.khana.presentation.auth.component.googleSignInOption
@@ -20,9 +22,16 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
-    navigateToForgetPasswordScreen :()-> Unit = {}
+    navigateToForgetPasswordScreen :()-> Unit = {},
+    navigateToHomeScreen :()-> Unit = {},
+    navigateToSignUpScreen :()-> Unit = {}
 ) {
+
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(state.userMessage) {
+        if(state.userMessage ==AuthResults.LOGIN_SUCCESS)
+            navigateToHomeScreen()
+    }
     val context = LocalContext.current
     val loginManager = LoginManager.getInstance()
     val callbackManager = remember { CallbackManager.Factory.create() }
@@ -45,10 +54,8 @@ fun LoginScreen(
     LoginScreenContent(
         state = state,
         action = { viewModel.handleUiState(it) },
-        //TODO
         navigateToForgetPassword = navigateToForgetPasswordScreen,
-        navigateToSignUp = {},
-        //TODO
+        navigateToSignUp = navigateToSignUpScreen,
         onSignInWithGoogleClicked = {
             println("onSignInWithGoogleClicked")
             launcher.launch(googleSignInClient.signInIntent)

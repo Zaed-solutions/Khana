@@ -133,7 +133,7 @@ class LoginViewModel(
         when (it) {
             is LoginUIAction.OnEmailChanged -> updateEmail(it.newEmail)
             is LoginUIAction.OnPasswordChanged -> updatePassword(it.newPass)
-            LoginUIAction.OnSignInClicked -> TODO()
+            LoginUIAction.OnSignInClicked -> onSignIn()
         }
     }
 
