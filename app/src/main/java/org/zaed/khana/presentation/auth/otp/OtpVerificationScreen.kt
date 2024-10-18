@@ -20,15 +20,24 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
+import org.zaed.khana.data.util.OtpResults
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun OTPVerificationScreen(
-    viewModel: OtpViewModel = koinViewModel()
+    email: String,
+    viewModel: OtpViewModel = koinViewModel(),
+    navigateToNewPasswordScreen: () -> Unit = {},
 ) {
-    val state by viewModel.uiState.collectAsState()
+    viewModel.setEmail(email)
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(state.userMessage) {
+        if(state.userMessage ==OtpResults.OTP_VERIFICATION_SUCCESS)
+            navigateToNewPasswordScreen()
+    }
 
     Column(
         modifier = Modifier
@@ -104,6 +113,6 @@ fun OTPTextField(value: String, onValueChange: (String) -> Unit) {
 @Composable
 fun OTPVerificationScreenPreview() {
     KhanaTheme {
-        OTPVerificationScreen()
+        OTPVerificationScreen("")
     }
 }

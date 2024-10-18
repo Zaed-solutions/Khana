@@ -24,7 +24,7 @@ interface AuthenticationRepository {
     suspend fun deleteAccount(userId: String): Result<Unit, AuthResults>
     suspend fun saveUser(user: FirebaseUser?)
     suspend fun sendOtp(email: String): Boolean
-    suspend fun verifyCode(fullOtp: String, email: String)
+    suspend fun verifyCode(fullOtp: String, email: String): Boolean
 
 
 }
