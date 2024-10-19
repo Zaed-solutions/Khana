@@ -1,8 +1,8 @@
 package org.zaed.khana.data.repository
 
 import com.google.firebase.auth.FirebaseUser
-import org.zaed.khana.data.model.User
 import kotlinx.coroutines.flow.Flow
+import org.zaed.khana.data.model.User
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.Result
 
@@ -12,7 +12,7 @@ interface AuthenticationRepository {
         email: String,
         password: String
     ): Flow<Result<User, AuthResults>>
-
+    suspend fun verifyPassword(password: String): Result<Boolean, AuthResults>
     fun signUpWithEmail(
         name: String,
         email: String,

@@ -1,9 +1,9 @@
 package org.zaed.khana.data.repository
 
 import com.google.firebase.auth.FirebaseUser
-import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSource
-import org.zaed.khana.data.model.User
 import kotlinx.coroutines.flow.Flow
+import org.zaed.khana.data.model.User
+import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSource
 import org.zaed.khana.data.source.remote.model.mapper.toUser
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.Result
@@ -19,6 +19,10 @@ class AuthenticationRepositoryImpl(
         password: String
     ): Flow<Result<User, AuthResults>> =
         remoteDataSource.signInWithEmail(email, password)
+
+    override suspend fun verifyPassword(password: String): Result<Boolean, AuthResults> {
+        return remoteDataSource.verifyPassword(password)
+    }
 
     override fun signUpWithEmail(
         name: String,

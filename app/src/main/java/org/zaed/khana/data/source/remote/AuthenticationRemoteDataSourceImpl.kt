@@ -1,7 +1,8 @@
 package org.zaed.khana.data.source.remote
 
-import org.zaed.khana.data.model.User
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -14,13 +15,15 @@ import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import org.zaed.khana.BuildConfig.BASE_URL
+import org.zaed.khana.data.model.User
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.GenericResponse
+import org.zaed.khana.data.util.Result
 
 
 class AuthenticationRemoteDataSourceImpl(
@@ -61,6 +64,27 @@ class AuthenticationRemoteDataSourceImpl(
             }
             awaitClose()
         }
+
+    override suspend fun verifyPassword(password: String): Result<Boolean, AuthResults> {
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
+        currentUser?.let {
+            val email = it.email
+            if (email != null) {
+                val credential = EmailAuthProvider.getCredential(email, password)
+                return try {
+                    // Re-authenticate the user
+                    it.reauthenticate(credential).await()
+                    Result.success(true)
+                } catch (e: FirebaseAuthInvalidCredentialsException) {
+                    Result.Success(false)
+                } catch (e: Exception) {
+                    Result.Error(AuthResults.SERVER_ERROR)
+                }
+            }
+        }
+        return Result.Error(AuthResults.USER_NOT_FOUND)
+    }
 
     override fun signUpWithEmail(
         name: String,

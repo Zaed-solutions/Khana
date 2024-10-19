@@ -89,4 +89,14 @@
     <string name="instagram">Instagram</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="settings">Settings</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="password_manager">Password Manager</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="this_action_cannot_be_undone_and_all_your_data_will_be_lost">This action cannot be undone and all your data will be lost.</string>
+    <string name="are_you_sure_you_want_to_delete_your_account">Are you sure you want to delete your account?</string>
+    <string name="confirm">Confirm</string>
+    <string name="enter_your_password_to_continue">Enter your password to continue</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="continue_">Continue</string>
 </resources>

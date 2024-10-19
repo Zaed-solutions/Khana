@@ -12,7 +12,7 @@ interface AuthenticationRemoteDataSource {
         email: String,
         password: String
     ): Flow<Result<User, AuthResults>>
-
+    suspend fun verifyPassword(password: String): Result<Boolean, AuthResults>
     fun signUpWithEmail(
         name: String,
         email: String,

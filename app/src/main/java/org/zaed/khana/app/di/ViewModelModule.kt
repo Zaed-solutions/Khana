@@ -16,8 +16,10 @@ import org.zaed.khana.presentation.helpcenter.HelpCenterViewModel
 import org.zaed.khana.presentation.home.HomeViewModel
 import org.zaed.khana.presentation.leavereview.LeaveReviewViewModel
 import org.zaed.khana.presentation.myorders.MyOrdersViewModel
+import org.zaed.khana.presentation.privacy.PrivacyPolicyViewModel
 import org.zaed.khana.presentation.productdetails.ProductDetailsViewModel
 import org.zaed.khana.presentation.search.SearchViewModel
+import org.zaed.khana.presentation.settings.SettingsViewModel
 import org.zaed.khana.presentation.trackorder.TrackOrderViewModel
 import org.zaed.khana.presentation.wishlist.WishlistViewModel
 
@@ -40,4 +42,6 @@ val viewModelModule = module {
     viewModelOf(::OtpViewModel)
     viewModelOf(::HelpCenterViewModel)
     viewModelOf(::NewPasswordViewModel)
+    viewModelOf(::SettingsViewModel)
+    viewModelOf(::PrivacyPolicyViewModel)
 }
