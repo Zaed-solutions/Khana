@@ -62,3 +62,6 @@ data object PrivacyPolicyScreen
 
 @Serializable
 data object SettingsScreen
+
+@Serializable
+data object PasswordManagerScreen

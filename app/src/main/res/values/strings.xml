@@ -99,4 +99,9 @@
     <string name="enter_your_password_to_continue">Enter your password to continue</string>
     <string name="wrong_password">Wrong password</string>
     <string name="continue_">Continue</string>
+    <string name="current_password">Current Password</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="change_password">Change Password</string>
 </resources>
