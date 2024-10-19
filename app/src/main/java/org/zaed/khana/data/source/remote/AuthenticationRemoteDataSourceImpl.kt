@@ -73,7 +73,6 @@ class AuthenticationRemoteDataSourceImpl(
             if (email != null) {
                 val credential = EmailAuthProvider.getCredential(email, password)
                 return try {
-                    // Re-authenticate the user
                     it.reauthenticate(credential).await()
                     Result.success(true)
                 } catch (e: FirebaseAuthInvalidCredentialsException) {
@@ -172,5 +171,19 @@ class AuthenticationRemoteDataSourceImpl(
             parameter("otp", fullOtp)
         }.body<GenericResponse<Boolean>>()
         return response.data ?: false
+    }
+
+    override suspend fun updateUserPassword(newPassword: String): Result<Unit, AuthResults> {
+        try{
+            val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+            user?.let {
+                it.updatePassword(newPassword).await()
+                return Result.success(Unit)
+            }
+            return Result.Error(AuthResults.USER_NOT_FOUND)
+        } catch (e: Exception){
+            e.printStackTrace()
+            return Result.Error(AuthResults.SERVER_ERROR)
+        }
     }
 }

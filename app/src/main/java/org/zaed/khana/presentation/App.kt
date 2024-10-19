@@ -19,6 +19,7 @@ import org.zaed.khana.app.navigation.LoginScreen
 import org.zaed.khana.app.navigation.MyOrdersScreen
 import org.zaed.khana.app.navigation.NewPasswordScreen
 import org.zaed.khana.app.navigation.OtpVerificationScreen
+import org.zaed.khana.app.navigation.PasswordManagerScreen
 import org.zaed.khana.app.navigation.PrivacyPolicyScreen
 import org.zaed.khana.app.navigation.ProductDetailsScreen
 import org.zaed.khana.app.navigation.SearchScreen
@@ -41,6 +42,7 @@ import org.zaed.khana.presentation.helpcenter.HelpCenterScreen
 import org.zaed.khana.presentation.home.HomeScreen
 import org.zaed.khana.presentation.leavereview.LeaveReviewScreen
 import org.zaed.khana.presentation.myorders.MyOrdersScreen
+import org.zaed.khana.presentation.passwordmanager.PasswordManagerScreen
 import org.zaed.khana.presentation.privacy.PrivacyPolicyScreen
 import org.zaed.khana.presentation.productdetails.ProductDetailsScreen
 import org.zaed.khana.presentation.search.SearchScreen
@@ -241,9 +243,14 @@ fun App() {
         composable<SettingsScreen> {
             SettingsScreen(
                 onBackPressed = { navController.popBackStack() },
-                onNavigateToPasswordManager = { /*TODO*/ },
+                onNavigateToPasswordManager = { navController.navigate(PasswordManagerScreen) },
                 onNavigateToNotificationSettings = { /*TODO*/ },
                 onNavigateToLogin = { navController.navigate(LoginScreen) }
+            )
+        }
+        composable<PasswordManagerScreen> {
+            PasswordManagerScreen(
+                onBackPressed = { navController.popBackStack() }
             )
         }
     }

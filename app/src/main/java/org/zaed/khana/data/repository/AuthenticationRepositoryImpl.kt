@@ -46,9 +46,9 @@ class AuthenticationRepositoryImpl(
         }
     }
 
-    override suspend fun saveUser(firebaseUser: FirebaseUser?) {
-        if (firebaseUser == null) return
-        remoteDataSource.saveUser(firebaseUser.toUser())
+    override suspend fun saveUser(user: FirebaseUser?) {
+        if (user == null) return
+        remoteDataSource.saveUser(user.toUser())
     }
 
     override suspend fun sendOtp(email: String)
@@ -56,6 +56,10 @@ class AuthenticationRepositoryImpl(
 
     override suspend fun verifyCode(fullOtp: String, email: String) =
         remoteDataSource.verifyCode(fullOtp, email)
+
+    override suspend fun updateUserPassword(newPassword: String): Result<Unit, AuthResults> {
+        return remoteDataSource.updateUserPassword(newPassword)
+    }
 
 
 }
