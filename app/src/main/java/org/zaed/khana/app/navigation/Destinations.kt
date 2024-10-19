@@ -59,3 +59,6 @@ data object WishlistScreen
 
 @Serializable
 data object PrivacyPolicyScreen
+
+@Serializable
+data object SettingsScreen

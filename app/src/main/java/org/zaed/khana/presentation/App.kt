@@ -22,6 +22,7 @@ import org.zaed.khana.app.navigation.OtpVerificationScreen
 import org.zaed.khana.app.navigation.PrivacyPolicyScreen
 import org.zaed.khana.app.navigation.ProductDetailsScreen
 import org.zaed.khana.app.navigation.SearchScreen
+import org.zaed.khana.app.navigation.SettingsScreen
 import org.zaed.khana.app.navigation.SignUpScreen
 import org.zaed.khana.app.navigation.TrackOrderScreen
 import org.zaed.khana.app.navigation.WishlistScreen
@@ -43,6 +44,7 @@ import org.zaed.khana.presentation.myorders.MyOrdersScreen
 import org.zaed.khana.presentation.privacy.PrivacyPolicyScreen
 import org.zaed.khana.presentation.productdetails.ProductDetailsScreen
 import org.zaed.khana.presentation.search.SearchScreen
+import org.zaed.khana.presentation.settings.SettingsScreen
 import org.zaed.khana.presentation.trackorder.TrackOrderScreen
 import kotlin.reflect.typeOf
 
@@ -234,6 +236,14 @@ fun App() {
                 onBackPressed = {
                     navController.popBackStack()
                 }
+            )
+        }
+        composable<SettingsScreen> {
+            SettingsScreen(
+                onBackPressed = { navController.popBackStack() },
+                onNavigateToPasswordManager = { /*TODO*/ },
+                onNavigateToNotificationSettings = { /*TODO*/ },
+                onNavigateToLogin = { navController.navigate(LoginScreen) }
             )
         }
     }
