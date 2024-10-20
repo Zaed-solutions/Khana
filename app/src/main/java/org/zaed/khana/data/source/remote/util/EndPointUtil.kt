@@ -70,5 +70,6 @@ sealed class EndPoint(val route: String) {
         data object PlaceOrder : EndPoint("/orders/insert")
         data object FetchOrderById : EndPoint("/orders/byId")
         data object FetchUserOrders : EndPoint("/orders/byUserId")
+        data object ConfirmPayment : EndPoint("/orders/confirmPayment")
     }
 }

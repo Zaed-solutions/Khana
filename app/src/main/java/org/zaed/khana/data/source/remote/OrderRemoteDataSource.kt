@@ -9,4 +9,5 @@ interface OrderRemoteDataSource {
     suspend fun placeOrder(order: Order): Result<String, OrderResult>
     fun fetchUserOrders(userId: String): Flow<Result<List<Order>, OrderResult>>
     suspend fun fetchOrderById(orderId: String): Result<Order, OrderResult>
+    suspend fun confirmPayment(orderId: String, selectedPaymentMethod: String): Result<Unit, OrderResult>
 }

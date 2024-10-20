@@ -104,4 +104,10 @@
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="change_password">Change Password</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="credit_debit_card">Credit &amp; Debit Cards</string>
+    <string name="add_card">Add Card</string>
+    <string name="more_payment_options">More Payment Options</string>
+    <string name="cash_on_delivery">Cash on Delivery</string>
+    <string name="paypal">PayPal</string>
 </resources>
