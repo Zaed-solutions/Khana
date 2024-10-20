@@ -7,7 +7,14 @@ import org.zaed.khana.presentation.auth.login.LoginViewModel
 import org.zaed.khana.presentation.auth.newpassword.NewPasswordViewModel
 import org.zaed.khana.presentation.auth.otp.OtpViewModel
 import org.zaed.khana.presentation.auth.signup.SignUpViewModel
+import org.zaed.khana.presentation.auth.userprofile.UserProfileViewModel
+import org.zaed.khana.presentation.filter.FilterViewModel
+import org.zaed.khana.presentation.home.HomeViewModel
+import org.zaed.khana.presentation.productdetails.ProductDetailsViewModel
+import org.zaed.khana.presentation.wishlist.WishlistViewModel
 import org.zaed.khana.presentation.cart.CartViewModel
+import org.zaed.khana.presentation.coupons.CouponsViewModel
+import org.zaed.khana.presentation.search.SearchViewModel
 import org.zaed.khana.presentation.category.CategoryViewModel
 import org.zaed.khana.presentation.checkout.CheckoutViewModel
 import org.zaed.khana.presentation.coupons.CouponsViewModel
@@ -46,4 +53,5 @@ val viewModelModule = module {
     viewModelOf(::SettingsViewModel)
     viewModelOf(::PrivacyPolicyViewModel)
     viewModelOf(::PasswordManagerViewModel)
+    viewModelOf(::UserProfileViewModel)
 }
