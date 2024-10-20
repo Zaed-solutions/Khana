@@ -154,7 +154,7 @@ class AuthenticationRemoteDataSourceImpl(
         }.body<GenericResponse<Unit>>()
         println(response)
     }
-    override suspend fun updateUserProfile(name: String, phoneNumber: String, imageUri: Uri?) =
+    override fun updateUserProfile(name: String, phoneNumber: String, imageUri: Uri?) =
         callbackFlow {
             trySend(Result.Loading)
             try {

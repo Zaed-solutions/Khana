@@ -29,4 +29,9 @@ interface AuthenticationRemoteDataSource {
     suspend fun updateUserPassword(newPassword: String): Result<Unit, AuthResults>
 
 
+    fun updateUserProfile(
+        name: String,
+        phoneNumber: String,
+        imageUri: Uri?
+    ): Flow<Result<AuthResults, AuthResults>>
 }
