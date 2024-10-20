@@ -1,33 +1,40 @@
 package org.zaed.khana.data.source.remote
 
-import org.zaed.khana.data.model.User
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import org.zaed.khana.BuildConfig.BASE_URL
+import org.zaed.khana.data.model.User
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.GenericResponse
+import org.zaed.khana.data.util.Result
 
 
 class AuthenticationRemoteDataSourceImpl(
     private val auth: FirebaseAuth,
+    private val firebaseStorage: FirebaseStorage,
     private val server: HttpClient,
 ) : AuthenticationRemoteDataSource {
-    override fun sendPasswordResetEmail(email: String): Flow<org.zaed.khana.data.util.Result<AuthResults, AuthResults>> =
+    override fun sendPasswordResetEmail(email: String): Flow<Result<AuthResults, AuthResults>> =
         callbackFlow {
 
         }
@@ -35,7 +42,7 @@ class AuthenticationRemoteDataSourceImpl(
     override fun signInWithEmail(
         email: String,
         password: String
-    ): Flow<org.zaed.khana.data.util.Result<User, AuthResults>> =
+    ): Flow<Result<User, AuthResults>> =
         callbackFlow {
             auth.signInWithEmailAndPassword(
                 email,
@@ -44,19 +51,19 @@ class AuthenticationRemoteDataSourceImpl(
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     trySend(
-                        org.zaed.khana.data.util.Result.Success(
+                        Result.Success(
                             User(
                                 id = user?.uid ?: "",
                                 username = user?.displayName ?: "",
                                 avatar = user?.photoUrl.toString(),
                                 email = user?.email ?: "",
                                 phoneNumber = user?.phoneNumber ?: "",
-                                createdAt = user?.metadata?.creationTimestamp?:0L,
+                                createdAt = user?.metadata?.creationTimestamp ?: 0L,
                             )
                         )
                     )
                 } else {
-                    trySend(org.zaed.khana.data.util.Result.Error(AuthResults.LOGIN_FAILED))
+                    trySend(Result.Error(AuthResults.LOGIN_FAILED))
                 }
             }
             awaitClose()
@@ -66,55 +73,55 @@ class AuthenticationRemoteDataSourceImpl(
         name: String,
         email: String,
         password: String
-    ): Flow<org.zaed.khana.data.util.Result<FirebaseUser, AuthResults>> = callbackFlow {
-        org.zaed.khana.data.util.Result.Loading
+    ): Flow<Result<FirebaseUser, AuthResults>> = callbackFlow {
+        Result.Loading
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 auth.currentUser?.updateProfile(
-                    com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                    UserProfileChangeRequest.Builder()
                         .setDisplayName(name)
                         .build()
                 )
                 val user = auth.currentUser
                 trySend(
-                    org.zaed.khana.data.util.Result.Success(
+                    Result.Success(
                         user!!
                     )
                 )
 
             } else {
-                trySend(org.zaed.khana.data.util.Result.Error(AuthResults.SERVER_ERROR))
+                trySend(Result.Error(AuthResults.SERVER_ERROR))
             }
         }
         awaitClose()
     }
 
-    override suspend fun getSignedInUser(): org.zaed.khana.data.util.Result<User, AuthResults> {
+    override suspend fun getSignedInUser(): Result<User, AuthResults> {
         if (Firebase.auth.currentUser == null) {
-            return org.zaed.khana.data.util.Result.Error(AuthResults.LOGIN_FAILED)
+            return Result.Error(AuthResults.LOGIN_FAILED)
         } else {
             val user = auth.currentUser
-            return org.zaed.khana.data.util.Result.Success(
+            return Result.Success(
                 User(
                     id = user?.uid ?: "",
                     username = user?.displayName ?: "",
                     avatar = user?.photoUrl.toString(),
                     email = user?.email ?: "",
                     phoneNumber = user?.phoneNumber ?: "",
-                    createdAt = user?.metadata?.creationTimestamp?:0L,
+                    createdAt = user?.metadata?.creationTimestamp ?: 0L,
                 )
             )
         }
     }
 
-    override suspend fun logout(): org.zaed.khana.data.util.Result<AuthResults, AuthResults> {
+    override suspend fun logout(): Result<AuthResults, AuthResults> {
         auth.signOut()
-        return org.zaed.khana.data.util.Result.Success(AuthResults.LOGOUT_SUCCESS)
+        return Result.Success(AuthResults.LOGOUT_SUCCESS)
     }
 
-    override suspend fun deleteAccount(userId: String): org.zaed.khana.data.util.Result<Unit, AuthResults> {
+    override suspend fun deleteAccount(userId: String): Result<Unit, AuthResults> {
         auth.currentUser?.delete()
-        return org.zaed.khana.data.util.Result.Success(Unit)
+        return Result.Success(Unit)
     }
 
     override suspend fun saveUser(user: User) {
@@ -125,21 +132,49 @@ class AuthenticationRemoteDataSourceImpl(
         }.body<GenericResponse<Unit>>()
         println(response)
     }
-
-    override suspend fun sendOtp(email: String):Boolean {
+    override suspend fun updateUserProfile(name: String, phoneNumber: String, imageUri: Uri?) =
+        callbackFlow {
+            trySend(Result.Loading)
+            try {
+                val imageUrl = imageUri?.let {
+                    uploadImageToFirebase(it)
+                }
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName(name)
+                    .setPhotoUri(Uri.parse(imageUrl))
+                    .build()
+                auth.currentUser?.updateProfile(profileUpdates)?.await()
+                server.put {
+                    url("$BASE_URL/users/updateByEmail")
+                    contentType(ContentType.Application.Json)
+                    setBody(
+                        User(
+                            id = auth.currentUser?.uid ?: "",
+                            username = auth.currentUser?.displayName ?: "",
+                            avatar = imageUrl.toString(),
+                        )
+                    )
+                }
+                trySend(Result.Success(AuthResults.UPDATE_PROFILE_SUCCESS))
+            } catch (_: Exception) {
+                trySend(Result.Error(AuthResults.SERVER_ERROR))
+            }
+            awaitClose()
+        }
+    override suspend fun sendOtp(email: String): Boolean {
         println(email)
-        val url = BASE_URL +"users/sendOtp"
+        val url = BASE_URL + "users/sendOtp"
         println(url)
         val response = server.get {
             url(url)
-            parameter("email",email)
+            parameter("email", email)
         }.body<GenericResponse<Boolean>>()
         return response.data ?: false
     }
 
     override suspend fun verifyCode(fullOtp: String, email: String) {
-            println(email + fullOtp)
-        val url = BASE_URL +"users/verifyOtp"
+        println(email + fullOtp)
+        val url = BASE_URL + "users/verifyOtp"
         println(url)
         val response = server.get {
             url(url)
@@ -147,5 +182,13 @@ class AuthenticationRemoteDataSourceImpl(
             parameter("otp", fullOtp)
         }.body<GenericResponse<Boolean>>()
         println(response)
+    }
+
+
+
+    private suspend fun uploadImageToFirebase(imageUri: Uri): String {
+        val ref = firebaseStorage.reference.child("profileImages/${imageUri.lastPathSegment}")
+        ref.putFile(imageUri).await()
+        return ref.downloadUrl.await().toString()
     }
 }

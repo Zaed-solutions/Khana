@@ -1,5 +1,6 @@
 package org.zaed.khana.data.repository
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import org.zaed.khana.data.model.User
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,7 @@ interface AuthenticationRepository {
     suspend fun saveUser(user: FirebaseUser?)
     suspend fun sendOtp(email: String): Boolean
     suspend fun verifyCode(fullOtp: String, email: String)
+    suspend fun updateUserProfile(name: String, phoneNumber: String, imageUri: Uri?): Flow<Result<AuthResults, AuthResults>>
 
 
 }

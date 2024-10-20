@@ -1,5 +1,6 @@
 package org.zaed.khana.data.repository
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSource
 import org.zaed.khana.data.model.User
@@ -52,6 +53,9 @@ class AuthenticationRepositoryImpl(
 
     override suspend fun verifyCode(fullOtp: String, email: String) =
         remoteDataSource.verifyCode(fullOtp, email)
+
+    override suspend fun updateUserProfile(name: String, phoneNumber: String, imageUri: Uri?): Flow<Result<AuthResults, AuthResults>> =
+        remoteDataSource.updateUserProfile(name, phoneNumber, imageUri)
 
 
 }

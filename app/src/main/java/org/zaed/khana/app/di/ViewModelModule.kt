@@ -6,6 +6,7 @@ import org.zaed.khana.presentation.auth.forgetPassword.ForgetPasswordViewModel
 import org.zaed.khana.presentation.auth.login.LoginViewModel
 import org.zaed.khana.presentation.auth.otp.OtpViewModel
 import org.zaed.khana.presentation.auth.signup.SignUpViewModel
+import org.zaed.khana.presentation.auth.userprofile.UserProfileViewModel
 import org.zaed.khana.presentation.filter.FilterViewModel
 import org.zaed.khana.presentation.home.HomeViewModel
 import org.zaed.khana.presentation.productdetails.ProductDetailsViewModel
@@ -36,4 +37,5 @@ val viewModelModule = module {
     viewModelOf(::TrackOrderViewModel)
     viewModelOf(::ForgetPasswordViewModel)
     viewModelOf(::OtpViewModel)
+    viewModelOf(::UserProfileViewModel)
 }
