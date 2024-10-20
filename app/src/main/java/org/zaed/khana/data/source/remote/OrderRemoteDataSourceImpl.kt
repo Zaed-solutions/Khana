@@ -16,9 +16,9 @@ import org.zaed.khana.data.source.remote.util.endPoint
 import org.zaed.khana.data.util.OrderResult
 import org.zaed.khana.data.util.Result
 
-class OrderRemoteDataSourceImpl (
+class OrderRemoteDataSourceImpl(
     private val httpClient: HttpClient
-): OrderRemoteDataSource {
+) : OrderRemoteDataSource {
     override suspend fun placeOrder(order: Order): Result<String, OrderResult> {
         return try {
             val request = httpClient.post {
@@ -68,7 +68,7 @@ class OrderRemoteDataSourceImpl (
         return try {
             val request = httpClient.post {
                 endPoint(EndPoint.Order.FetchOrderById.route)
-                parameter("orderId",orderId)
+                parameter("orderId", orderId)
             }
             if (request.status == HttpStatusCode.OK) {
                 val responseData = request.body<GenericResponse<Order>>().data
@@ -77,6 +77,27 @@ class OrderRemoteDataSourceImpl (
                 } else {
                     Result.Error(OrderResult.PLACE_ORDER_FAILED)
                 }
+            } else {
+                Result.Error(OrderResult.SERVER_ERROR)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.Error(OrderResult.NETWORK_ERROR)
+        }
+    }
+
+    override suspend fun confirmPayment(
+        orderId: String,
+        selectedPaymentMethod: String
+    ): Result<Unit, OrderResult> {
+        return try {
+            val request = httpClient.post {
+                endPoint(EndPoint.Order.ConfirmPayment.route)
+                parameter("orderId", orderId)
+                parameter("paymentMethod", selectedPaymentMethod)
+            }
+            if (request.status == HttpStatusCode.OK) {
+                Result.Success(Unit)
             } else {
                 Result.Error(OrderResult.SERVER_ERROR)
             }

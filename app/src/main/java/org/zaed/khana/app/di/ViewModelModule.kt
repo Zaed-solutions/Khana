@@ -17,6 +17,7 @@ import org.zaed.khana.presentation.home.HomeViewModel
 import org.zaed.khana.presentation.leavereview.LeaveReviewViewModel
 import org.zaed.khana.presentation.myorders.MyOrdersViewModel
 import org.zaed.khana.presentation.passwordmanager.PasswordManagerViewModel
+import org.zaed.khana.presentation.payment.PaymentViewModel
 import org.zaed.khana.presentation.privacy.PrivacyPolicyViewModel
 import org.zaed.khana.presentation.productdetails.ProductDetailsViewModel
 import org.zaed.khana.presentation.search.SearchViewModel
@@ -46,4 +47,5 @@ val viewModelModule = module {
     viewModelOf(::SettingsViewModel)
     viewModelOf(::PrivacyPolicyViewModel)
     viewModelOf(::PasswordManagerViewModel)
+    viewModelOf(::PaymentViewModel)
 }

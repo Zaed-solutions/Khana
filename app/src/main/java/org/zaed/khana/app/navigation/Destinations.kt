@@ -65,3 +65,6 @@ data object SettingsScreen
 
 @Serializable
 data object PasswordManagerScreen
+
+@Serializable
+data class PaymentScreen(val orderId: String)

@@ -20,6 +20,7 @@ import org.zaed.khana.app.navigation.MyOrdersScreen
 import org.zaed.khana.app.navigation.NewPasswordScreen
 import org.zaed.khana.app.navigation.OtpVerificationScreen
 import org.zaed.khana.app.navigation.PasswordManagerScreen
+import org.zaed.khana.app.navigation.PaymentScreen
 import org.zaed.khana.app.navigation.PrivacyPolicyScreen
 import org.zaed.khana.app.navigation.ProductDetailsScreen
 import org.zaed.khana.app.navigation.SearchScreen
@@ -43,6 +44,7 @@ import org.zaed.khana.presentation.home.HomeScreen
 import org.zaed.khana.presentation.leavereview.LeaveReviewScreen
 import org.zaed.khana.presentation.myorders.MyOrdersScreen
 import org.zaed.khana.presentation.passwordmanager.PasswordManagerScreen
+import org.zaed.khana.presentation.payment.PaymentScreen
 import org.zaed.khana.presentation.privacy.PrivacyPolicyScreen
 import org.zaed.khana.presentation.productdetails.ProductDetailsScreen
 import org.zaed.khana.presentation.search.SearchScreen
@@ -134,8 +136,8 @@ fun App() {
         composable<CheckoutScreen> {
             CheckoutScreen(
                 onBackPressed = { navController.popBackStack() },
-                onNavigateToPaymentScreen = {
-                    /*TODO*/
+                onNavigateToPaymentScreen = { orderId ->
+                    navController.navigate(PaymentScreen(orderId = orderId))
                 }
             )
         }
@@ -251,6 +253,18 @@ fun App() {
         composable<PasswordManagerScreen> {
             PasswordManagerScreen(
                 onBackPressed = { navController.popBackStack() }
+            )
+        }
+        composable<PaymentScreen>{ backStackEntry ->
+            val orderId = backStackEntry.toRoute<PaymentScreen>().orderId
+            PaymentScreen(
+                orderId = orderId,
+                onBackPressed = {
+                    navController.popBackStack()
+                },
+                onNavigateToHome = {
+                    navController.navigate(HomeScreen())
+                }
             )
         }
     }
