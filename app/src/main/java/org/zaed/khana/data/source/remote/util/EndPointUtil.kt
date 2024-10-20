@@ -38,6 +38,11 @@ sealed class EndPoint(val route: String) {
     object Coupon {
         data object FetchCoupon : EndPoint("/coupons/all")
     }
+    object Support {
+        data object FetchFAQ : EndPoint("/support/faqs")
+        data object FetchContactInfo : EndPoint("/support/contactInfo")
+        data object FetchLegalInfo : EndPoint("/support/legalInfo")
+    }
 
     object Product {
         data object FetchWishlistedProducts : EndPoint("/products/wishListProductsByUserId")

@@ -22,10 +22,10 @@ fun ChipItem(
 ) {
     FilterChip(
         modifier = modifier,
-        colors = if (isSelected) FilterChipDefaults.filterChipColors(
+        colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor =  MaterialTheme.colorScheme.primary,
             selectedLabelColor =  MaterialTheme.colorScheme.onPrimary
-        ) else FilterChipDefaults.filterChipColors(),
+        ) ,
         selected = isSelected,
         shape = shape,
         onClick = {

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.util.AuthResults
+import org.zaed.khana.data.util.OtpResults
 import org.zaed.khana.data.util.PasswordFieldError
 
 
@@ -17,9 +18,13 @@ class OtpViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OtpUiState())
     val uiState = _uiState.asStateFlow()
+    fun setEmail(email: String) {
+        _uiState.update {
+            it.copy(email = email)
+        }
+    }
 
-
-    private fun updateActionResult(message: AuthResults) {
+    private fun updateActionResult(message: OtpResults) {
         println(message.userMessage)
         _uiState.update {
             it.copy(
@@ -55,7 +60,10 @@ class OtpViewModel(
         with(uiState.value){
             val fullOtp =otp1+otp2+otp3+otp4
             viewModelScope.launch (Dispatchers.IO){
-                authRepo.verifyCode(fullOtp, email)
+                when(authRepo.verifyCode(fullOtp, email)){
+                    true -> updateActionResult(OtpResults.OTP_VERIFICATION_SUCCESS)
+                    false -> updateActionResult(OtpResults.OTP_VERIFICATION_FAILED)
+                }
             }
 
         }

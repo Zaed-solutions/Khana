@@ -2,9 +2,9 @@ package org.zaed.khana.data.repository
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
-import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSource
-import org.zaed.khana.data.model.User
 import kotlinx.coroutines.flow.Flow
+import org.zaed.khana.data.model.User
+import org.zaed.khana.data.source.remote.AuthenticationRemoteDataSource
 import org.zaed.khana.data.source.remote.model.mapper.toUser
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.Result
@@ -20,6 +20,10 @@ class AuthenticationRepositoryImpl(
         password: String
     ): Flow<Result<User, AuthResults>> =
         remoteDataSource.signInWithEmail(email, password)
+
+    override suspend fun verifyPassword(password: String): Result<Boolean, AuthResults> {
+        return remoteDataSource.verifyPassword(password)
+    }
 
     override fun signUpWithEmail(
         name: String,
@@ -43,9 +47,9 @@ class AuthenticationRepositoryImpl(
         }
     }
 
-    override suspend fun saveUser(firebaseUser: FirebaseUser?) {
-        if (firebaseUser == null) return
-        remoteDataSource.saveUser(firebaseUser.toUser())
+    override suspend fun saveUser(user: FirebaseUser?) {
+        if (user == null) return
+        remoteDataSource.saveUser(user.toUser())
     }
 
     override suspend fun sendOtp(email: String)
@@ -54,8 +58,9 @@ class AuthenticationRepositoryImpl(
     override suspend fun verifyCode(fullOtp: String, email: String) =
         remoteDataSource.verifyCode(fullOtp, email)
 
-    override suspend fun updateUserProfile(name: String, phoneNumber: String, imageUri: Uri?): Flow<Result<AuthResults, AuthResults>> =
-        remoteDataSource.updateUserProfile(name, phoneNumber, imageUri)
+    override suspend fun updateUserPassword(newPassword: String): Result<Unit, AuthResults> {
+        return remoteDataSource.updateUserPassword(newPassword)
+    }
 
 
 }

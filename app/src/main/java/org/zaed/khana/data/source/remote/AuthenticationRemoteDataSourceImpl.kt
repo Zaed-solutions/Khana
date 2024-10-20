@@ -1,7 +1,9 @@
 package org.zaed.khana.data.source.remote
 
 import android.net.Uri
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -69,12 +71,32 @@ class AuthenticationRemoteDataSourceImpl(
             awaitClose()
         }
 
+    override suspend fun verifyPassword(password: String): Result<Boolean, AuthResults> {
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
+        currentUser?.let {
+            val email = it.email
+            if (email != null) {
+                val credential = EmailAuthProvider.getCredential(email, password)
+                return try {
+                    it.reauthenticate(credential).await()
+                    Result.success(true)
+                } catch (e: FirebaseAuthInvalidCredentialsException) {
+                    Result.Success(false)
+                } catch (e: Exception) {
+                    Result.Error(AuthResults.SERVER_ERROR)
+                }
+            }
+        }
+        return Result.Error(AuthResults.USER_NOT_FOUND)
+    }
+
     override fun signUpWithEmail(
         name: String,
         email: String,
         password: String
     ): Flow<Result<FirebaseUser, AuthResults>> = callbackFlow {
-        Result.Loading
+        trySend(org.zaed.khana.data.util.Result.Loading)
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 auth.currentUser?.updateProfile(
@@ -172,16 +194,30 @@ class AuthenticationRemoteDataSourceImpl(
         return response.data ?: false
     }
 
-    override suspend fun verifyCode(fullOtp: String, email: String) {
-        println(email + fullOtp)
-        val url = BASE_URL + "users/verifyOtp"
+    override suspend fun verifyCode(fullOtp: String, email: String):Boolean {
+            println(email + fullOtp)
+        val url = BASE_URL +"users/verifyOtp"
         println(url)
         val response = server.get {
             url(url)
             parameter("email", email)
             parameter("otp", fullOtp)
         }.body<GenericResponse<Boolean>>()
-        println(response)
+        return response.data ?: false
+    }
+
+    override suspend fun updateUserPassword(newPassword: String): Result<Unit, AuthResults> {
+        try{
+            val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+            user?.let {
+                it.updatePassword(newPassword).await()
+                return Result.success(Unit)
+            }
+            return Result.Error(AuthResults.USER_NOT_FOUND)
+        } catch (e: Exception){
+            e.printStackTrace()
+            return Result.Error(AuthResults.SERVER_ERROR)
+        }
     }
 
 

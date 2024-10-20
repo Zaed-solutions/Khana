@@ -24,6 +24,9 @@ fun Error.userMessage(): String {
 
         is ShippingAddressResult -> userMessage
         is OrderResult -> userMessage
+        is OtpResults -> userMessage
+        is SupportResult -> userMessage
+        else -> ""
     }
 }
 
@@ -44,6 +47,8 @@ fun Error.isNotIdle(): Boolean {
         is ForgetPasswordResult -> this != ForgetPasswordResult.IDLE
         is ShippingAddressResult -> this != ShippingAddressResult.IDLE
         is OrderResult -> this != OrderResult.IDLE
+        is OtpResults -> this != OtpResults.IDLE
+        is SupportResult -> this != SupportResult.IDLE
     }
 }
 
@@ -99,6 +104,7 @@ enum class CouponResult(val userMessage: String) : Error {
     SERVER_ERROR("Failed to fetch coupons"),
     NETWORK_ERROR("Failed to connect to the network"),
 }
+
 @Serializable
 enum class ForgetPasswordResult(val userMessage: String) : Error {
     IDLE(""),
@@ -186,6 +192,25 @@ enum class OrderResult(val userMessage: String) : Error {
     IDLE(""),
     PLACE_ORDER_FAILED("Failed to place order"),
     FETCH_USER_ORDERS_FAILED("Failed to get user orders"),
+    SERVER_ERROR("Failed to get response from the server"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+
+@Serializable
+enum class SupportResult(val userMessage: String) : Error {
+    IDLE(""),
+    FETCH_FAQS_FAILED("Failed to fetch FAQs"),
+    FETCH_LEGAL_INFO_FAILED("Failed to fetch Legal Info"),
+    FETCH_CONTACT_INFO_FAILED("Failed to fetch contact info"),
+    SERVER_ERROR("Failed to get response from the server"),
+    NETWORK_ERROR("Failed to connect to the network"),
+}
+
+@Serializable
+enum class OtpResults(val userMessage: String) : Error {
+    IDLE(""),
+    OTP_VERIFICATION_FAILED("Failed to verify OTP"),
+    OTP_VERIFICATION_SUCCESS("OTP verified successfully"),
     SERVER_ERROR("Failed to get response from the server"),
     NETWORK_ERROR("Failed to connect to the network"),
 }
