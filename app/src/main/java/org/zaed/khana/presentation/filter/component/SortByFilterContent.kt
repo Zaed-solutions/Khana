@@ -34,7 +34,12 @@ fun SortByFilterContent(
             FilterChip(
                 selected = isSelected,
                 onClick = { onSortingOptionSelected(sortByOption) },
-                label = { Text(text = sortByOption.displayName) },
+                label = {
+                    Text(
+                        text = sortByOption.displayName,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                },
                 shape = MaterialTheme.shapes.extraLarge,
                 border = FilterChipDefaults.filterChipBorder(
                     enabled = true,

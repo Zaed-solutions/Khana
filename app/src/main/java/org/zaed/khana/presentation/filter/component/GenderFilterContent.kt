@@ -34,7 +34,12 @@ fun GenderFilterContent(
             FilterChip(
                 selected = isSelected,
                 onClick = { onGenderSelected(gender) },
-                label = { Text(text = gender.displayName) },
+                label = {
+                    Text(
+                        text = gender.displayName,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                },
                 shape = MaterialTheme.shapes.extraLarge,
                 border = FilterChipDefaults.filterChipBorder(
                     enabled = true,

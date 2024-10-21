@@ -34,7 +34,11 @@ fun BrandsFilterContent(
             FilterChip(
                 selected = isSelected,
                 onClick = { onBrandSelected(brand) },
-                label = { Text(text = brand.displayName) },
+                label = {
+                    Text(
+                        text = brand.displayName,
+                        style = MaterialTheme.typography.bodyLarge
+                    ) },
                 shape = MaterialTheme.shapes.extraLarge,
                 border = FilterChipDefaults.filterChipBorder(
                     enabled = true,

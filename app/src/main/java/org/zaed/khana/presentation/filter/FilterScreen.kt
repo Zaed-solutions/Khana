@@ -1,20 +1,26 @@
 package org.zaed.khana.presentation.filter
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
@@ -35,10 +41,14 @@ import org.zaed.khana.presentation.filter.component.SortByFilterContent
 fun FilterScreen(
     modifier: Modifier = Modifier,
     viewModel: FilterViewModel = koinViewModel(),
+    initialFilter: ProductFilter,
     onBackPressed: () -> Unit,
     onNavigateToHome: (ProductFilter) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect (true){
+        viewModel.init(initialFilter)
+    }
     FilterScreenContent(modifier = modifier, filter = state.productFilter) { action ->
         when (action) {
             FilterUiAction.OnApplyFilters -> onNavigateToHome(state.productFilter)
@@ -60,7 +70,10 @@ private fun FilterScreenContent(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.filter))
+                    Text(
+                        text = stringResource(R.string.filter),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = { onAction(FilterUiAction.OnBackPressed) }) {
@@ -80,7 +93,10 @@ private fun FilterScreenContent(
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
             FilterSection(title = stringResource(R.string.brands)) {

@@ -34,7 +34,7 @@ data object CheckoutScreen
 data object CouponsScreen
 
 @Serializable
-data object FilterScreen
+data class FilterScreen(val initialFilter: ProductFilter)
 
 @Serializable
 data object HelpCenterScreen
