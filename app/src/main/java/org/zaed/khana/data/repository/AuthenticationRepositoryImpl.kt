@@ -59,11 +59,16 @@ class AuthenticationRepositoryImpl(
         remoteDataSource.verifyCode(fullOtp, email)
 
     override fun updateUserProfile(
+        userId: String,
         name: String,
         phoneNumber: String,
         imageUri: Uri?
     ): Flow<Result<AuthResults, AuthResults>> =
-        remoteDataSource.updateUserProfile(name, phoneNumber, imageUri)
+        remoteDataSource.updateUserProfile(userId, name, phoneNumber, imageUri)
+
+    override suspend fun updateUserAvatar(userId: String, imageUri: Uri): Result<String, AuthResults> {
+        return remoteDataSource.updateUserAvatar(userId, imageUri)
+    }
 
     override suspend fun updateUserPassword(newPassword: String): Result<Unit, AuthResults> {
         return remoteDataSource.updateUserPassword(newPassword)

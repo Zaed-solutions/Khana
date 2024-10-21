@@ -12,24 +12,21 @@ import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.util.AuthResults
-import org.zaed.khana.presentation.auth.component.LoginScreenContent
 import org.zaed.khana.presentation.auth.component.SignInWithFacebook
 import org.zaed.khana.presentation.auth.component.googleSignInOption
 import org.zaed.khana.presentation.auth.component.rememberFirebaseAuthLauncher
-import org.zaed.khana.presentation.auth.login.LoginUiState
-import org.zaed.khana.presentation.auth.login.LoginViewModel
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel = koinViewModel(),
-    navigateToHomeScreen :()-> Unit = {},
+    navigateToCompleteProfile :()-> Unit = {},
     navigateToSignIn :()-> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(state.userMessage) {
         if(state.userMessage == AuthResults.SIGNUP_SUCCESS)
-            navigateToHomeScreen()
+            navigateToCompleteProfile()
     }
     val context = LocalContext.current
     val loginManager = LoginManager.getInstance()

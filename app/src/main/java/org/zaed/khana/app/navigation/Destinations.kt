@@ -68,3 +68,9 @@ data object PasswordManagerScreen
 
 @Serializable
 data class PaymentScreen(val orderId: String)
+
+@Serializable
+data object ProfileScreen
+
+@Serializable
+data object CompleteProfileScreen

@@ -21,6 +21,9 @@ class LoginViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()
+    init {
+        getSignedInUser()
+    }
     private fun getSignedInUser() {
         viewModelScope.launch(Dispatchers.IO) {
             authRepo.getSignedInUser().let { result ->

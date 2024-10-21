@@ -28,10 +28,10 @@ interface AuthenticationRepository {
     suspend fun verifyCode(fullOtp: String, email: String): Boolean
     suspend fun updateUserPassword(newPassword: String): Result<Unit, AuthResults>
     fun updateUserProfile(
+        userId: String,
         name: String,
         phoneNumber: String,
         imageUri: Uri?
     ): Flow<Result<AuthResults, AuthResults>>
-
-
+    suspend fun updateUserAvatar(userId: String, imageUri: Uri): Result<String, AuthResults>
 }
