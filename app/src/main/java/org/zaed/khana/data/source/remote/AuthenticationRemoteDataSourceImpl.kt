@@ -5,7 +5,6 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -19,6 +18,7 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -26,6 +26,8 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import org.zaed.khana.BuildConfig.BASE_URL
 import org.zaed.khana.data.model.User
+import org.zaed.khana.data.source.remote.util.EndPoint
+import org.zaed.khana.data.source.remote.util.endPoint
 import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.data.util.GenericResponse
 import org.zaed.khana.data.util.Result
@@ -34,7 +36,7 @@ import org.zaed.khana.data.util.Result
 class AuthenticationRemoteDataSourceImpl(
     private val auth: FirebaseAuth,
     private val firebaseStorage: FirebaseStorage,
-    private val server: HttpClient,
+    private val httpClient: HttpClient,
 ) : AuthenticationRemoteDataSource {
     override fun sendPasswordResetEmail(email: String): Flow<Result<AuthResults, AuthResults>> =
         callbackFlow {
@@ -147,26 +149,26 @@ class AuthenticationRemoteDataSourceImpl(
     }
 
     override suspend fun saveUser(user: User) {
-        val response = server.post {
+        val response = httpClient.post {
             url("$BASE_URL/users/insert")
             setBody(user)
             contentType(ContentType.Application.Json)
         }.body<GenericResponse<Unit>>()
         println(response)
     }
-    override fun updateUserProfile(name: String, phoneNumber: String, imageUri: Uri?) =
+    override fun updateUserProfile(userId: String, name: String, phoneNumber: String, imageUri: Uri?) =
         callbackFlow {
             trySend(Result.Loading)
             try {
-                val imageUrl = imageUri?.let {
-                    uploadImageToFirebase(it)
+                val imageUrl = imageUri?.let { uri ->
+                    uploadImageToFirebase(userId, uri)
                 }
                 val profileUpdates = UserProfileChangeRequest.Builder()
                     .setDisplayName(name)
                     .setPhotoUri(Uri.parse(imageUrl))
                     .build()
                 auth.currentUser?.updateProfile(profileUpdates)?.await()
-                server.put {
+                httpClient.put {
                     url("$BASE_URL/users/updateByEmail")
                     contentType(ContentType.Application.Json)
                     setBody(
@@ -183,11 +185,35 @@ class AuthenticationRemoteDataSourceImpl(
             }
             awaitClose()
         }
+
+    override suspend fun updateUserAvatar(userId: String, imageUri: Uri): Result<String, AuthResults> {
+        return try{
+            val imageUrl = uploadImageToFirebase(userId, imageUri)
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(Uri.parse(imageUrl))
+                .build()
+            auth.currentUser?.updateProfile(profileUpdates)?.await()
+            val response = httpClient.post {
+                endPoint(EndPoint.User.UpdateUserAvatar.route)
+                parameter("userId", userId)
+                parameter("avatarUrl", imageUrl)
+            }
+            if(response.status == HttpStatusCode.OK){
+                Result.Success(imageUrl)
+            } else {
+                Result.Error(AuthResults.FAILED_TO_UPDATE_AVATAR)
+            }
+        } catch(e: Exception){
+            e.printStackTrace()
+            Result.Error(AuthResults.SERVER_ERROR)
+        }
+    }
+
     override suspend fun sendOtp(email: String): Boolean {
         println(email)
         val url = BASE_URL + "users/sendOtp"
         println(url)
-        val response = server.get {
+        val response = httpClient.get {
             url(url)
             parameter("email", email)
         }.body<GenericResponse<Boolean>>()
@@ -198,7 +224,7 @@ class AuthenticationRemoteDataSourceImpl(
             println(email + fullOtp)
         val url = BASE_URL +"users/verifyOtp"
         println(url)
-        val response = server.get {
+        val response = httpClient.get {
             url(url)
             parameter("email", email)
             parameter("otp", fullOtp)
@@ -222,8 +248,8 @@ class AuthenticationRemoteDataSourceImpl(
 
 
 
-    private suspend fun uploadImageToFirebase(imageUri: Uri): String {
-        val ref = firebaseStorage.reference.child("profileImages/${imageUri.lastPathSegment}")
+    private suspend fun uploadImageToFirebase(userId: String, imageUri: Uri): String {
+        val ref = firebaseStorage.reference.child("profileImages/$userId/${imageUri.lastPathSegment}")
         ref.putFile(imageUri).await()
         return ref.downloadUrl.await().toString()
     }

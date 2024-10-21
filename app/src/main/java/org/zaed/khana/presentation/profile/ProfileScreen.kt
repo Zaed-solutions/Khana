@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.profile
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.Assignment
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,7 +60,8 @@ fun ProfileScreen(
     ProfileScreenContent(
         modifier = modifier,
         name = state.currentUser.firstName+" "+state.currentUser.lastName,
-        pfpUrl = state.currentUser.avatar,
+        avatarUrl = state.currentUser.avatar,
+        avatarUri = null,
         onAction = { action ->
             when(action) {
                 ProfileUiAction.OnBackPressed -> onBackPressed()
@@ -68,7 +70,6 @@ fun ProfileScreen(
                 ProfileUiAction.OnPaymentMethodsClicked -> onNavigateToPaymentMethods()
                 ProfileUiAction.OnPrivacyPolicyClicked -> onNavigateToPrivacyPolicy()
                 ProfileUiAction.OnSettingsClicked -> onNavigateToSettings()
-                ProfileUiAction.OnChangeAvatarClicked -> TODO()
                 else -> viewModel.handleUiAction(action)
             }
         }
@@ -81,7 +82,8 @@ fun ProfileScreen(
 private fun ProfileScreenContent(
     modifier: Modifier = Modifier,
     name: String,
-    pfpUrl: String,
+    avatarUrl: String,
+    avatarUri: Uri?,
     onAction: (ProfileUiAction) -> Unit,
 ) {
     Scaffold(
@@ -110,8 +112,11 @@ private fun ProfileScreenContent(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ProfileHeader(
+                modifier = Modifier.padding(bottom = 16.dp),
                 name = name,
-                pfpUrl = pfpUrl,
+                avatarUrl = avatarUrl,
+                avatarUri = avatarUri,
+                onAvatarPicked = { uri -> onAction(ProfileUiAction.OnAvatarPicked(uri)) }
             )
             ProfileScreenOptions.entries.forEach { option ->
                 ListItem(
@@ -126,7 +131,8 @@ private fun ProfileScreenContent(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onAction(option.action) }
+                        .clickable { if(option != ProfileScreenOptions.PAYMENT_METHODS) onAction(option.action) }
+                        .graphicsLayer(alpha = if(option == ProfileScreenOptions.PAYMENT_METHODS) 0.12f else 1f)
                 )
                 if(option != ProfileScreenOptions.LOGOUT) {
                     HorizontalDivider(thickness = 0.5.dp)
@@ -150,7 +156,7 @@ enum class ProfileScreenOptions(val titleId: Int, val icon: ImageVector, val act
 @Composable
 private fun ProfileScreenContentPreview() {
     KhanaTheme {
-        ProfileScreenContent(name = "Muhammed Edrees", pfpUrl = "") {
+        ProfileScreenContent(name = "Muhammed Edrees", avatarUrl = "", avatarUri = null) {
 
         }
     }

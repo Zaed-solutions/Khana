@@ -20,7 +20,9 @@ sealed class EndPoint(val route: String) {
     object Advertisement {
         data object FetchAdvertisement : EndPoint("/advertisements/all")
     }
-
+    object User{
+        data object UpdateUserAvatar: EndPoint("/users/updateUserAvatar")
+    }
     object Cart {
         data object AddItemToCart : EndPoint("/cart/addToCart")
         data object ApplyPromoCode : EndPoint("/cart/applyPromoCode")

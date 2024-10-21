@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import org.zaed.khana.app.navigation.CartScreen
 import org.zaed.khana.app.navigation.CategoryScreen
 import org.zaed.khana.app.navigation.CheckoutScreen
+import org.zaed.khana.app.navigation.CompleteProfileScreen
 import org.zaed.khana.app.navigation.CouponsScreen
 import org.zaed.khana.app.navigation.CustomNavType
 import org.zaed.khana.app.navigation.FilterScreen
@@ -23,6 +24,7 @@ import org.zaed.khana.app.navigation.PasswordManagerScreen
 import org.zaed.khana.app.navigation.PaymentScreen
 import org.zaed.khana.app.navigation.PrivacyPolicyScreen
 import org.zaed.khana.app.navigation.ProductDetailsScreen
+import org.zaed.khana.app.navigation.ProfileScreen
 import org.zaed.khana.app.navigation.SearchScreen
 import org.zaed.khana.app.navigation.SettingsScreen
 import org.zaed.khana.app.navigation.SignUpScreen
@@ -80,8 +82,8 @@ fun App() {
         }
         composable<SignUpScreen> {
             SignUpScreen(
-                navigateToHomeScreen = {
-                    navController.navigate(HomeScreen())
+                navigateToCompleteProfile = {
+                    navController.navigate(CompleteProfileScreen)
                 },
                 navigateToSignIn = { navController.navigate(LoginScreen) }
             )
@@ -266,6 +268,21 @@ fun App() {
                     navController.navigate(HomeScreen())
                 }
             )
+        }
+        composable<CompleteProfileScreen> {
+            org.zaed.khana.presentation.auth.completeprofile.CompleteProfileScreen(
+                navigateToHomeScreen = { navController.navigate(HomeScreen()) }
+            )
+        }
+        composable<ProfileScreen> {
+            org.zaed.khana.presentation.profile.ProfileScreen(
+                onBackPressed = { navController.popBackStack() },
+                onNavigateToHelpCenter = { navController.navigate(HelpCenterScreen) },
+                onNavigateToMyOrders = { navController.navigate(MyOrdersScreen) },
+                onNavigateToPaymentMethods = { /*TODO*/ },
+                onNavigateToPrivacyPolicy = { navController.navigate(PrivacyPolicyScreen) },
+                onNavigateToSettings = { navController.navigate(SettingsScreen) },
+                onNavigateToLogin = { navController.navigate(LoginScreen) })
         }
     }
 }

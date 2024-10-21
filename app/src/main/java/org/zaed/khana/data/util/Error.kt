@@ -159,6 +159,7 @@ enum class CartResult(val userMessage: String) : Error {
 @Serializable
 enum class AuthResults(val userMessage: String) : Error {
     IDLE(""),
+    FAILED_TO_UPDATE_AVATAR("Failed to update avatar"),
     INVALID_NAME("Invalid Name"),
     PASSWORD_DOES_NOT_MATCH("Password does not match"),
     INVALID_EMAIL("Invalid Email"),

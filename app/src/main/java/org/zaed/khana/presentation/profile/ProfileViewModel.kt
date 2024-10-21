@@ -1,8 +1,10 @@
 package org.zaed.khana.presentation.profile
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -28,11 +30,22 @@ class ProfileViewModel(
     }
     fun handleUiAction(action: ProfileUiAction) {
         when(action) {
-            is ProfileUiAction.OnUpdateAvatar -> TODO()
+            is ProfileUiAction.OnAvatarPicked -> updateUserAvatar(action.uri)
             is ProfileUiAction.OnLogoutClicked -> logout()
             else -> Unit
         }
     }
+
+    private fun updateUserAvatar(uri: Uri) {
+        viewModelScope.launch (Dispatchers.IO) {
+            authRepo.updateUserAvatar(_uiState.value.currentUser.id, uri).onSuccessWithData { imageUrl ->
+                _uiState.update { it.copy(currentUser = it.currentUser.copy(avatar = imageUrl)) }
+            }.onFailure {
+                Log.e("ProfileViewModel:updateUserAvatar", "Failed to update avatar $it")
+            }
+        }
+    }
+
     private fun logout(){
         viewModelScope.launch {
             authRepo.logout().onSuccess {
