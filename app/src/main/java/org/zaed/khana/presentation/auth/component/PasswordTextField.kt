@@ -35,7 +35,9 @@ import org.zaed.khana.R
 fun PasswordTextField(
     modifier: Modifier = Modifier,
     value: String = "",
-    onValueChanged: (String) -> Unit = {}
+    onValueChanged: (String) -> Unit = {},
+    isError: Boolean = false,
+    errorMessage: String = ""
 ) {
     Column(
         modifier = Modifier
@@ -56,6 +58,16 @@ fun PasswordTextField(
             value = value,
             onValueChange = { onValueChanged(it) },
             shape = RoundedCornerShape(30.dp),
+            isError = isError,
+            supportingText = {
+                if(isError){
+                    Text(
+                        text =errorMessage,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
             visualTransformation = if (showPassword) {
                 VisualTransformation.None
             } else {

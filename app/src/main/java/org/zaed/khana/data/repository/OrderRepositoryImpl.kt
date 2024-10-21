@@ -20,4 +20,11 @@ class OrderRepositoryImpl(
     override suspend fun fetchOrderById(orderId: String): Result<Order, OrderResult> {
         return orderRemoteDataSource.fetchOrderById(orderId)
     }
+
+    override suspend fun confirmPayment(
+        orderId: String,
+        selectedPaymentMethod: String
+    ): Result<Unit, OrderResult> {
+        return orderRemoteDataSource.confirmPayment(orderId, selectedPaymentMethod)
+    }
 }

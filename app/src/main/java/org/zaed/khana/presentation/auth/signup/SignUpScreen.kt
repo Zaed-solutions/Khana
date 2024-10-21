@@ -2,6 +2,7 @@ package org.zaed.khana.presentation.auth.signup
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -10,6 +11,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.facebook.CallbackManager
 import com.facebook.login.LoginManager
 import org.koin.androidx.compose.koinViewModel
+import org.zaed.khana.data.util.AuthResults
 import org.zaed.khana.presentation.auth.component.LoginScreenContent
 import org.zaed.khana.presentation.auth.component.SignInWithFacebook
 import org.zaed.khana.presentation.auth.component.googleSignInOption
@@ -20,9 +22,15 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun SignUpScreen(
-    viewModel: SignUpViewModel = koinViewModel()
+    viewModel: SignUpViewModel = koinViewModel(),
+    navigateToHomeScreen :()-> Unit = {},
+    navigateToSignIn :()-> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(state.userMessage) {
+        if(state.userMessage == AuthResults.SIGNUP_SUCCESS)
+            navigateToHomeScreen()
+    }
     val context = LocalContext.current
     val loginManager = LoginManager.getInstance()
     val callbackManager = remember { CallbackManager.Factory.create() }
@@ -45,8 +53,7 @@ fun SignUpScreen(
     SignUpScreenContent(
         state = state,
         action = { viewModel.handleUiState(it) },
-        navigateToSignIn = {},
-        //TODO
+        navigateToSignIn = navigateToSignIn,
         onSignInWithGoogleClicked = {
             println("onSignUpWithGoogleClicked")
             launcher.launch(googleSignInClient.signInIntent)
@@ -67,11 +74,10 @@ fun SignUpScreen(
 )
 fun LoginScreenPreview() {
     KhanaTheme {
-        LoginScreenContent(
-            state = LoginUiState(),
+        SignUpScreenContent(
+            state = SignUpUiState(),
             action = {},
-            navigateToForgetPassword = {},
-            navigateToSignUp = {},
+            navigateToSignIn = {},
             onSignInWithGoogleClicked = {},
         )
     }
