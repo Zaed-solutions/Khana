@@ -75,7 +75,7 @@ fun App() {
             LoginScreen(
                 navigateToForgetPasswordScreen = { navController.navigate(ForgetPasswordScreen) },
                 navigateToHomeScreen = {
-                    navController.navigate(HomeScreen)
+                    navController.navigate(HomeScreen())
                 },
                 navigateToSignUpScreen = { navController.navigate(SignUpScreen) }
             )
