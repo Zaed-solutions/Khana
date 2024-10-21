@@ -1,6 +1,9 @@
-package org.zaed.khana.presentation.auth.userprofile
+package org.zaed.khana.presentation.auth.completeprofile
 
-data class UserProfileUiState(
+import org.zaed.khana.data.model.User
+
+data class CompleteProfileUiState(
+    val currentUser: User = User(),
     val name: String = "",
     val phoneNumber: String = "",
     val imageUri: String? = null,
