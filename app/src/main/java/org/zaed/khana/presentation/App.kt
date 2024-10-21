@@ -102,8 +102,8 @@ fun App() {
                 onNavigateToNotificationsScreen = {
                     //TODO
                 },
-                onNavigateToFilterScreen = {
-                    navController.navigate(FilterScreen)
+                onNavigateToFilterScreen = { filter ->
+                    navController.navigate(FilterScreen(filter))
                 },
                 onNavigateToSearchScreen = {
                     navController.navigate(SearchScreen)
@@ -148,8 +148,14 @@ fun App() {
                 onBackPressed = { navController.popBackStack() }
             )
         }
-        composable<FilterScreen> {
+        composable<FilterScreen>(
+            typeMap = mapOf(
+                typeOf<ProductFilter>() to CustomNavType.ProductFilterType
+            )
+        ) { backStackEntry ->
+            val initialFilter = backStackEntry.toRoute<FilterScreen>().initialFilter
             FilterScreen(
+                initialFilter = initialFilter,
                 onBackPressed = {
                     navController.popBackStack()
                 },

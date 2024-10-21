@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.MaximumPrice
 import org.zaed.khana.data.model.MinimumPrice
+import org.zaed.khana.data.model.ProductFilter
 import org.zaed.khana.data.util.BrandFilterOption
 import org.zaed.khana.data.util.GenderFilterOption
 import org.zaed.khana.data.util.ReviewsFilterOption
@@ -15,7 +16,11 @@ import org.zaed.khana.data.util.SortByFilterOption
 class FilterViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(FilterUiState())
     val uiState = _uiState.asStateFlow()
-
+    fun init(initialFilter: ProductFilter) {
+        viewModelScope.launch {
+            _uiState.value = FilterUiState(productFilter = initialFilter)
+        }
+    }
     fun handleUiAction(action: FilterUiAction) {
         when (action) {
             FilterUiAction.OnResetFilters -> resetFilters()

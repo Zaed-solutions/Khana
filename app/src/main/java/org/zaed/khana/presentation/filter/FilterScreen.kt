@@ -12,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,10 +36,14 @@ import org.zaed.khana.presentation.filter.component.SortByFilterContent
 fun FilterScreen(
     modifier: Modifier = Modifier,
     viewModel: FilterViewModel = koinViewModel(),
+    initialFilter: ProductFilter,
     onBackPressed: () -> Unit,
     onNavigateToHome: (ProductFilter) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect (true){
+        viewModel.init(initialFilter)
+    }
     FilterScreenContent(modifier = modifier, filter = state.productFilter) { action ->
         when (action) {
             FilterUiAction.OnApplyFilters -> onNavigateToHome(state.productFilter)

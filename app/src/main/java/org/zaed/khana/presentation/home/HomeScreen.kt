@@ -34,7 +34,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
     productFilter: ProductFilter,
-    onNavigateToFilterScreen: () -> Unit,
+    onNavigateToFilterScreen: (ProductFilter) -> Unit,
     onNavigateToNotificationsScreen: () -> Unit,
     onNavigateToProductDetailsScreen: (String) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
@@ -55,7 +55,7 @@ fun HomeScreen(
         wishlistedProducts = state.wishlistedProductsIds,
         onAction = { action ->
             when (action) {
-                HomeUiAction.OnFiltersButtonClicked -> onNavigateToFilterScreen()
+                HomeUiAction.OnFiltersButtonClicked -> onNavigateToFilterScreen(state.filter)
                 HomeUiAction.OnNotificationButtonClicked -> onNavigateToNotificationsScreen()
                 is HomeUiAction.OnProductClicked -> onNavigateToProductDetailsScreen(action.productId)
                 is HomeUiAction.OnSearchClicked -> onNavigateToSearchScreen()
