@@ -2,7 +2,9 @@ package org.zaed.khana.presentation.filter.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
@@ -20,14 +22,19 @@ fun FilterBottomBar(
     onResetFilters: () -> Unit
 ) {
     Row(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.fillMaxWidth().padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        FilledTonalButton(onClick = { onResetFilters() }) {
+        FilledTonalButton(
+            modifier = Modifier.widthIn(min = 150.dp),
+            onClick = { onResetFilters() }) {
             Text(text = stringResource(R.string.reset_filters))
         }
-        Button(onClick = { onApplyFilters() }) {
+        Button(
+            modifier = Modifier.widthIn(min = 150.dp),
+            onClick = { onApplyFilters() }
+        ) {
             Text(stringResource(R.string.apply))
         }
     }
