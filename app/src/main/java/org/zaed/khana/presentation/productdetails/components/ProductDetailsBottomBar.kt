@@ -1,10 +1,12 @@
 package org.zaed.khana.presentation.productdetails.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -21,12 +23,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.util.shimmerEffect
 import org.zaed.khana.presentation.util.toMoney
 
 @Composable
 fun ProductDetailsBottomBar(
     price: Float,
     isAddedToCart: Boolean,
+    isLoading: Boolean,
     onAddToCartClicked: () -> Unit,
 ) {
     Surface(
@@ -48,10 +52,14 @@ fun ProductDetailsBottomBar(
         ) {
             Column{
                 Text(text = stringResource(R.string.total_price))
-                Text(text = price.toMoney())
+                if(isLoading){
+                    Box(modifier = Modifier.size(width = 82.dp, height = 24.dp).shimmerEffect())
+                } else {
+                    Text(text = price.toMoney())
+                }
             }
             Button(
-                enabled = !isAddedToCart,
+                enabled = !(isAddedToCart || isLoading),
                 onClick = { onAddToCartClicked() }) {
                 Icon(
                     imageVector = if(isAddedToCart) Icons.Default.Check else Icons.Default.ShoppingBag,
@@ -71,7 +79,7 @@ fun ProductDetailsBottomBar(
 @Composable
 private fun ProductDetailsBottomBarPreview() {
     KhanaTheme {
-        ProductDetailsBottomBar(price = 183.33f, true) {
+        ProductDetailsBottomBar(price = 183.33f, false, true) {
 
         }
     }

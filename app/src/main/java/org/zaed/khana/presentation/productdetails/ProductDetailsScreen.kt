@@ -133,6 +133,7 @@ private fun ProductDetailsScreenContent(
             ProductDetailsBottomBar(
                 price = price,
                 isAddedToCart = isAddedToCart,
+                isLoading = isLoading,
                 onAddToCartClicked = { onAction(ProductDetailsUiAction.OnAddToCartClicked) }
             )
         },
@@ -145,7 +146,8 @@ private fun ProductDetailsScreenContent(
         ) {
             ImagesPreviewPager(
                 isLoading = isLoading,
-                imagesUrls = imagesUrls)
+                imagesUrls = imagesUrls
+            )
             ProductInformationSection(
                 title = title,
                 isLoading = isLoading,

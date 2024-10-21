@@ -22,7 +22,7 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun ProductDetailsTopBar(
     onBackPressed: () -> Unit,
     onWishlistProduct: () -> Unit,
-    isWishlisted: Boolean
+    isWishlisted: Boolean,
 ) {
     CenterAlignedTopAppBar(
         title = {
