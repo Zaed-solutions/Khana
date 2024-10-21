@@ -22,12 +22,13 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun ProductDetailsTopBar(
     onBackPressed: () -> Unit,
     onWishlistProduct: () -> Unit,
-    isWishlisted: Boolean
+    isWishlisted: Boolean,
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = stringResource(R.string.product_details),
+                style = MaterialTheme.typography.titleLarge
             )
         },
         navigationIcon = {

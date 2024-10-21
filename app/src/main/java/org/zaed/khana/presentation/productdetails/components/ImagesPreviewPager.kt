@@ -20,38 +20,49 @@ import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
 import com.tbuonomo.viewpagerdotsindicator.compose.type.ShiftIndicatorType
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.util.shimmerEffect
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagesPreviewPager(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     imagesUrls: List<String>
 ) {
-    val pagerState = rememberPagerState(pageCount = { imagesUrls.size })
-    Box(
-        modifier = modifier
-            .height(320.dp)
-            .fillMaxWidth()
-    ) {
-        HorizontalPager(state = pagerState) { pageIndex ->
-            AsyncImage(
-                model = imagesUrls[pageIndex],
-                modifier = Modifier.fillMaxSize(),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-            )
-        }
-        if (imagesUrls.size > 1) {
-            DotsIndicator(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(vertical = 16.dp),
-                dotCount = imagesUrls.size,
-                type = ShiftIndicatorType(dotsGraphic = DotGraphic(color = MaterialTheme.colorScheme.primary)),
-                pagerState = pagerState
-            )
+    if(isLoading){
+        ImagesPreviewShimmer()
+    } else {
+        val pagerState = rememberPagerState(pageCount = { imagesUrls.size })
+        Box(
+            modifier = modifier
+                .height(320.dp)
+                .fillMaxWidth()
+        ) {
+            HorizontalPager(state = pagerState) { pageIndex ->
+                AsyncImage(
+                    model = imagesUrls[pageIndex],
+                    modifier = Modifier.fillMaxSize(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                )
+            }
+            if (imagesUrls.size > 1) {
+                DotsIndicator(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(vertical = 16.dp),
+                    dotCount = imagesUrls.size,
+                    type = ShiftIndicatorType(dotsGraphic = DotGraphic(color = MaterialTheme.colorScheme.primary)),
+                    pagerState = pagerState
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun ImagesPreviewShimmer(){
+    Box(modifier = Modifier.fillMaxWidth().height(320.dp).shimmerEffect())
 }
 
 @Preview(showSystemUi = true, showBackground = true)
@@ -63,6 +74,6 @@ private fun ImagesPagerPreview() {
         "https://www.image.com/image.jpg"
     )
     KhanaTheme {
-        ImagesPreviewPager(imagesUrls = images)
+        ImagesPreviewPager(isLoading = true, imagesUrls = images)
     }
 }

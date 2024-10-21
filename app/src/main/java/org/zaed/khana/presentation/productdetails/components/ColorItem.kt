@@ -5,15 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.ktor.util.hex
 import org.zaed.khana.presentation.theme.KhanaTheme
 import org.zaed.khana.presentation.util.fromHex
 
@@ -26,10 +25,10 @@ fun ColorItem(
 ) {
     val color = Color.fromHex(hexColor)
     Icon(
-        imageVector = if(isSelected) Icons.Default.CheckCircle else Icons.Default.Circle,
+        imageVector = if(isSelected) Icons.Default.RadioButtonChecked else Icons.Default.Circle,
         contentDescription = null,
         tint = color,
-        modifier = modifier.size(48.dp).clickable { onSelectColor() }
+        modifier = modifier.size(36.dp).clickable { onSelectColor() }
     )
 }
 

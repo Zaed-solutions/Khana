@@ -1,7 +1,5 @@
 package org.zaed.khana.presentation.productdetails
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +24,7 @@ import org.zaed.khana.data.util.Error
 import org.zaed.khana.data.util.ProductResult
 import org.zaed.khana.data.util.isNotIdle
 import org.zaed.khana.data.util.userMessage
-import org.zaed.khana.presentation.home.components.ColorSelectionSection
+import org.zaed.khana.presentation.productdetails.components.ColorSelectionSection
 import org.zaed.khana.presentation.productdetails.components.ImagesPreviewPager
 import org.zaed.khana.presentation.productdetails.components.ProductDetailsBottomBar
 import org.zaed.khana.presentation.productdetails.components.ProductDetailsTopBar
@@ -65,7 +62,9 @@ fun ProductDetailsScreen(
         selectedColor = state.selectedColor,
         price = state.product.basePrice,
         imagesUrls = state.product.previewImagesLinks,
-        actionResult = state.result
+        actionResult = state.result,
+        isAddedToCart = state.isAddedToCart,
+        isLoading = state.isLoading
     )
 }
 
@@ -75,6 +74,7 @@ private fun ProductDetailsScreenContent(
     modifier: Modifier = Modifier,
     onAction: (ProductDetailsUiAction) -> Unit,
     isWishlisted: Boolean,
+    isLoading: Boolean,
     title: String,
     category: String,
     rating: Float,
@@ -85,7 +85,8 @@ private fun ProductDetailsScreenContent(
     availableColors: List<Color>,
     selectedColor: Color,
     price: Float,
-    actionResult: Error
+    actionResult: Error,
+    isAddedToCart: Boolean
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = actionResult) {
@@ -131,6 +132,8 @@ private fun ProductDetailsScreenContent(
         bottomBar = {
             ProductDetailsBottomBar(
                 price = price,
+                isAddedToCart = isAddedToCart,
+                isLoading = isLoading,
                 onAddToCartClicked = { onAction(ProductDetailsUiAction.OnAddToCartClicked) }
             )
         },
@@ -141,9 +144,13 @@ private fun ProductDetailsScreenContent(
                 .padding(paddingValues)
                 .fillMaxWidth(),
         ) {
-            ImagesPreviewPager(imagesUrls = imagesUrls)
+            ImagesPreviewPager(
+                isLoading = isLoading,
+                imagesUrls = imagesUrls
+            )
             ProductInformationSection(
                 title = title,
+                isLoading = isLoading,
                 description = description,
                 category = category,
                 rating = rating,
@@ -153,13 +160,15 @@ private fun ProductDetailsScreenContent(
                 availableSizes = availableSizes,
                 selectedSize = selectedSize,
                 onSelectSize = { size -> onAction(ProductDetailsUiAction.OnSelectSize(size)) },
-                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 8.dp)
+                modifier = Modifier.padding(top = 16.dp),
+                isLoading = isLoading
             )
             ColorSelectionSection(
                 availableColors = availableColors,
                 selectedColor = selectedColor,
                 onSelectColor = { hexColor -> onAction(ProductDetailsUiAction.OnSelectColor(hexColor)) },
-                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 8.dp)
+                modifier = Modifier.padding(top = 16.dp),
+                isLoading = isLoading
             )
         }
     }
@@ -183,7 +192,9 @@ private fun ProductDetailsScreenPreview() {
             availableColors = listOf(Color("Black", "#000000"), Color("White", "#ffffff"), Color("Red", "#ff0000")),
             selectedColor = Color("Black", "#000000"),
             price = 183.5f,
-            actionResult = ProductResult.IDLE
+            actionResult = ProductResult.IDLE,
+            isAddedToCart = false,
+            isLoading = false
         )
     }
 }
