@@ -28,6 +28,7 @@ fun ProductDetailsTopBar(
         title = {
             Text(
                 text = stringResource(R.string.product_details),
+                style = MaterialTheme.typography.titleLarge
             )
         },
         navigationIcon = {

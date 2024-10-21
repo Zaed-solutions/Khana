@@ -1,6 +1,5 @@
 package org.zaed.khana.presentation.productdetails.components
 
-import android.icu.text.DecimalFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -26,6 +26,7 @@ import org.zaed.khana.presentation.util.toMoney
 @Composable
 fun ProductDetailsBottomBar(
     price: Float,
+    isAddedToCart: Boolean,
     onAddToCartClicked: () -> Unit,
 ) {
     Surface(
@@ -39,7 +40,9 @@ fun ProductDetailsBottomBar(
         )
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -47,14 +50,16 @@ fun ProductDetailsBottomBar(
                 Text(text = stringResource(R.string.total_price))
                 Text(text = price.toMoney())
             }
-            Button(onClick = { onAddToCartClicked() }) {
+            Button(
+                enabled = !isAddedToCart,
+                onClick = { onAddToCartClicked() }) {
                 Icon(
-                    imageVector = Icons.Default.ShoppingBag,
+                    imageVector = if(isAddedToCart) Icons.Default.Check else Icons.Default.ShoppingBag,
                     contentDescription = null,
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp)
                 )
                 Text(
-                    text = stringResource(R.string.add_to_cart),
+                    text = if(isAddedToCart) stringResource(R.string.added_to_cart) else stringResource(R.string.add_to_cart),
                     modifier = Modifier.padding(start = 4.dp, end = 16.dp)
                 )
             }
@@ -66,7 +71,7 @@ fun ProductDetailsBottomBar(
 @Composable
 private fun ProductDetailsBottomBarPreview() {
     KhanaTheme {
-        ProductDetailsBottomBar(price = 183.33f) {
+        ProductDetailsBottomBar(price = 183.33f, true) {
 
         }
     }

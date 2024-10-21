@@ -41,7 +41,8 @@ class ProductDetailsViewModel(
                     it.copy(
                         product = product,
                         selectedSize = product.availableSizes.firstOrNull() ?: "",
-                        selectedColor = product.availableColors.firstOrNull() ?: Color()
+                        selectedColor = product.availableColors.firstOrNull() ?: Color(),
+                        isLoading = false
                     )
                 }
                 checkIfIsWishlisted(productId)
@@ -89,7 +90,7 @@ class ProductDetailsViewModel(
             with(uiState.value) {
                 cartRepo.addItemToCart(currentUser.id, productId, selectedColor, selectedSize)
                     .onSuccess {
-                        _uiState.update { it.copy(result = ProductResult.IDLE) }
+                        _uiState.update { it.copy(result = ProductResult.IDLE, isAddedToCart = true) }
                     }.onFailure { error ->
                     Log.e("ProductDetailsViewModel:addItemToCart", error.userMessage)
                     _uiState.update { it.copy(result = error) }

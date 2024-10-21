@@ -115,4 +115,5 @@
     <string name="cash_on_delivery">Cash on Delivery</string>
     <string name="paypal">PayPal</string>
     <string name="user_avatar">user avatar</string>
+    <string name="added_to_cart">Added to cart</string>
 </resources>
