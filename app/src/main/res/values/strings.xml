@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Khana</string>
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="wishlist">Wishlist</string>
     <string name="location">Location</string>
     <string name="search">Search</string>
     <string name="category">Category</string>
