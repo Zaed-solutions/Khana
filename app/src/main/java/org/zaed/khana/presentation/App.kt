@@ -1,18 +1,12 @@
 package org.zaed.khana.presentation
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -81,11 +75,10 @@ fun App() {
     val currentRoute = (navBackStackEntry?.destination?.route
         ?: HomeScreen::class.qualifiedName.orEmpty()).substringBefore("?")
     val bottomNavRoutes = BottomNavigation.entries.map{ it.route::class.qualifiedName.orEmpty() }
-    Log.d("App", "currentRoute: $currentRoute, bottomNavRoutes: $bottomNavRoutes")
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.systemBars.exclude(WindowInsets.navigationBars)),
+        ,
         bottomBar = {
             AnimatedVisibility(
                 visible = bottomNavRoutes.contains(currentRoute),
@@ -123,7 +116,9 @@ fun App() {
                 LoginScreen(
                     navigateToForgetPasswordScreen = { navController.navigate(ForgetPasswordScreen) },
                     navigateToHomeScreen = {
-                        navController.navigate(HomeScreen())
+                        navController.navigate(HomeScreen()) {
+                            popUpTo(LoginScreen) { inclusive = true }
+                        }
                     },
                     navigateToSignUpScreen = { navController.navigate(SignUpScreen) }
                 )
@@ -131,7 +126,9 @@ fun App() {
             composable<SignUpScreen> {
                 SignUpScreen(
                     navigateToCompleteProfile = {
-                        navController.navigate(CompleteProfileScreen)
+                        navController.navigate(CompleteProfileScreen) {
+                            popUpTo(SignUpScreen) { inclusive = true }
+                        }
                     },
                     navigateToSignIn = { navController.navigate(LoginScreen) }
                 )
@@ -325,7 +322,11 @@ fun App() {
             }
             composable<CompleteProfileScreen> {
                 org.zaed.khana.presentation.auth.completeprofile.CompleteProfileScreen(
-                    navigateToHomeScreen = { navController.navigate(HomeScreen()) }
+                    navigateToHomeScreen = {
+                        navController.navigate(HomeScreen()) {
+                            popUpTo(CompleteProfileScreen) { inclusive = true }
+                        }
+                    }
                 )
             }
             composable<ProfileScreen> {

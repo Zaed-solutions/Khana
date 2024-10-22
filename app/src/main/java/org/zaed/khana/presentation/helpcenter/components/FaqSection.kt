@@ -25,7 +25,7 @@ fun FaqSection(
     faqTags: List<String>,
 ) {
     var selectedTag by remember {
-        mutableStateOf(faqTags.first())
+        mutableStateOf(faqTags.firstOrNull()?:"")
     }
     val filteredFaqs by remember(faq, selectedTag) {
         mutableStateOf(faq.filter { selectedTag == "All" || it.tag == selectedTag })
