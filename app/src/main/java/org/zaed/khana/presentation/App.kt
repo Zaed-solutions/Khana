@@ -1,21 +1,29 @@
 package org.zaed.khana.presentation
 
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import org.zaed.khana.R
 import org.zaed.khana.app.navigation.BottomNavigation
 import org.zaed.khana.app.navigation.BottomNavigationBar
 import org.zaed.khana.app.navigation.CustomNavType
@@ -75,9 +83,29 @@ fun App() {
     val currentRoute = (navBackStackEntry?.destination?.route
         ?: HomeScreen::class.qualifiedName.orEmpty()).substringBefore("?")
     val bottomNavRoutes = BottomNavigation.entries.map{ it.route::class.qualifiedName.orEmpty() }
+    val isDarkMode = isSystemInDarkTheme()
+    val context = LocalContext.current as ComponentActivity
+
+    DisposableEffect(isDarkMode) {
+        context.enableEdgeToEdge(
+            statusBarStyle = if (!isDarkMode) {
+                SystemBarStyle.light(
+                    scrim = context.getResources().getColor(R.color.background_light),
+                    darkScrim = context.getResources().getColor(R.color.on_background_light)
+                )
+            } else {
+                SystemBarStyle.dark(
+                    scrim = context.getResources().getColor(R.color.background_dark),
+                )
+            }
+        )
+
+        onDispose { }
+    }
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
+            .systemBarsPadding()
         ,
         bottomBar = {
             AnimatedVisibility(
