@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -61,11 +60,12 @@ fun ProductItem(
         //title and rating
         Row(
             verticalAlignment = Alignment.Top,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.width(160.dp)
         ) {
             Text(text = productName, modifier = Modifier.weight(1f))
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Star,
@@ -153,7 +153,7 @@ private fun ThumbnailSectionPreview1() {
 private fun ProductItemPreview() {
     KhanaTheme {
         ProductItem(
-            productName = "Test Title",
+            productName = "Test Title Test Title",
             productThumbnailImageLink = "https://www.imge.com/test.jpg",
             productRating = 4.7f,
             productPrice = 183f,

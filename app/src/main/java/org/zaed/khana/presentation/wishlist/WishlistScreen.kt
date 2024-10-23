@@ -1,12 +1,9 @@
 package org.zaed.khana.presentation.wishlist
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -18,17 +15,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.Product
-import org.zaed.khana.presentation.home.components.ProductItem
 import org.zaed.khana.presentation.home.components.SortedByFilterSection
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.wishlist.components.WishlistedProductsList
 
 @Composable
 fun WishlistScreen(
@@ -39,17 +34,18 @@ fun WishlistScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     WishlistScreenContent(
+        modifier = modifier,
         categories = state.categories.toList(),
         products = state.displayedProducts,
         selectedCategory = state.selectedCategory,
+        isLoading = state.isLoading,
         onAction = { action ->
             when (action) {
                 WishlistUiAction.OnBackPressed -> onBackPressed()
                 is WishlistUiAction.OnProductClicked -> onNavigateToProductDetails(action.productId)
                 else -> viewModel.handleUiAction(action)
             }
-        },
-        modifier = modifier
+        }
     )
 }
 
@@ -57,6 +53,7 @@ fun WishlistScreen(
 @Composable
 private fun WishlistScreenContent(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     categories: List<String>,
     products: List<Product>,
     selectedCategory: String,
@@ -80,39 +77,30 @@ private fun WishlistScreenContent(
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
-            SortedByFilterSection(
-                isLoading = false,
-                sortedByOption = categories,
-                selectedOption = selectedCategory,
-                onSelectOption = { category ->
-                    onAction(WishlistUiAction.OnCategoryClicked(category))
+            AnimatedVisibility(visible = categories.size > 1) {
+                SortedByFilterSection(
+                    isLoading = isLoading,
+                    sortedByOption = categories,
+                    selectedOption = selectedCategory,
+                    onSelectOption = { category ->
+                        onAction(WishlistUiAction.OnCategoryClicked(category))
+                    }
+                )
+            }
+            WishlistedProductsList(
+                products = products,
+                isLoading = isLoading,
+                onWishlistProduct = { productId ->
+                    onAction(
+                        WishlistUiAction.OnRemoverWishlistedProduct(
+                            productId
+                        )
+                    )
+                },
+                onProductClicked = { productId ->
+                    onAction(WishlistUiAction.OnProductClicked(productId))
                 }
             )
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                items(products.size) { index ->
-                    val product = products[index]
-                    ProductItem(
-                        productName = product.name,
-                        productThumbnailImageLink = product.thumbnailImageLink,
-                        productRating = product.rating,
-                        productPrice = product.basePrice,
-                        isWishlisted = true,
-                        onWishlistProduct = {
-                            onAction(
-                                WishlistUiAction.OnRemoverWishlistedProduct(
-                                    product.id
-                                )
-                            )
-                        },
-                        onProductClicked = { onAction(WishlistUiAction.OnProductClicked(product.id)) }
-                    )
-                }
-            }
         }
     }
 }
@@ -132,6 +120,7 @@ private fun WishlistScreenContentPreview() {
         WishlistScreenContent(
             categories = categories,
             products = products,
+            isLoading = false,
             selectedCategory = "All"
         ) {}
     }

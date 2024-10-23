@@ -9,4 +9,5 @@ data class WishlistUiState(
     val displayedProducts: List<Product> = emptyList(),
     val categories: Set<String> = emptySet(),
     val selectedCategory: String = "",
+    val isLoading: Boolean = true,
 )

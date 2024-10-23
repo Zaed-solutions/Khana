@@ -35,6 +35,7 @@ fun SortedByFilterSection(
             items(sortedByOption.size) { index ->
                 val option = sortedByOption[index]
                 ChipItem(
+                    modifier = Modifier.animateItem(),
                     title = option,
                     isSelected = option == selectedOption,
                     onSelectItem = onSelectOption
