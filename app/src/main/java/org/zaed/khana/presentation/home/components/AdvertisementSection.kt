@@ -26,6 +26,7 @@ fun AdvertisementSection(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
     ads: List<Advertisement>,
+    onBrowseOffersClicked: () -> Unit = {}
 ) {
     if(isLoading){
         AdvertisementSectionShimmer(modifier = modifier)
@@ -40,7 +41,8 @@ fun AdvertisementSection(
         ) {
             HorizontalPager(state = pagerState) { page ->
                 AdvertisementItem(
-                    advertisement = ads[page]
+                    advertisement = ads[page],
+                    onBrowseOffersClicked = onBrowseOffersClicked
                 )
             }
             if (ads.size > 1) {

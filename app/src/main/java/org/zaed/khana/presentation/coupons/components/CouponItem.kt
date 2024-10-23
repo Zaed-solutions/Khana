@@ -1,9 +1,11 @@
 package org.zaed.khana.presentation.coupons.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import org.zaed.khana.R
 import org.zaed.khana.data.model.Coupon
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.util.shimmerEffect
 
 @Composable
 fun CouponItem(
@@ -85,10 +88,77 @@ fun CouponItem(
             FilledTonalButton(
                 onClick = { onCopyCouponCode(coupon.code) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = cornerRadius, bottomEnd = cornerRadius),
+                shape = RoundedCornerShape(
+                    topStart = 0.dp,
+                    topEnd = 0.dp,
+                    bottomStart = cornerRadius,
+                    bottomEnd = cornerRadius
+                ),
             ) {
                 Text(
-                    modifier = Modifier.padding(vertical= 8.dp),
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    text = stringResource(R.string.copy_code),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 20.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CouponItemShimmer(modifier: Modifier = Modifier) {
+    val cornerRadius = 16.dp
+    OutlinedCard(
+        modifier = modifier.fillMaxWidth(),
+        shape = TicketShape(
+            circleRadius = 20.dp,
+            circleCutoffPercentage = 2.4F,
+            cornerSize = CornerSize(cornerRadius)
+        ),
+        border = CardDefaults.outlinedCardBorder()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp, horizontal = 32.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(26.dp)
+                        .shimmerEffect()
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(24.dp)
+                        .shimmerEffect()
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .height(26.dp)
+                        .shimmerEffect()
+                )
+
+            }
+            FilledTonalButton(
+                onClick = {},
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(
+                    topStart = 0.dp,
+                    topEnd = 0.dp,
+                    bottomStart = cornerRadius,
+                    bottomEnd = cornerRadius
+                ),
+            ) {
+                Text(
+                    modifier = Modifier.padding(vertical = 8.dp),
                     text = stringResource(R.string.copy_code),
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 20.sp
@@ -102,14 +172,22 @@ fun CouponItem(
 @Composable
 private fun CouponItemPreview() {
     KhanaTheme {
-        CouponItem(coupon = Coupon(
-            title = "WELCOME200",
-            description = "GET 50% OFF",
-            code = "WELCOME200",
-            discountPercentage = 20f,
-            minAmount = 2f
-        )) {
+        CouponItem(
+            coupon = Coupon(
+                title = "WELCOME200",
+                description = "GET 50% OFF",
+                code = "WELCOME200",
+                discountPercentage = 20f,
+                minAmount = 2f
+            )
+        ) {}
+    }
+}
 
-        }
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun CouponShimmerPreview() {
+    KhanaTheme {
+        CouponItemShimmer()
     }
 }

@@ -36,6 +36,7 @@ fun HomeScreen(
     onNavigateToFilterScreen: (ProductFilter) -> Unit,
     onNavigateToProductDetailsScreen: (String) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
+    onNavigateToCouponsScreen: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = true) {
@@ -56,6 +57,7 @@ fun HomeScreen(
                 HomeUiAction.OnFiltersButtonClicked -> onNavigateToFilterScreen(state.filter)
                 is HomeUiAction.OnProductClicked -> onNavigateToProductDetailsScreen(action.productId)
                 is HomeUiAction.OnSearchClicked -> onNavigateToSearchScreen()
+                HomeUiAction.OnBrowseOffersClicked -> onNavigateToCouponsScreen()
                 else -> viewModel.handleUiAction(action)
             }
         }
@@ -93,7 +95,8 @@ private fun HomeContent(
             AdvertisementSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 isLoading = isLoading,
-                ads = ads
+                ads = ads,
+                onBrowseOffersClicked = { onAction(HomeUiAction.OnBrowseOffersClicked) }
             )
             CategoriesSection(
                 isLoading = isLoading,

@@ -7,4 +7,5 @@ sealed interface CartUiAction{
     data class OnRemoveItemFromCart(val productId: String): CartUiAction
     data class OnApplyPromoCode(val code: String): CartUiAction
     data object OnProceedToCheckout: CartUiAction
+    data object OnViewCoupons: CartUiAction
 }

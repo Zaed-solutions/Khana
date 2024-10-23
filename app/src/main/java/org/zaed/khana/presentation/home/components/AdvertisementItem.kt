@@ -15,19 +15,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import org.zaed.khana.R
 import org.zaed.khana.data.model.Advertisement
 import org.zaed.khana.presentation.theme.KhanaTheme
 import org.zaed.khana.presentation.util.shimmerEffect
 
 @Composable
 fun AdvertisementItem(
+    modifier: Modifier = Modifier,
     advertisement: Advertisement,
-    modifier: Modifier = Modifier
+    onBrowseOffersClicked: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -45,7 +48,11 @@ fun AdvertisementItem(
         ) {
             val state = painter.state
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                Box(modifier = Modifier.fillMaxSize().shimmerEffect())
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .shimmerEffect()
+                )
             } else {
                 SubcomposeAsyncImageContent()
             }
@@ -63,8 +70,8 @@ fun AdvertisementItem(
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f)
             )
-            Button(onClick = { /*TODO*/ }, shape = MaterialTheme.shapes.large) {
-                Text(text = "Shop Now")
+            Button(onClick = { onBrowseOffersClicked() }, shape = MaterialTheme.shapes.large) {
+                Text(text = stringResource(R.string.browse_offers))
             }
         }
     }
