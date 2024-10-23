@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +22,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import org.zaed.khana.data.model.Advertisement
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.util.shimmerEffect
 
 @Composable
 fun AdvertisementItem(
@@ -45,7 +45,7 @@ fun AdvertisementItem(
         ) {
             val state = painter.state
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                CircularProgressIndicator()
+                Box(modifier = Modifier.fillMaxSize().shimmerEffect())
             } else {
                 SubcomposeAsyncImageContent()
             }

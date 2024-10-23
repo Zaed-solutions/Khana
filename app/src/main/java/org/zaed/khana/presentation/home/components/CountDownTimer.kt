@@ -27,22 +27,31 @@ fun CountDownTimer(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(text = "Closing in:")
-        Text(text = hours.toString().padStart(2, '0'),
+        Text(
+            text = hours.toString().padStart(2, '0'),
+            color= MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.extraSmall)
                 .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(horizontal = 3.dp)
         )
         Text(text = ":")
-        Text(text = minutes.toString().padStart(2, '0'),
+        Text(
+            text = minutes.toString().padStart(2, '0'),
+            color= MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.extraSmall)
                 .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(horizontal = 3.dp)
         )
         Text(text = ":")
-        Text(text = remainingSeconds.toString().padStart(2, '0'),
+        Text(
+            text = remainingSeconds.toString().padStart(2, '0'),
+            color= MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.extraSmall)
                 .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(horizontal = 3.dp)
         )
     }
 }

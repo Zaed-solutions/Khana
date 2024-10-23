@@ -8,11 +8,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.ProductFilter
-import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.AdvertisementRepository
+import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.CategoryRepository
 import org.zaed.khana.data.repository.ProductRepository
-import org.zaed.khana.data.util.SortByFilterOption
 
 class HomeViewModel(
     private val advertisementRepo: AdvertisementRepository,
@@ -28,7 +27,7 @@ class HomeViewModel(
         fetchAdvertisements()
         fetchCategories()
         fetchFlashSaleEndTime()
-        fetchSorterByOptions()
+        fetchSortedByOptions()
     }
 
     private fun fetchCurrentUser(){
@@ -77,11 +76,11 @@ class HomeViewModel(
         }
     }
 
-    private fun fetchSorterByOptions(){
+    private fun fetchSortedByOptions(){
         viewModelScope.launch {
             productRepo.fetchSortedByOptions().collect{ result ->
                 result.onSuccessWithData { options ->
-                    _uiState.update { it.copy(sorterByOptions = options) }
+                    _uiState.update { it.copy(sortedByOptions = options) }
                     fetchProducts()
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchLabels", error.userMessage)
@@ -95,7 +94,7 @@ class HomeViewModel(
             productRepo.fetchProductsByFilter(uiState.value.filter).collect{ result ->
                 Log.d("HomeViewModel:fetchProducts", result.toString())
                 result.onSuccessWithData { products ->
-                    _uiState.update { it.copy(products = products) }
+                    _uiState.update { it.copy(products = products, isLoading = false) }
                 }.onFailure { error ->
                     Log.e("HomeViewModel:fetchProducts", error.userMessage)
                 }

@@ -172,9 +172,6 @@ fun App() {
                 val filter = backStackEntry.toRoute<HomeScreen>().filter
                 HomeScreen(
                     productFilter = filter,
-                    onNavigateToNotificationsScreen = {
-                        //TODO
-                    },
                     onNavigateToFilterScreen = { initialFilter ->
                         navController.navigate(FilterScreen(initialFilter))
                     },

@@ -26,8 +26,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.Product
-import org.zaed.khana.presentation.home.components.SortedByFilterSection
 import org.zaed.khana.presentation.home.components.ProductItem
+import org.zaed.khana.presentation.home.components.SortedByFilterSection
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
@@ -62,8 +62,6 @@ private fun WishlistScreenContent(
     selectedCategory: String,
     onAction: (WishlistUiAction) -> Unit
 ) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -83,6 +81,7 @@ private fun WishlistScreenContent(
             modifier = Modifier.padding(paddingValues)
         ) {
             SortedByFilterSection(
+                isLoading = false,
                 sortedByOption = categories,
                 selectedOption = selectedCategory,
                 onSelectOption = { category ->
@@ -110,8 +109,7 @@ private fun WishlistScreenContent(
                                 )
                             )
                         },
-                        onProductClicked = { onAction(WishlistUiAction.OnProductClicked(product.id)) },
-                        screenWidth = screenWidth.value.toInt()
+                        onProductClicked = { onAction(WishlistUiAction.OnProductClicked(product.id)) }
                     )
                 }
             }

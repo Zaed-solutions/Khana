@@ -1,16 +1,16 @@
 package org.zaed.khana.presentation.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,7 +23,6 @@ import org.zaed.khana.data.model.ProductFilter
 import org.zaed.khana.presentation.home.components.AdvertisementSection
 import org.zaed.khana.presentation.home.components.CategoriesSection
 import org.zaed.khana.presentation.home.components.FlashSaleSection
-import org.zaed.khana.presentation.home.components.LocationAndNotificationsSection
 import org.zaed.khana.presentation.home.components.ProductItems
 import org.zaed.khana.presentation.home.components.SearchAndFiltersSection
 import org.zaed.khana.presentation.home.components.SortedByFilterSection
@@ -35,7 +34,6 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     productFilter: ProductFilter,
     onNavigateToFilterScreen: (ProductFilter) -> Unit,
-    onNavigateToNotificationsScreen: () -> Unit,
     onNavigateToProductDetailsScreen: (String) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
 ) {
@@ -45,18 +43,17 @@ fun HomeScreen(
     }
     HomeContent(
         modifier = modifier,
-        hasNewNotification = state.hasNewNotification,
+        isLoading = state.isLoading,
         ads = state.ads,
         categories = state.categories,
         flashSaleEndsAtEpochSeconds = state.flashSaleEndsAtEpochSeconds,
-        sortedByOptions = state.sorterByOptions,
+        sortedByOptions = state.sortedByOptions,
         selectedLabel = state.filter.sortedBy,
         products = state.products,
         wishlistedProducts = state.wishlistedProductsIds,
         onAction = { action ->
             when (action) {
                 HomeUiAction.OnFiltersButtonClicked -> onNavigateToFilterScreen(state.filter)
-                HomeUiAction.OnNotificationButtonClicked -> onNavigateToNotificationsScreen()
                 is HomeUiAction.OnProductClicked -> onNavigateToProductDetailsScreen(action.productId)
                 is HomeUiAction.OnSearchClicked -> onNavigateToSearchScreen()
                 else -> viewModel.handleUiAction(action)
@@ -67,7 +64,7 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
-    hasNewNotification: Boolean,
+    isLoading: Boolean,
     ads: List<Advertisement>,
     categories: List<Category>,
     flashSaleEndsAtEpochSeconds: Long,
@@ -78,55 +75,51 @@ private fun HomeContent(
     onAction: (HomeUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.padding(paddingValues),
-            contentPadding = PaddingValues(all = 16.dp),
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(vertical = 16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item {
-                LocationAndNotificationsSection(
-                    onNotificationsButtonClicked = {
-                        onAction(HomeUiAction.OnNotificationButtonClicked)
-                    },
-                    hasNewNotification = hasNewNotification
-                )
-            }
-            item {
-                SearchAndFiltersSection(
-                    onFiltersButtonClicked = { onAction(HomeUiAction.OnFiltersButtonClicked) },
-                    onChangeSearchingStatus = { if (it) onAction(HomeUiAction.OnSearchClicked) }
-                )
-            }
-            item {
-                AdvertisementSection(ads = ads)
-            }
-            item {
-                CategoriesSection(categories)
-            }
-            item {
-                FlashSaleSection(flashSaleEndsAtEpochSeconds)
-            }
-            item {
-                SortedByFilterSection(
-                    sortedByOption = sortedByOptions,
-                    selectedOption = selectedLabel,
-                    onSelectOption = { onAction(HomeUiAction.OnUpdateSortedByOption(it)) }
-                )
-            }
-            item {
-                ProductItems(
-                    products = products,
-                    wishlistedProducts = wishlistedProducts,
-                    onProductClicked = { onAction(HomeUiAction.OnProductClicked(it)) },
-                    onWishlistProduct = { onAction(HomeUiAction.OnWishlistProduct(it)) },
-                    screenWidth = screenWidth.value.toInt()
-                )
-            }
+            SearchAndFiltersSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onFiltersButtonClicked = { onAction(HomeUiAction.OnFiltersButtonClicked) },
+                onChangeSearchingStatus = { if (it) onAction(HomeUiAction.OnSearchClicked) }
+            )
+            AdvertisementSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                isLoading = isLoading,
+                ads = ads
+            )
+            CategoriesSection(
+                isLoading = isLoading,
+                categories = categories
+            )
+            FlashSaleSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                isLoading = isLoading,
+                endsAtEpochSeconds = flashSaleEndsAtEpochSeconds
+            )
+
+            SortedByFilterSection(
+                isLoading = isLoading,
+                sortedByOption = sortedByOptions,
+                selectedOption = selectedLabel,
+                onSelectOption = { onAction(HomeUiAction.OnUpdateSortedByOption(it)) }
+            )
+
+            ProductItems(
+                isLoading = isLoading,
+                products = products,
+                wishlistedProducts = wishlistedProducts,
+                onProductClicked = { onAction(HomeUiAction.OnProductClicked(it)) },
+                onWishlistProduct = { onAction(HomeUiAction.OnWishlistProduct(it)) },
+            )
+
         }
     }
 }
@@ -135,8 +128,7 @@ private fun HomeContent(
 @Composable
 private fun HomeScreenContentPreview() {
     val ads = listOf(
-        Advertisement(title = "Test Advertisement 1"),
-        Advertisement(title = "Test Advertisement 2")
+        Advertisement(title = "Test Advertisement 1")
     )
     val categories = listOf(
         Category("", "Jacket"),
@@ -152,7 +144,7 @@ private fun HomeScreenContentPreview() {
     )
     KhanaTheme {
         HomeContent(
-            hasNewNotification = true,
+            isLoading = true,
             ads = ads,
             categories = categories,
             flashSaleEndsAtEpochSeconds = Clock.System.now().epochSeconds + 30000,
