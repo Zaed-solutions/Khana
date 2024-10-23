@@ -90,7 +90,7 @@ dependencies {
     // If using coroutines with the SDK
     implementation (libs.kotlinx.coroutines.core)
     implementation(libs.play.services.auth)
-    implementation("com.tbuonomo:dotsindicator:5.0")
+    implementation(libs.dotsindicator)
     implementation(libs.coil.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.ktor.client.core)

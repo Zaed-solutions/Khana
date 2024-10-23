@@ -1,4 +1,4 @@
-package org.zaed.khana.presentation
+package org.zaed.khana.app
 
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
