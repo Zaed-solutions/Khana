@@ -119,4 +119,8 @@
     <string name="paypal">PayPal</string>
     <string name="user_avatar">user avatar</string>
     <string name="added_to_cart">Added to cart</string>
+    <string name="browse_offers">Browse Offers</string>
+    <string name="delivery_fee">Delivery Fee</string>
+    <string name="total_cost">Total Cost</string>
+    <string name="view_available_coupons">View Available Coupons</string>
 </resources>

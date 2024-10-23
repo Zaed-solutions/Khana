@@ -21,7 +21,7 @@ class CouponsViewModel(
         viewModelScope.launch {
             couponRepo.fetchCoupons().collect { result ->
                 result.onSuccessWithData { coupons ->
-                    _uiState.update { it.copy(coupons = coupons) }
+                    _uiState.update { it.copy(coupons = coupons, isLoading = false) }
                 }.onFailure { error ->
                     Log.e("CouponsViewModel:fetchCoupons", error.userMessage)
                 }

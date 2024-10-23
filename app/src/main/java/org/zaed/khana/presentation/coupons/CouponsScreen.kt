@@ -1,19 +1,13 @@
 package org.zaed.khana.presentation.coupons
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -28,16 +22,12 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.Coupon
-import org.zaed.khana.data.util.CartResult
-import org.zaed.khana.data.util.ProductResult
-import org.zaed.khana.data.util.userMessage
-import org.zaed.khana.presentation.coupons.components.CouponItem
+import org.zaed.khana.presentation.coupons.components.CouponsList
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
@@ -49,6 +39,7 @@ fun CouponsScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     CouponsScreenContent(
         modifier = modifier,
+        isLoading = state.isLoading,
         coupons = state.coupons,
         onAction = { action ->
             when (action) {
@@ -58,10 +49,11 @@ fun CouponsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CouponsScreenContent(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     coupons: List<Coupon>,
     onAction: (CouponsUiAction) -> Unit,
 ) {
@@ -85,32 +77,20 @@ private fun CouponsScreenContent(
             )
         }
     ) { paddingValues ->
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues)
-        ) {
-            item {
-                Text(text = stringResource(R.string.best_offers_for_you), style = MaterialTheme.typography.headlineSmall)
+        CouponsList(
+            modifier = modifier.padding(paddingValues),
+            isLoading = isLoading,
+            coupons = coupons,
+            onCopyCouponCode = { code ->
+                clipboardManager.setText(AnnotatedString(code))
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "Copied coupon code to clipboard!",
+                        withDismissAction = true
+                    )
+                }
             }
-            items(coupons.size) { index ->
-                val coupon = coupons[index]
-                CouponItem(
-                    coupon = coupon,
-                    onCopyCouponCode = { code ->
-                        clipboardManager.setText(AnnotatedString(code))
-                        scope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = "Copied coupon code to clipboard!",
-                                withDismissAction = true
-                            )
-                        }
-                    }
-                )
-            }
-        }
+        )
     }
 }
 
@@ -162,8 +142,11 @@ private fun CouponScreenContentPreview() {
         ),
     )
     KhanaTheme {
-        CouponsScreenContent(coupons = coupons) {
-            
+        CouponsScreenContent(
+            isLoading = false,
+            coupons = coupons
+        ) {
+
         }
     }
 }
