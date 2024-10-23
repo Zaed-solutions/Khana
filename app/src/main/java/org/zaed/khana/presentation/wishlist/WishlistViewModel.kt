@@ -62,11 +62,12 @@ class WishlistViewModel(
                 _uiState.update {
                     it.copy(
                         categories = categories,
-                        selectedCategory = selectedCategory
+                        selectedCategory = selectedCategory,
+                        isLoading = false
                     )
                 }
             } else {
-                _uiState.update { it.copy(categories = categories, selectedCategory = "All") }
+                _uiState.update { it.copy(categories = categories, selectedCategory = "All", isLoading = false) }
             }
             filterProductsByCategory(uiState.value.selectedCategory)
         }

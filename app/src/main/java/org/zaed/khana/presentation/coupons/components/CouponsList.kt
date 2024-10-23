@@ -41,6 +41,7 @@ fun CouponsList(
             items(coupons.size) { index ->
                 val coupon = coupons[index]
                 CouponItem(
+                    modifier = Modifier.animateItem(),
                     coupon = coupon,
                     onCopyCouponCode = onCopyCouponCode
                 )

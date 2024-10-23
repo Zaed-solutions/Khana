@@ -40,6 +40,7 @@ fun ProductItems(
                 val product = products[index]
                 val isWishlisted = wishlistedProducts.contains(product.id)
                 ProductItem(
+                    modifier = Modifier.animateItem(),
                     productName = product.name,
                     productThumbnailImageLink = product.thumbnailImageLink,
                     productRating = product.rating,

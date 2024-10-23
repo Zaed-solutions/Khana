@@ -50,6 +50,7 @@ fun CategoriesSection(
                 items(categories.size) { index ->
                     val category = categories[index]
                     CategoryItem(
+                        modifier = Modifier.animateItem(),
                         categoryImage = category.categoryImage,
                         categoryTitle = category.categoryTitle
                     )
