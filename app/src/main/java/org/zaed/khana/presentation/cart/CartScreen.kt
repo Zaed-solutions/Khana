@@ -45,6 +45,7 @@ fun CartScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
     onNavigateToCheckout: () -> Unit,
+    onNavigateToCoupons: () -> Unit,
     viewModel: CartViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -55,6 +56,7 @@ fun CartScreen(
             when (action) {
                 CartUiAction.OnBackPressed -> onBackPressed()
                 CartUiAction.OnProceedToCheckout -> onNavigateToCheckout()
+                CartUiAction.OnViewCoupons -> onNavigateToCoupons()
                 else -> viewModel.handleUiAction(action)
             }
         },
@@ -166,6 +168,9 @@ private fun CartScreenContent(
                         deliveryFee = deliveryFee,
                         onApplyPromoCode = { code ->
                             onAction(CartUiAction.OnApplyPromoCode(code))
+                        },
+                        onViewCouponsClicked = {
+                            onAction(CartUiAction.OnViewCoupons)
                         },
                         onProceedToCheckout = {
                             onAction(CartUiAction.OnProceedToCheckout)

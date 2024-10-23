@@ -1,15 +1,14 @@
 package org.zaed.khana.presentation.cart.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
@@ -35,6 +35,7 @@ fun ProceedToCheckoutBottomSheetContent(
     subTotalPrice: Float,
     deliveryFee: Float,
     onApplyPromoCode: (String) -> Unit,
+    onViewCouponsClicked: () -> Unit,
     onProceedToCheckout: () -> Unit,
 ) {
     var code by remember {
@@ -44,7 +45,6 @@ fun ProceedToCheckoutBottomSheetContent(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         //promo code text field
@@ -65,19 +65,30 @@ fun ProceedToCheckoutBottomSheetContent(
                 ) {
                     Text(text = stringResource(R.string.apply))
                 }
-            })
+            }
+        )
+            Text(
+                text = stringResource(R.string.view_available_coupons),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    textDecoration = TextDecoration.Underline,
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .clickable { onViewCouponsClicked() }
+            )
         //price calculations
         PriceCalculationItem(
-            modifier = Modifier.padding(top = 16.dp),
+            modifier = Modifier.padding(top = 8.dp),
             title = "Sub-Total",
             price = subTotalPrice
         )
-        PriceCalculationItem(title = "Delivery Fee", price = deliveryFee)
+        PriceCalculationItem(title = stringResource(R.string.delivery_fee), price = deliveryFee)
         AnimatedVisibility(visible = discountPercentage > 0) {
             PriceCalculationItem(title = "Discount", price = discountPercentage * subTotalPrice)
         }
         PriceCalculationItem(
-            title = "Total Cost",
+            title = stringResource(R.string.total_cost),
             price = subTotalPrice + deliveryFee - discountPercentage * subTotalPrice,
             modifier = Modifier.padding(vertical = 8.dp)
         )
@@ -115,7 +126,8 @@ private fun ProceedToCheckoutBottomSheetContentPreview() {
             discountPercentage = 0.1f,
             subTotalPrice = 407.94f,
             deliveryFee = 25f,
-            onApplyPromoCode = {}
+            onApplyPromoCode = {},
+            onViewCouponsClicked = {},
         ) {
         }
     }

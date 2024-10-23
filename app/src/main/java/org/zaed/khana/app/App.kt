@@ -180,6 +180,9 @@ fun App() {
                     },
                     onNavigateToProductDetailsScreen = { productId ->
                         navController.navigate(ProductDetailsScreen(productId = productId))
+                    },
+                    onNavigateToCouponsScreen = {
+                        navController.navigate(CouponsScreen)
                     }
                 )
             }
@@ -187,6 +190,9 @@ fun App() {
                 CartScreen(
                     onBackPressed = {
                         navController.popBackStack()
+                    },
+                    onNavigateToCoupons = {
+                        navController.navigate(CouponsScreen)
                     },
                     onNavigateToCheckout = {
                         navController.navigate(CheckoutScreen)
