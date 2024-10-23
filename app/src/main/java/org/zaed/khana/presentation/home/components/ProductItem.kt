@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +31,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.util.shimmerEffect
 import org.zaed.khana.presentation.util.toMoney
 
 @Composable
@@ -43,20 +43,18 @@ fun ProductItem(
     isWishlisted: Boolean,
     onWishlistProduct: () -> Unit,
     onProductClicked: () -> Unit,
-    screenWidth: Int,
     modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
-            .width(((screenWidth - 40) / 2).dp)
+            .width(160.dp)
             .clickable { onProductClicked() }
     ) {
         //image and wishlist
         ThumbnailSection(
             productThumbnailImageLink = productThumbnailImageLink,
-            screenWidth = screenWidth,
             onWishlistProduct = onWishlistProduct,
             isWishlisted = isWishlisted
         )
@@ -71,7 +69,7 @@ fun ProductItem(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Star,
-                    tint = Color.Yellow,
+                    tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = null
                 )
                 Text(text = DecimalFormat("#.#").format(productRating))
@@ -85,7 +83,6 @@ fun ProductItem(
 @Composable
 private fun ThumbnailSection(
     productThumbnailImageLink: String,
-    screenWidth: Int,
     onWishlistProduct: () -> Unit,
     isWishlisted: Boolean,
     modifier: Modifier = Modifier
@@ -98,12 +95,12 @@ private fun ThumbnailSection(
             contentDescription = "product thumbnail",
             modifier = Modifier
                 .align(Alignment.Center)
-                .size(((screenWidth - 40) / 2).dp),
+                .size(160.dp),
             contentScale = ContentScale.FillBounds
         ) {
             val state = painter.state
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                CircularProgressIndicator(Modifier.size(36.dp))
+                Box(modifier = Modifier.fillMaxSize().shimmerEffect())
             } else {
                 SubcomposeAsyncImageContent()
             }
@@ -111,8 +108,8 @@ private fun ThumbnailSection(
         IconButton(
             onClick = { onWishlistProduct() },
             colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(
-                    alpha = 0.5f
+                containerColor = MaterialTheme.colorScheme.surface.copy(
+                    alpha = 0.7f
                 ), contentColor = MaterialTheme.colorScheme.primary
             ),
             modifier = Modifier
@@ -133,7 +130,6 @@ private fun ThumbnailSectionPreview2() {
     KhanaTheme {
         ThumbnailSection(
             productThumbnailImageLink = "https://www.imge.com/test.jpg",
-            screenWidth = 400,
             onWishlistProduct = { /*TODO*/ },
             isWishlisted = false
         )
@@ -146,7 +142,6 @@ private fun ThumbnailSectionPreview1() {
     KhanaTheme {
         ThumbnailSection(
             productThumbnailImageLink = "https://www.imge.com/test.jpg",
-            screenWidth = 400,
             onWishlistProduct = { /*TODO*/ },
             isWishlisted = true
         )
@@ -165,7 +160,6 @@ private fun ProductItemPreview() {
             isWishlisted = false,
             onWishlistProduct = { /*TODO*/ },
             onProductClicked = { /*TODO*/ },
-            screenWidth = 400
         )
     }
 }

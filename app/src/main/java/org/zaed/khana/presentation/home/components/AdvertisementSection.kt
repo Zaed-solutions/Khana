@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.home.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
@@ -17,36 +19,54 @@ import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
 import com.tbuonomo.viewpagerdotsindicator.compose.type.ShiftIndicatorType
 import org.zaed.khana.data.model.Advertisement
 import org.zaed.khana.presentation.theme.KhanaTheme
+import org.zaed.khana.presentation.util.shimmerEffect
 
 @Composable
 fun AdvertisementSection(
-    ads: List<Advertisement>,
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
+    ads: List<Advertisement>,
 ) {
-    val pagerState = rememberPagerState(pageCount = {
-        ads.size
-    })
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        HorizontalPager(state = pagerState) { page ->
-            AdvertisementItem(
-                advertisement = ads[page]
-            )
+    if(isLoading){
+        AdvertisementSectionShimmer(modifier = modifier)
+    } else {
+        val pagerState = rememberPagerState(pageCount = {
+            ads.size
+        })
+        Column(
+            modifier = modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HorizontalPager(state = pagerState) { page ->
+                AdvertisementItem(
+                    advertisement = ads[page]
+                )
+            }
+            if (ads.size > 1) {
+                DotsIndicator(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .height(8.dp),
+                    dotCount = ads.size,
+                    type = ShiftIndicatorType(dotsGraphic = DotGraphic(color = MaterialTheme.colorScheme.primary)),
+                    pagerState = pagerState
+                )
+            }
         }
-        if(ads.size > 1) {
-            DotsIndicator(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .height(8.dp),
-                dotCount = ads.size,
-                type = ShiftIndicatorType(dotsGraphic = DotGraphic(color = MaterialTheme.colorScheme.primary)),
-                pagerState = pagerState
-            )
-        }
+
     }
+}
+
+@Composable
+private fun AdvertisementSectionShimmer(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .clip(MaterialTheme.shapes.large)
+            .shimmerEffect()
+    )
 }
 
 
@@ -81,6 +101,6 @@ private fun AdvertisementSectionPreview() {
         )
     )
     KhanaTheme {
-        AdvertisementSection(modifier = Modifier.padding(16.dp), ads = ads)
+        AdvertisementSection(modifier = Modifier.padding(16.dp), isLoading = false, ads = ads)
     }
 }

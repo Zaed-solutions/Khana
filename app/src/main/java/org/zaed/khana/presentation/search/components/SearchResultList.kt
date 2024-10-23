@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.data.model.Product
@@ -32,7 +31,6 @@ fun SearchResultList(
     onProductClicked: (String) -> Unit,
     onWishlistProduct: (String) -> Unit,
     wishlistedProducts: List<String>,
-    screenWidth: Int,
 ) {
     val state = rememberLazyGridState()
     LazyVerticalGrid(
@@ -72,7 +70,6 @@ fun SearchResultList(
                 isWishlisted = wishlistedProducts.contains(product.id),
                 onWishlistProduct = { onWishlistProduct(product.id) },
                 onProductClicked = { onProductClicked(product.id) },
-                screenWidth = screenWidth
             )
         }
     }
@@ -88,15 +85,12 @@ private fun SearchResultListPreview() {
         Product(id = "4", name = "Product 4", rating = 3.8f, basePrice = 170.9f),
         Product(id = "5", name = "Product 5", rating = 3.4f, basePrice = 360.3f),
     )
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
     KhanaTheme {
         SearchResultList(
             products = products,
             onProductClicked = {},
             onWishlistProduct = {},
-            wishlistedProducts = listOf("2", "5"),
-            screenWidth = screenWidth.value.toInt()
+            wishlistedProducts = listOf("2", "5")
         )
     }
 }

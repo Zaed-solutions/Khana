@@ -43,8 +43,8 @@ fun ProductDetailsTopBar(
             IconButton(
                 onClick = { onWishlistProduct() },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(
-                        alpha = 0.5f
+                    containerColor = MaterialTheme.colorScheme.surface.copy(
+                        alpha = 0.7f
                     ), contentColor = MaterialTheme.colorScheme.primary
                 ),
             ) {
