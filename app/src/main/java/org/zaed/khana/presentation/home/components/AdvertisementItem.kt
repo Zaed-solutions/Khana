@@ -13,18 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.SubcomposeAsyncImageContent
 import org.zaed.khana.R
 import org.zaed.khana.data.model.Advertisement
+import org.zaed.khana.presentation.components.StatefulAsyncImage
 import org.zaed.khana.presentation.theme.KhanaTheme
-import org.zaed.khana.presentation.util.shimmerEffect
 
 @Composable
 fun AdvertisementItem(
@@ -35,28 +30,13 @@ fun AdvertisementItem(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.large)
             .height(150.dp)
     ) {
-        SubcomposeAsyncImage(
-            model = advertisement.backgroundImageUrl,
-            contentDescription = "ad background",
-            modifier = Modifier
-                .align(Alignment.Center)
-                .fillMaxSize(),
-            contentScale = ContentScale.Crop
-        ) {
-            val state = painter.state
-            if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .shimmerEffect()
-                )
-            } else {
-                SubcomposeAsyncImageContent()
-            }
-        }
+        StatefulAsyncImage(
+            modifier = Modifier.fillMaxSize().align(Alignment.Center),
+            imageUrl = advertisement.backgroundImageUrl,
+            shape = MaterialTheme.shapes.large
+        )
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)

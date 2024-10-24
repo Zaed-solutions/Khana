@@ -13,6 +13,8 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -80,10 +82,13 @@ private fun SearchScreenContent(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(id = R.string.search))
+                    Text(
+                        stringResource(id = R.string.search),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onAction(SearchUiAction.OnBackPressed) }) {
+                    OutlinedIconButton(onClick = { onAction(SearchUiAction.OnBackPressed) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "back button"

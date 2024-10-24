@@ -89,7 +89,10 @@ fun PaymentScreenContent(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.payment_methods))
+                    Text(
+                        text = stringResource(R.string.payment_methods),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
                     OutlinedIconButton(onClick = { onAction(PaymentUiAction.OnBackPressed) }) {

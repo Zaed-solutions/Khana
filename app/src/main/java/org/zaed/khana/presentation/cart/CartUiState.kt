@@ -7,7 +7,8 @@ data class CartUiState(
     val currentUser: User = User(),
     val cartItems: List<CartItem> = emptyList(),
     val discountPercentage: Float = 0f,
-    val deliveryFee: Float = 0f
+    val deliveryFee: Float = 0f,
+    val isLoading: Boolean = true,
 ){
     val subTotalPrice: Float
         get() = cartItems.sumOf { (it.productBasePrice * it.quantity).toDouble()}.toFloat()

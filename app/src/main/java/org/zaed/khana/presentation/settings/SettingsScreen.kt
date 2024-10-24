@@ -97,7 +97,10 @@ private fun SettingsScreenContent(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.settings))
+                    Text(
+                        text = stringResource(R.string.settings),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
                     OutlinedIconButton(onClick = { onAction(SettingsUiAction.OnBackPressed) }) {

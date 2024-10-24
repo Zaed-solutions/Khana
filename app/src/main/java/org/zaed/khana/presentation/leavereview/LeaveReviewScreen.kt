@@ -79,7 +79,10 @@ private fun LeaveReviewScreenContent(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.leave_review))
+                    Text(
+                        text = stringResource(R.string.leave_review),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
                     OutlinedIconButton(onClick = { onAction(LeaveReviewUiAction.OnBackPressed) }) {

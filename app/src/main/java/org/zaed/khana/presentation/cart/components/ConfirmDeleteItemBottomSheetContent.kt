@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +31,8 @@ fun ConfirmDeleteItemBottomSheetContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -41,16 +43,22 @@ fun ConfirmDeleteItemBottomSheetContent(
         CartItem(
             item = item,
             showControlQuantitySection = false,
-            modifier = Modifier.padding(top = 24.dp, bottom = 16.dp)
+            modifier = Modifier.padding(vertical = 8.dp)
         )
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            FilledTonalButton(onClick = { onCancel() }) {
+            FilledTonalButton(
+                onClick = { onCancel() },
+                modifier = Modifier.widthIn(min = 150.dp)
+            ) {
                 Text(stringResource(R.string.cancel))
             }
-            Button(onClick = { onRemoveCartItem(item.productId) }) {
+            Button(
+                onClick = { onRemoveCartItem(item.productId) },
+                modifier = Modifier.widthIn(min = 150.dp)
+            ) {
                 Text(text = stringResource(R.string.yes_remove))
             }
         }

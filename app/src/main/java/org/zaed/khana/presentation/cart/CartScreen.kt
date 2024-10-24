@@ -1,43 +1,41 @@
 package org.zaed.khana.presentation.cart
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.CartItem
 import org.zaed.khana.data.model.Color
-import org.zaed.khana.presentation.cart.components.CartItem
+import org.zaed.khana.presentation.cart.components.CartItemsList
 import org.zaed.khana.presentation.cart.components.ConfirmDeleteItemBottomSheetContent
 import org.zaed.khana.presentation.cart.components.ProceedToCheckoutBottomSheetContent
-import org.zaed.khana.presentation.cart.components.SwipeToDeleteContainer
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
@@ -51,6 +49,7 @@ fun CartScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     CartScreenContent(
         modifier = modifier,
+        isLoading = state.isLoading,
         cartItems = state.cartItems,
         onAction = { action ->
             when (action) {
@@ -71,25 +70,33 @@ fun CartScreen(
 @Composable
 private fun CartScreenContent(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     cartItems: List<CartItem>,
     onAction: (CartUiAction) -> Unit,
     discountPercentage: Float,
     subTotalPrice: Float,
     deliveryFee: Float,
 ) {
-    var swipedItemIndex by remember { mutableIntStateOf(-1) }
+    var swipedItemId by remember { mutableStateOf("") }
     var isItemSwiped by remember { mutableStateOf(false) }
     var showBottomSheet by remember {
         mutableStateOf(false)
     }
     val sheetState = rememberModalBottomSheetState()
+    val bottomSheetModifier = Modifier
+        .windowInsetsPadding(WindowInsets.ime)
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.my_cart)) },
+                title = {
+                    Text(
+                        text = stringResource(R.string.my_cart),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                        },
                 navigationIcon = {
-                    IconButton(onClick = { onAction(CartUiAction.OnBackPressed) }) {
+                    OutlinedIconButton(onClick = { onAction(CartUiAction.OnBackPressed) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null
@@ -100,82 +107,72 @@ private fun CartScreenContent(
                     TextButton(
                         enabled = cartItems.isNotEmpty(),
                         onClick = {
-                        isItemSwiped = false
-                        showBottomSheet = true
-                    }) {
+                            isItemSwiped = false
+                            showBottomSheet = true
+                        }) {
                         Text(text = "Checkout")
                     }
                 })
         }
     ) { paddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues),
-            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            items(cartItems.size) { index ->
-                val item = cartItems[index]
-                SwipeToDeleteContainer(
-                    onDelete = {
-                        swipedItemIndex = index
-                        isItemSwiped = true
-                        showBottomSheet = true
-                    }
-                ) {
-                    CartItem(
-                        item = item,
-                        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                        onIncrementQuantity = { onAction(CartUiAction.OnIncrementItemQuantity(item.productId)) },
-                        onDecrementQuantity = {
-                            if (item.quantity == 1) {
-                                swipedItemIndex = index
-                                isItemSwiped = true
-                                showBottomSheet = true
-                            } else {
-                                onAction(CartUiAction.OnDecrementItemQuantity(item.productId))
-                            }
-
-                        }
-                    )
-                }
-            }
-        }
-        if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showBottomSheet = false
+            CartItemsList(
+                isLoading = isLoading,
+                cartItems = cartItems,
+                onDeleteCartItem = { id ->
+                    swipedItemId = id
+                    isItemSwiped = true
+                    showBottomSheet = true
                 },
-                sheetState = sheetState
-            ) {
-                if (isItemSwiped) {
-                    val item = cartItems[swipedItemIndex]
-                    ConfirmDeleteItemBottomSheetContent(
-                        item = item,
-                        onRemoveCartItem = {
-                            onAction(CartUiAction.OnRemoveItemFromCart(item.productId))
-                            showBottomSheet = false
-                        },
-                        onCancel = {
-                            showBottomSheet = false
-                        }
-                    )
-                } else {
-                    ProceedToCheckoutBottomSheetContent(
-                        discountPercentage = discountPercentage,
-                        subTotalPrice = subTotalPrice,
-                        deliveryFee = deliveryFee,
-                        onApplyPromoCode = { code ->
-                            onAction(CartUiAction.OnApplyPromoCode(code))
-                        },
-                        onViewCouponsClicked = {
-                            onAction(CartUiAction.OnViewCoupons)
-                        },
-                        onProceedToCheckout = {
-                            onAction(CartUiAction.OnProceedToCheckout)
-                        }
-                    )
+                onIncrementItemQuantity = { id ->
+                    onAction(CartUiAction.OnIncrementItemQuantity(id))
+                },
+                onDecrementItemQuantity = { id ->
+                    onAction(CartUiAction.OnDecrementItemQuantity(id))
+                }
+            )
+            if (showBottomSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    windowInsets = WindowInsets.ime.only(WindowInsetsSides.Bottom),
+                    sheetState = sheetState
+                ) {
+                    if (isItemSwiped) {
+                        val item = cartItems.first { it.id == swipedItemId }
+                        ConfirmDeleteItemBottomSheetContent(
+                            modifier = bottomSheetModifier,
+                            item = item,
+                            onRemoveCartItem = {
+                                onAction(CartUiAction.OnRemoveItemFromCart(item.productId))
+                                showBottomSheet = false
+                            },
+                            onCancel = {
+                                showBottomSheet = false
+                            }
+                        )
+                    } else {
+                        ProceedToCheckoutBottomSheetContent(
+                            modifier = bottomSheetModifier,
+                            discountPercentage = discountPercentage,
+                            subTotalPrice = subTotalPrice,
+                            deliveryFee = deliveryFee,
+                            onApplyPromoCode = { code ->
+                                onAction(CartUiAction.OnApplyPromoCode(code))
+                            },
+                            onViewCouponsClicked = {
+                                onAction(CartUiAction.OnViewCoupons)
+                            },
+                            onProceedToCheckout = {
+                                onAction(CartUiAction.OnProceedToCheckout)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -225,10 +222,11 @@ private fun CartScreenContentPreview() {
     KhanaTheme {
         CartScreenContent(
             cartItems = items,
-                onAction ={},
-                discountPercentage = 0.05f,
-                subTotalPrice = 2199.95f,
-                deliveryFee = 25f
-            )
+            onAction = {},
+            discountPercentage = 0.05f,
+            subTotalPrice = 2199.95f,
+            deliveryFee = 25f,
+            isLoading = false
+        )
     }
 }

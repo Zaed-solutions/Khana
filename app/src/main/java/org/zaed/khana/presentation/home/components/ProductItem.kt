@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,15 +21,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.SubcomposeAsyncImageContent
+import org.zaed.khana.presentation.components.StatefulAsyncImage
 import org.zaed.khana.presentation.theme.KhanaTheme
-import org.zaed.khana.presentation.util.shimmerEffect
 import org.zaed.khana.presentation.util.toMoney
 
 @Composable
@@ -82,29 +77,20 @@ fun ProductItem(
 
 @Composable
 private fun ThumbnailSection(
+    modifier: Modifier = Modifier,
     productThumbnailImageLink: String,
     onWishlistProduct: () -> Unit,
-    isWishlisted: Boolean,
-    modifier: Modifier = Modifier
+    isWishlisted: Boolean
 ) {
     Box(
-        modifier = modifier.clip(MaterialTheme.shapes.large)
-    ) {
-        SubcomposeAsyncImage(
-            model = productThumbnailImageLink,
-            contentDescription = "product thumbnail",
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(160.dp),
+        modifier = modifier
+    ){
+        StatefulAsyncImage(
+            modifier = Modifier.size(160.dp).align(Alignment.Center),
+            imageUrl = productThumbnailImageLink,
+            shape = MaterialTheme.shapes.large,
             contentScale = ContentScale.FillBounds
-        ) {
-            val state = painter.state
-            if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                Box(modifier = Modifier.fillMaxSize().shimmerEffect())
-            } else {
-                SubcomposeAsyncImageContent()
-            }
-        }
+        )
         IconButton(
             onClick = { onWishlistProduct() },
             colors = IconButtonDefaults.iconButtonColors(

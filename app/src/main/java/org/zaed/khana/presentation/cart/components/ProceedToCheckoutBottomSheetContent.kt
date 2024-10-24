@@ -85,7 +85,7 @@ fun ProceedToCheckoutBottomSheetContent(
         )
         PriceCalculationItem(title = stringResource(R.string.delivery_fee), price = deliveryFee)
         AnimatedVisibility(visible = discountPercentage > 0) {
-            PriceCalculationItem(title = "Discount", price = discountPercentage * subTotalPrice)
+            PriceCalculationItem(title = "Discount", isNegative = true, price = discountPercentage * subTotalPrice)
         }
         PriceCalculationItem(
             title = stringResource(R.string.total_cost),
@@ -105,6 +105,7 @@ fun ProceedToCheckoutBottomSheetContent(
 @Composable
 private fun PriceCalculationItem(
     modifier: Modifier = Modifier,
+    isNegative: Boolean = false,
     title: String,
     price: Float
 ) {
@@ -114,7 +115,7 @@ private fun PriceCalculationItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = title)
-        Text(text = price.toMoney())
+        Text(text = "${if(isNegative) "-" else ""}${price.toMoney()}")
     }
 }
 
