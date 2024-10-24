@@ -47,7 +47,7 @@ class CheckoutViewModel(
                     _uiState.update {
                         it.copy(
                             shippingAddresses = data,
-                            selectedShippingAddress = data.first()
+                            selectedShippingAddress = data.firstOrNull()?: ShippingAddress(),
                         )
                     }
                 }.onFailure {

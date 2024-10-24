@@ -10,6 +10,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 googleAuthLibraryOauth2Http = "1.19.0"
 junitVersion = "1.2.1"
+lottieCompose = "6.5.2"
 playServicesAuth = "21.2.0"
 espressoCore = "3.6.1"
 kotlinComposeCompilerPlugin = "2.0.0"
@@ -48,6 +49,7 @@ koin-androidx-compose-navigation = { module = "io.insert-koin:koin-androidx-comp
 kotlin-compose-compiler-plugin = { module = "org.jetbrains.kotlin:kotlin-compose-compiler-plugin", version.ref = "kotlinComposeCompilerPlugin" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-client" }
 kotlin-compose-compiler-plugin-embeddable = { module = "org.jetbrains.kotlin:kotlin-compose-compiler-plugin-embeddable", version.ref = "kotlinComposeCompilerPluginEmbeddable" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 realm-base = { module = "io.realm.kotlin:library-base", version.ref = "realm" }
 realm-sync = { module = "io.realm.kotlin:library-sync", version.ref = "realm" }
 

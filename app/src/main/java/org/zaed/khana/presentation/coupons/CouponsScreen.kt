@@ -8,6 +8,8 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -65,9 +67,14 @@ private fun CouponsScreenContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(text = stringResource(R.string.coupons)) },
+                title = {
+                    Text(
+                        text = stringResource(R.string.coupons),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
                 navigationIcon = {
-                    IconButton(onClick = { onAction(CouponsUiAction.OnBackPressed) }) {
+                    OutlinedIconButton(onClick = { onAction(CouponsUiAction.OnBackPressed) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null

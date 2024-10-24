@@ -10,6 +10,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,7 +54,10 @@ private fun PrivacyPolicyScreenContent(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.privacy_policy))
+                    Text(
+                        text = stringResource(R.string.privacy_policy),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
                     OutlinedIconButton(onClick = { onAction(PrivacyPolicyUiAction.OnBackPressed) }) {

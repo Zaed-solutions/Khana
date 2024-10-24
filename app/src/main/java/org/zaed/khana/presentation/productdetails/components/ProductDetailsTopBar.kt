@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -32,7 +33,7 @@ fun ProductDetailsTopBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = { onBackPressed() }) {
+            OutlinedIconButton(onClick = { onBackPressed() }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "back button"

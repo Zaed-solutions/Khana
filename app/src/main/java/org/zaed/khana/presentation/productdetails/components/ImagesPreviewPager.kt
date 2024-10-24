@@ -12,13 +12,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
 import com.tbuonomo.viewpagerdotsindicator.compose.type.ShiftIndicatorType
+import org.zaed.khana.presentation.components.StatefulAsyncImage
 import org.zaed.khana.presentation.theme.KhanaTheme
 import org.zaed.khana.presentation.util.shimmerEffect
 
@@ -39,11 +39,10 @@ fun ImagesPreviewPager(
                 .fillMaxWidth()
         ) {
             HorizontalPager(state = pagerState) { pageIndex ->
-                AsyncImage(
-                    model = imagesUrls[pageIndex],
+                StatefulAsyncImage(
                     modifier = Modifier.fillMaxSize(),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    imageUrl = imagesUrls[pageIndex],
+                    shape = RectangleShape
                 )
             }
             if (imagesUrls.size > 1) {
@@ -62,7 +61,10 @@ fun ImagesPreviewPager(
 
 @Composable
 private fun ImagesPreviewShimmer(){
-    Box(modifier = Modifier.fillMaxWidth().height(320.dp).shimmerEffect())
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(320.dp)
+        .shimmerEffect())
 }
 
 @Preview(showSystemUi = true, showBackground = true)
@@ -74,6 +76,6 @@ private fun ImagesPagerPreview() {
         "https://www.image.com/image.jpg"
     )
     KhanaTheme {
-        ImagesPreviewPager(isLoading = true, imagesUrls = images)
+        ImagesPreviewPager(isLoading = false, imagesUrls = images)
     }
 }

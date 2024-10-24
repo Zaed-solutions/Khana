@@ -37,7 +37,7 @@ class CartViewModel(
         viewModelScope.launch {
             cartRepo.fetchUserCartItems(uiState.value.currentUser.id).collect { result ->
                 result.onSuccessWithData { items ->
-                    _uiState.update { it.copy(cartItems = items) }
+                    _uiState.update { it.copy(cartItems = items, isLoading = false) }
                 }.onFailure {
                     Log.e(
                         "${this@CartViewModel::class.simpleName}:fetchUserCartItems",
@@ -69,15 +69,15 @@ class CartViewModel(
             }
 
             is CartUiAction.OnDecrementItemQuantity -> {
-                decrementItemQuantity(action.productId)
+                decrementItemQuantity(action.itemId)
             }
 
             is CartUiAction.OnIncrementItemQuantity -> {
-                incrementItemQuantity(action.productId)
+                incrementItemQuantity(action.itemId)
             }
 
             is CartUiAction.OnRemoveItemFromCart -> {
-                removeCartItem(action.productId)
+                removeCartItem(action.itemId)
             }
 
             else -> Unit
@@ -95,14 +95,14 @@ class CartViewModel(
         }
     }
 
-    private fun incrementItemQuantity(productId: String) {
+    private fun incrementItemQuantity(itemId: String) {
         viewModelScope.launch {
-            val item = uiState.value.cartItems.find { it.productId == productId } ?: return@launch
+            val item = uiState.value.cartItems.find { it.id == itemId } ?: return@launch
             val newQuantity = item.quantity + 1
             cartRepo.updateItemQuantity(item.id, newQuantity)
                 .onSuccess {
                     val updatedItems = uiState.value.cartItems.map {
-                        if (it.productId == productId) {
+                        if (it.id == itemId) {
                             it.copy(quantity = newQuantity)
                         } else {
                             it
@@ -118,14 +118,14 @@ class CartViewModel(
         }
     }
 
-    private fun decrementItemQuantity(productId: String) {
+    private fun decrementItemQuantity(itemId: String) {
         viewModelScope.launch {
-            val item = uiState.value.cartItems.find { it.productId == productId } ?: return@launch
+            val item = uiState.value.cartItems.find { it.id == itemId } ?: return@launch
             val newQuantity = item.quantity - 1
             cartRepo.updateItemQuantity(item.id, newQuantity)
                 .onSuccess {
                     val updatedItems = uiState.value.cartItems.map {
-                        if (it.productId == productId) {
+                        if (it.id == itemId) {
                             it.copy(quantity = newQuantity)
                         } else {
                             it
@@ -141,12 +141,12 @@ class CartViewModel(
         }
     }
 
-    private fun removeCartItem(productId: String) {
+    private fun removeCartItem(itemId: String) {
         viewModelScope.launch {
-            val item = uiState.value.cartItems.find { it.productId == productId } ?: return@launch
+            val item = uiState.value.cartItems.find { it.id == itemId } ?: return@launch
             cartRepo.removeCartItem(item.id)
                 .onSuccess {
-                    val updatedItems = uiState.value.cartItems.filter { it.productId != productId }
+                    val updatedItems = uiState.value.cartItems.filter { it.id != itemId }
                     _uiState.value = uiState.value.copy(cartItems = updatedItems)
                 }.onFailure {
                     Log.e(

@@ -135,6 +135,7 @@ class CartRemoteDataSourceImpl(
         return try{
             val response = httpClient.get {
                 endPoint(EndPoint.Cart.FetchDeliveryFee.route)
+                parameter("userId", userId)
             }
             if(response.status == HttpStatusCode.OK){
                 val responseData = response.body<GenericResponse<Float>>().data

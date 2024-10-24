@@ -12,6 +12,8 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -22,11 +24,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
+import org.zaed.khana.R
 import org.zaed.khana.data.model.CartItem
 import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.OrderedCartItem
@@ -74,10 +78,13 @@ private fun MyOrdersScreenContent(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "My Orders")
+                    Text(
+                        text = stringResource(id = R.string.my_orders),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onAction(MyOrdersUiAction.OnBackPressed) }) {
+                    OutlinedIconButton(onClick = { onAction(MyOrdersUiAction.OnBackPressed) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null

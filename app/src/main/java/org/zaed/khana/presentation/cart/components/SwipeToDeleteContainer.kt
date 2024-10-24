@@ -66,7 +66,7 @@ private fun DeleteBackGround(
     swipeDismissState: SwipeToDismissBoxState,
 ) {
     val color = if (swipeDismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
-        Color.Red
+        MaterialTheme.colorScheme.error
     } else {
         Color.Transparent
     }
@@ -77,7 +77,7 @@ private fun DeleteBackGround(
             .padding(16.dp),
         contentAlignment = Alignment.CenterEnd
     ) {
-        Icon(imageVector = Icons.Default.Delete, contentDescription = null, tint = Color.White)
+        Icon(imageVector = Icons.Default.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.onError)
     }
 }
 
@@ -86,12 +86,14 @@ private fun DeleteBackGround(
 private fun SwipeToDeleteContainerPreview() {
     KhanaTheme {
         LazyColumn (
-            contentPadding = PaddingValues(32.dp),
+            contentPadding = PaddingValues(vertical = 32.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ){
             items(10){ index ->
-                SwipeToDeleteContainer(onDelete = { /*TODO*/ }) {
-                    Text(text = "Item: $index", modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth().background(MaterialTheme.colorScheme.background),)
+                SwipeToDeleteContainer(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    onDelete = { /*TODO*/ }) {
+                    Text(text = "Item: $index", modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().background(MaterialTheme.colorScheme.background),)
                 }
             }
         }

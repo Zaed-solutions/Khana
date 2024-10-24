@@ -21,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,17 +54,17 @@ fun ProfileScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = state.isLoggedOut) {
-        if(state.isLoggedOut){
+        if (state.isLoggedOut) {
             onNavigateToLogin()
         }
     }
     ProfileScreenContent(
         modifier = modifier,
-        name = state.currentUser.firstName+" "+state.currentUser.lastName,
+        name = state.currentUser.firstName + " " + state.currentUser.lastName,
         avatarUrl = state.currentUser.avatar,
         avatarUri = null,
         onAction = { action ->
-            when(action) {
+            when (action) {
                 ProfileUiAction.OnBackPressed -> onBackPressed()
                 ProfileUiAction.OnHelpCenterClicked -> onNavigateToHelpCenter()
                 ProfileUiAction.OnMyOrdersClicked -> onNavigateToMyOrders()
@@ -91,7 +92,10 @@ private fun ProfileScreenContent(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.profile))
+                    Text(
+                        text = stringResource(R.string.profile),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
                     OutlinedIconButton(onClick = { onAction(ProfileUiAction.OnBackPressed) }) {
@@ -127,14 +131,21 @@ private fun ProfileScreenContent(
                         Icon(imageVector = option.icon, contentDescription = null)
                     },
                     trailingContent = {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos, contentDescription = null )
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                            contentDescription = null
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { if(option != ProfileScreenOptions.PAYMENT_METHODS) onAction(option.action) }
-                        .graphicsLayer(alpha = if(option == ProfileScreenOptions.PAYMENT_METHODS) 0.12f else 1f)
+                        .clickable {
+                            if (option != ProfileScreenOptions.PAYMENT_METHODS) onAction(
+                                option.action
+                            )
+                        }
+                        .graphicsLayer(alpha = if (option == ProfileScreenOptions.PAYMENT_METHODS) 0.12f else 1f)
                 )
-                if(option != ProfileScreenOptions.LOGOUT) {
+                if (option != ProfileScreenOptions.LOGOUT) {
                     HorizontalDivider(thickness = 0.5.dp)
                 }
             }
@@ -143,12 +154,28 @@ private fun ProfileScreenContent(
     }
 }
 
-enum class ProfileScreenOptions(val titleId: Int, val icon: ImageVector, val action: ProfileUiAction) {
-    PAYMENT_METHODS(R.string.payment_methods, Icons.Default.CreditCard, ProfileUiAction.OnPaymentMethodsClicked),
-    MY_ORDERS(R.string.my_orders, Icons.AutoMirrored.Filled.Assignment, ProfileUiAction.OnMyOrdersClicked),
+enum class ProfileScreenOptions(
+    val titleId: Int,
+    val icon: ImageVector,
+    val action: ProfileUiAction
+) {
+    PAYMENT_METHODS(
+        R.string.payment_methods,
+        Icons.Default.CreditCard,
+        ProfileUiAction.OnPaymentMethodsClicked
+    ),
+    MY_ORDERS(
+        R.string.my_orders,
+        Icons.AutoMirrored.Filled.Assignment,
+        ProfileUiAction.OnMyOrdersClicked
+    ),
     SETTINGS(R.string.settings, Icons.Default.Settings, ProfileUiAction.OnSettingsClicked),
     HELP_CENTER(R.string.help_center, Icons.Default.Info, ProfileUiAction.OnHelpCenterClicked),
-    PRIVACY_POLICY(R.string.privacy_policy, Icons.Default.Lock, ProfileUiAction.OnPrivacyPolicyClicked),
+    PRIVACY_POLICY(
+        R.string.privacy_policy,
+        Icons.Default.Lock,
+        ProfileUiAction.OnPrivacyPolicyClicked
+    ),
     LOGOUT(R.string.log_out, Icons.AutoMirrored.Filled.Logout, ProfileUiAction.OnLogoutClicked),
 }
 
