@@ -17,8 +17,10 @@ class PaymentViewModel(
     private val _uiState = MutableStateFlow(PaymentUiState())
     val uiState = _uiState.asStateFlow()
     fun init(orderId: String){
+        viewModelScope.launch {
+            _uiState.update { it.copy(orderId = orderId) }
+        }
         fetchCurrentUser()
-        _uiState.update { it.copy(orderId = orderId) }
     }
     private fun fetchCurrentUser(){
         viewModelScope.launch {

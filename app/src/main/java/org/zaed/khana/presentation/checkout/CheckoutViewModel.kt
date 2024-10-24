@@ -61,7 +61,7 @@ class CheckoutViewModel(
         viewModelScope.launch {
             cartRepo.fetchUserCartItems(_uiState.value.currentUser.id).collect { result ->
                 result.onSuccessWithData { data ->
-                    _uiState.update { it.copy(cartItems = data) }
+                    _uiState.update { it.copy(cartItems = data, isLoading = false) }
                 }.onFailure {
                     Log.e("CheckoutViewModel:fetchCartItems", it.userMessage)
                 }
@@ -118,8 +118,8 @@ class CheckoutViewModel(
             )
             orderRepo.placeOrder(
                 order = order
-            ).onSuccess {
-                _uiState.update { it.copy(orderId = it.orderId, isOrderPlaced = true) }
+            ).onSuccessWithData { orderId ->
+                _uiState.update { it.copy(orderId = orderId, isOrderPlaced = true) }
             }.onFailure {
                 Log.e("CheckoutViewModel:placeOrder", it.userMessage)
             }

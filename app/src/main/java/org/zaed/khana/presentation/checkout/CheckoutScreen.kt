@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -33,19 +30,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.data.model.CartItem
+import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.ShippingAddress
 import org.zaed.khana.data.model.ShippingType
 import org.zaed.khana.presentation.checkout.components.AddAddressBottomSheet
+import org.zaed.khana.presentation.checkout.components.CheckoutBottomBar
 import org.zaed.khana.presentation.checkout.components.OrderListSection
 import org.zaed.khana.presentation.checkout.components.ShippingAddressBottomSheet
 import org.zaed.khana.presentation.checkout.components.ShippingAddressSection
 import org.zaed.khana.presentation.checkout.components.ShippingTypeBottomSheet
 import org.zaed.khana.presentation.checkout.components.ShippingTypeSection
+import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
 fun CheckoutScreen(
@@ -66,6 +67,7 @@ fun CheckoutScreen(
         shippingType = state.selectedShippingType,
         addresses = state.shippingAddresses,
         cartItems = state.cartItems,
+        isLoading = state.isLoading,
         onAction = { action ->
             when (action) {
                 CheckoutUiAction.OnBackPressed -> onBackPressed()
@@ -83,6 +85,7 @@ private fun CheckoutScreenContent(
     addresses: List<ShippingAddress>,
     shippingType: ShippingType,
     cartItems: List<CartItem>,
+    isLoading: Boolean,
     onAction: (CheckoutUiAction) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -110,44 +113,34 @@ private fun CheckoutScreenContent(
             )
         },
         bottomBar = {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(
-                    topStart = 16.dp,
-                    topEnd = 16.dp,
-                    bottomStart = 0.dp,
-                    bottomEnd = 0.dp
-                ),
-                shadowElevation = 24.dp
-            ) {
-                Button(
-                    onClick = { onAction(CheckoutUiAction.OnContinueToPaymentClicked) },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(R.string.continue_to_payment),
-                        style = MaterialTheme.typography.titleLarge)
-                }
-            }
+            CheckoutBottomBar(
+                onContinueToPayment = { onAction(CheckoutUiAction.OnContinueToPaymentClicked) },
+                enabled = !isLoading && shippingAddress.id.isNotBlank()
+            )
         }
     ) { paddingValues ->
         Column(
             modifier
                 .fillMaxWidth()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .padding(top = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             ShippingAddressSection(
+                isLoading = isLoading,
                 shippingAddress = shippingAddress,
-                onChangeAddressClicked = { shownBottomSheet = ShownBottomSheet.SHIPPING_ADDRESS }
+                onChangeAddressClicked = { shownBottomSheet = ShownBottomSheet.SHIPPING_ADDRESS },
+                onAddShippingAddressClicked = { shownBottomSheet = ShownBottomSheet.ADD_ADDRESS }
             )
             ShippingTypeSection(
+                isLoading = isLoading,
                 shippingType = shippingType,
                 onChangeTypeClicked = { shownBottomSheet = ShownBottomSheet.SHIPPING_TYPE }
             )
-            OrderListSection(cartItems = cartItems)
+            OrderListSection(
+                isLoading = isLoading,
+                cartItems = cartItems
+            )
         }
         if (shownBottomSheet != ShownBottomSheet.NONE) {
             ModalBottomSheet(
@@ -210,4 +203,85 @@ private enum class ShownBottomSheet {
     SHIPPING_ADDRESS,
     ADD_ADDRESS,
     SHIPPING_TYPE
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun CheckoutScreenContentPreview() {
+    val addresses = listOf(
+        ShippingAddress(
+            id = "1",
+            userId = "1",
+            title = "Home",
+            country = "Saudi Arabia",
+            city = "Eastlake Village",
+            addressLine = "Street 8, House 3",
+            phoneNumber = "(968) 403-4498"
+        ),
+        ShippingAddress(
+            id = "1",
+            userId = "1",
+            title = "Friend's House",
+            country = "Saudi Arabia",
+            city = "Eastlake Village",
+            addressLine = "Street 8, House 3",
+            phoneNumber = "(968) 403-4498"
+        ),
+        ShippingAddress(
+            id = "1",
+            userId = "1",
+            title = "Work",
+            country = "Saudi Arabia",
+            city = "Eastlake Village",
+            addressLine = "Street 8, House 3",
+            phoneNumber = "(968) 403-4498"
+        ),
+
+    )
+    val items = listOf(
+        CartItem(
+            quantity = 1,
+            productName = "Jacket",
+            productColor = Color(name = "Brown"),
+            productSize = "XL",
+            productBasePrice = 999.99f
+        ),
+        CartItem(
+            quantity = 1,
+            productName = "Shirt",
+            productColor = Color(name = "White"),
+            productSize = "XL",
+            productBasePrice = 199.99f
+        ),
+        CartItem(
+            quantity = 1,
+            productName = "Pants",
+            productColor = Color(name = "Blue"),
+            productSize = "35",
+            productBasePrice = 249.99f
+        ),
+        CartItem(
+            quantity = 1,
+            productName = "T-Shirt",
+            productColor = Color(name = "Pink"),
+            productSize = "XL",
+            productBasePrice = 159.99f
+        ),
+        CartItem(
+            quantity = 10,
+            productName = "Shoes",
+            productColor = Color(name = "White"),
+            productSize = "45",
+            productBasePrice = 320f
+        )
+    )
+    KhanaTheme {
+        CheckoutScreenContent(
+            shippingAddress = addresses.first(),
+            addresses = addresses,
+            shippingType = ShippingType.REGULAR,
+            cartItems = items,
+            isLoading = false
+        ) {}
+    }
 }

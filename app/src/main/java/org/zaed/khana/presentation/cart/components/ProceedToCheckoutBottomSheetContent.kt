@@ -95,9 +95,14 @@ fun ProceedToCheckoutBottomSheetContent(
         //proceed button
         Button(
             onClick = { onProceedToCheckout() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth()
         ) {
-            Text(text = stringResource(R.string.proceed_to_checkout))
+            Text(
+                text = stringResource(R.string.proceed_to_checkout),
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 }

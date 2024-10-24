@@ -13,5 +13,6 @@ data class CheckoutUiState(
     val selectedShippingAddress: ShippingAddress = ShippingAddress(),
     val selectedShippingType: ShippingType = ShippingType.ECONOMY,
     val isOrderPlaced: Boolean = false,
-    val orderId: String = ""
+    val orderId: String = "",
+    val isLoading: Boolean = true,
 )
