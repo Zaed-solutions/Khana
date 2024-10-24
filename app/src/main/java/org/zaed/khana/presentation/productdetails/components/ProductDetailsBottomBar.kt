@@ -60,7 +60,8 @@ fun ProductDetailsBottomBar(
             }
             Button(
                 enabled = !(isAddedToCart || isLoading),
-                onClick = { onAddToCartClicked() }) {
+                onClick = { onAddToCartClicked() }
+            ) {
                 Icon(
                     imageVector = if(isAddedToCart) Icons.Default.Check else Icons.Default.ShoppingBag,
                     contentDescription = null,

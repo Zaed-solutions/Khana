@@ -111,7 +111,7 @@ fun App() {
             AnimatedVisibility(
                 visible = bottomNavRoutes.contains(currentRoute),
                 enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
-                exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { it }),
             ) {
                 BottomNavigationBar(
                     currentRoute = currentRoute,

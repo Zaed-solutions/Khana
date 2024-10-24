@@ -22,7 +22,7 @@
     <string name="reset_filters">Reset Filters</string>
     <string name="checkout">Checkout</string>
     <string name="change">Change</string>
-    <string name="shipping_address">Shipping Address</string>
+    <string name="choose_shipping_address">Choose Shipping Address</string>
     <string name="continue_to_payment">Continue to Payment</string>
     <string name="sign_in">Sign In</string>
     <string name="hi_welcome_back_you_ve_been_missed">Hi! Welcome back, you\'ve been missed</string>
@@ -124,4 +124,6 @@
     <string name="total_cost">Total Cost</string>
     <string name="view_available_coupons">View Available Coupons</string>
     <string name="nothing_to_see_here">Nothing to see here</string>
+    <string name="choose_shipping_type">Choose Shipping Type</string>
+    <string name="no_set_shipping_address">No set shipping address.</string>
 </resources>

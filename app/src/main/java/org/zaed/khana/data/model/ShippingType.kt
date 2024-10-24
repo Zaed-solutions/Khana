@@ -15,5 +15,5 @@ enum class ShippingType(val title: String, val estimatedDeliveryInDays: Int) {
 fun ShippingType.getEstimatedDeliveryDate(): String {
     val currentDate = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
     val estimatedDate = currentDate.plus(estimatedDeliveryInDays, DateTimeUnit.DAY)
-    return "Estimated Arrival ${estimatedDate.dayOfMonth} ${estimatedDate.month.name.replaceFirstChar { it.uppercase() }} ${estimatedDate.year}"
+    return "Estimated Arrival: ${estimatedDate.month.name.substring(0, 3).lowercase().replaceFirstChar { it.uppercase() }} ${estimatedDate.dayOfMonth}, ${estimatedDate.year}"
 }

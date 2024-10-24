@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
@@ -38,7 +39,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
 import org.zaed.khana.presentation.payment.components.PaymentMethodsSection
@@ -59,7 +59,6 @@ fun PaymentScreen(
     LaunchedEffect(state.isPaymentConfirmed) {
         if (state.isPaymentConfirmed) {
             snackbarHostState.showSnackbar("Payment Confirmed")
-            delay(4000)
             onNavigateToHome()
         }
     }
@@ -113,9 +112,12 @@ fun PaymentScreenContent(
                     onClick = { onAction(PaymentUiAction.OnContinueClicked) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp)
+                        .padding(16.dp)
                 ) {
-                    Text(text = stringResource(R.string.continue_))
+                    Text(
+                        text = stringResource(R.string.continue_),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
             }
         },
@@ -145,7 +147,11 @@ fun PaymentScreenContent(
                             Text(text = stringResource(R.string.add_card))
                         },
                         leadingContent = {
-                            Icon(imageVector = Icons.Default.CreditCard, contentDescription = null)
+                            Icon(
+                                imageVector = Icons.Default.CreditCard,
+                                contentDescription = null,
+                                modifier = Modifier.size(30.dp)
+                            )
                         },
                         trailingContent = {
                             Icon(
@@ -176,7 +182,8 @@ fun PaymentScreenContent(
                                 leadingContent = {
                                     Icon(
                                         painter = painterResource(id = method.iconId),
-                                        tint = Color.Unspecified,
+                                        tint = if(method.isColoredLogo) Color.Unspecified else MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(30.dp),
                                         contentDescription = null
                                     )
                                 },
@@ -211,11 +218,12 @@ fun PaymentScreenContent(
 
 enum class PaymentMethods(
     @DrawableRes val iconId: Int,
+    val isColoredLogo: Boolean,
     val enabled: Boolean,
     @StringRes val displayNameId: Int
 ) {
-    CASH_ON_DELIVERY(R.drawable.cod, true, R.string.cash_on_delivery),
-    PAYPAL(R.drawable.paypal, false, R.string.paypal),
+    CASH_ON_DELIVERY(R.drawable.cod, false ,true, R.string.cash_on_delivery),
+    PAYPAL(R.drawable.paypal, true, false, R.string.paypal),
 }
 
 @Preview(showSystemUi = true, showBackground = true)
