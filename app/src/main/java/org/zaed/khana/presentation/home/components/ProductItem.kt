@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -24,8 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.zaed.khana.R
 import org.zaed.khana.presentation.components.StatefulAsyncImage
 import org.zaed.khana.presentation.theme.KhanaTheme
 import org.zaed.khana.presentation.util.shimmerEffect
@@ -66,7 +67,7 @@ fun ProductItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Star,
+                    painter = painterResource(id = R.drawable.ic_star_filled),
                     tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = null
                 )

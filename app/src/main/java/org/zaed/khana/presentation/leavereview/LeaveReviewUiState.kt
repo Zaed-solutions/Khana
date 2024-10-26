@@ -8,5 +8,6 @@ data class LeaveReviewUiState(
     val item: CartItem = CartItem(),
     val rating: Int = 0,
     val review: String = "",
+    val isLoading: Boolean = true,
     val isReviewSubmitted: Boolean = false
 )
