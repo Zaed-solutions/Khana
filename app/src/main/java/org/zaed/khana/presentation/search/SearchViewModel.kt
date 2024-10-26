@@ -51,7 +51,7 @@ class SearchViewModel(
         viewModelScope.launch {
             searchRepo.fetchRecentSearches().collect { result ->
                 result.onSuccessWithData { searches ->
-                    _uiState.update { it.copy(recentSearches = searches) }
+                    _uiState.update { it.copy(recentSearches = searches, isLoadingRecentSearches = false) }
                     Log.d("SearchViewModel:fetchRecentSearches", "Recent searches fetched: $searches")
                 }.onFailure { error ->
                     Log.e("SearchViewModel:fetchRecentSearches", error.userMessage)
@@ -110,9 +110,10 @@ class SearchViewModel(
 
     private fun fetchSearchResult(query: String) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoadingProducts = true) }
             searchRepo.fetchSearchResult(query).collect { result ->
                 result.onSuccessWithData { products ->
-                    _uiState.update { it.copy(products = products) }
+                    _uiState.update { it.copy(products = products, isLoadingProducts = false) }
                 }.onFailure { error ->
                     Log.e("SearchViewModel:fetchSearchResult", error.userMessage)
                 }

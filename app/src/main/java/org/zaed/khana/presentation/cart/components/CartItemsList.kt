@@ -22,11 +22,10 @@ fun CartItemsList(
     onIncrementItemQuantity: (String) -> Unit,
     onDecrementItemQuantity: (String) -> Unit,
 ) {
-    val isEmpty = cartItems.isEmpty()
-    Crossfade(targetState = isEmpty, label = "cart items") { state ->
+    Crossfade(targetState = isLoading to cartItems, label = "cart items") { state ->
         when {
-            isLoading -> CartItemsShimmer(modifier = modifier)
-            state -> EmptyListScreen(modifier = modifier)
+            state.first -> CartItemsShimmer(modifier = modifier)
+            state.second.isEmpty() -> EmptyListScreen(modifier = modifier)
             else -> {
                 LazyColumn(
                     modifier = modifier
@@ -37,13 +36,15 @@ fun CartItemsList(
                     items(cartItems.size) { index ->
                         val item = cartItems[index]
                         SwipeToDeleteContainer(
+                            modifier = Modifier.animateItem(),
                             onDelete = {
                                 onDeleteCartItem(item.id)
                             }
                         ) {
                             CartItem(
                                 item = item,
-                                modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.background),
                                 onIncrementQuantity = { onIncrementItemQuantity(item.id) },
                                 onDecrementQuantity = {
                                     onDecrementItemQuantity(item.id)
