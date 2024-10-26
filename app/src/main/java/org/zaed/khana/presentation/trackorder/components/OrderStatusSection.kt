@@ -135,6 +135,7 @@ fun OrderStatusSection(
                         } else {
                             Text(
                                 text = confirmedEpochSeconds.formatEpochSecondsToDateTime(),
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -174,6 +175,7 @@ fun OrderStatusSection(
                         } else {
                             Text(
                                 text = confirmedEpochSeconds.formatEpochSecondsToDateTime(),
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -213,6 +215,7 @@ fun OrderStatusSection(
                         } else {
                             Text(
                                 text = shippedEpochSeconds.formatEpochSecondsToDateTime(),
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -252,6 +255,7 @@ fun OrderStatusSection(
                         } else {
                             Text(
                                 text = deliveredEpochSeconds.formatEpochSecondsToDateTime(),
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }

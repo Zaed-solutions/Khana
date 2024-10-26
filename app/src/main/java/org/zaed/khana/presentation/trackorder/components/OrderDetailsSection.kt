@@ -41,6 +41,7 @@ fun OrderDetailsSection(
         ) {
             Text(
                 text = stringResource(R.string.expected_delivery_date),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 modifier = Modifier.weight(1f)
             )
             if(isLoading) {
@@ -62,6 +63,7 @@ fun OrderDetailsSection(
         ) {
             Text(
                 text = stringResource(R.string.tracking_id),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 modifier = Modifier.weight(1f)
             )
             if(isLoading) {
