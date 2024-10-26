@@ -1,9 +1,13 @@
 package org.zaed.khana.presentation.leavereview
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -29,6 +33,7 @@ import org.zaed.khana.presentation.leavereview.components.LeaveReviewBottomBar
 import org.zaed.khana.presentation.leavereview.components.LeaveReviewDetailsSection
 import org.zaed.khana.presentation.leavereview.components.LeaveReviewRatingSection
 import org.zaed.khana.presentation.myorders.components.PlacedOrderItem
+import org.zaed.khana.presentation.myorders.components.PlacedOrderItemShimmer
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
@@ -50,6 +55,7 @@ fun LeaveReviewScreen(
     }
     LeaveReviewScreenContent(
         modifier = modifier,
+        isLoading = state.isLoading,
         item = state.item,
         rating = state.rating,
         onAction = { action ->
@@ -71,6 +77,7 @@ fun LeaveReviewScreen(
 @Composable
 private fun LeaveReviewScreenContent(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     item: CartItem,
     rating: Int,
     onAction: (LeaveReviewUiAction) -> Unit,
@@ -100,7 +107,9 @@ private fun LeaveReviewScreenContent(
                 onCancelClicked = { onAction(LeaveReviewUiAction.OnCancelClicked) }
             )
         },
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.ime)
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -109,16 +118,27 @@ private fun LeaveReviewScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            PlacedOrderItem(
-                modifier = Modifier.padding(top = 16.dp),
-                thumbnailUrl = item.productThumbnail,
-                title = item.productColor.name + " " + item.productName,
-                quantity = item.quantity,
-                size = item.productSize,
-                price = item.productBasePrice,
-                buttonText = stringResource(R.string.reorder),
-                onButtonClicked = { onAction(LeaveReviewUiAction.OnReorderClicked) }
-            )
+            Crossfade(targetState = isLoading) { state ->
+                when {
+                    state -> {
+                        PlacedOrderItemShimmer(modifier = Modifier.padding(top = 16.dp))
+                    }
+
+                    else -> {
+                        PlacedOrderItem(
+                            modifier = Modifier.padding(top = 16.dp),
+                            thumbnailUrl = item.productThumbnail,
+                            title = item.productColor.name + " " + item.productName,
+                            quantity = item.quantity,
+                            size = item.productSize,
+                            price = item.productBasePrice,
+                            buttonText = stringResource(R.string.reorder),
+                            onButtonClicked = { onAction(LeaveReviewUiAction.OnReorderClicked) }
+                        )
+                    }
+                }
+
+            }
             Text(
                 text = stringResource(R.string.how_is_your_order),
                 style = MaterialTheme.typography.headlineMedium,
@@ -140,7 +160,7 @@ private fun LeaveReviewScreenContent(
 private fun LeaveReviewScreenContentPreview() {
     val item = CartItem(productName = "Product Name")
     KhanaTheme {
-        LeaveReviewScreenContent(item = item, rating = 3) {
+        LeaveReviewScreenContent(isLoading = false, item = item, rating = 3) {
 
         }
     }

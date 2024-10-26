@@ -36,13 +36,13 @@ fun LeaveReviewBottomBar(
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             FilledTonalButton(
-                modifier = Modifier.widthIn(min = 120.dp),
+                modifier = Modifier.widthIn(min = 150.dp),
                 onClick = { onCancelClicked() }
             ) {
                 Text(text = stringResource(R.string.cancel))
             }
             Button(
-                modifier = Modifier.widthIn(min = 120.dp),
+                modifier = Modifier.widthIn(min = 150.dp),
                 onClick = { onSubmitClicked() }
             ) {
                 Text(stringResource(R.string.submit))
