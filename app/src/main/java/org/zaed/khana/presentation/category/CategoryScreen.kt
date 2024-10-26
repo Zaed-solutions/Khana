@@ -1,11 +1,7 @@
 package org.zaed.khana.presentation.category
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -19,11 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.data.model.Product
-import org.zaed.khana.presentation.home.components.ProductItem
+import org.zaed.khana.presentation.category.components.CategoryProducts
 
 @Composable
 fun CategoryScreen(
@@ -40,6 +35,7 @@ fun CategoryScreen(
     CategoryScreenContent(
         modifier = modifier,
         category = state.category,
+        isLoading = state.isLoading,
         wishlistedProductsIds = state.wishlistedProductsIds,
         products = state.products
     ) { action ->
@@ -57,6 +53,7 @@ fun CategoryScreen(
 private fun CategoryScreenContent(
     modifier: Modifier = Modifier,
     category: String,
+    isLoading: Boolean,
     wishlistedProductsIds: List<String>,
     products: List<Product>,
     onAction: (CategoryUiAction) -> Unit
@@ -79,25 +76,18 @@ private fun CategoryScreenContent(
         },
         modifier = modifier.fillMaxSize()
     ) { paddingValues ->
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(all = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            items(products.size){ index ->
-                val product = products[index]
-                ProductItem(
-                    productName = product.name,
-                    productThumbnailImageLink = product.thumbnailImageLink,
-                    productRating = product.rating,
-                    productPrice = product.basePrice ,
-                    isWishlisted = wishlistedProductsIds.contains(product.id),
-                    onWishlistProduct = { onAction(CategoryUiAction.OnWishlistClicked(product.id)) },
-                    onProductClicked = { onAction(CategoryUiAction.OnProductClicked(product.id)) },
-                )
+        CategoryProducts(
+            modifier = Modifier.padding(paddingValues),
+            products = products,
+            isLoading = isLoading,
+            wishlistedProductsIds = wishlistedProductsIds,
+            onWishlistProduct = { productId ->
+                onAction(CategoryUiAction.OnWishlistClicked(productId))
+            },
+            onProductClicked = { productId ->
+                onAction(CategoryUiAction.OnProductClicked(productId))
             }
-        }
+        )
     }
 }
+

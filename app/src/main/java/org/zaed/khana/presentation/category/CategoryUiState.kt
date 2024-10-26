@@ -6,6 +6,7 @@ import org.zaed.khana.data.model.User
 data class CategoryUiState(
     val currentUser: User = User(),
     val products: List<Product> = emptyList(),
+    val isLoading: Boolean = true,
     val category: String = "",
     val wishlistedProductsIds: List<String> = emptyList(),
 )
