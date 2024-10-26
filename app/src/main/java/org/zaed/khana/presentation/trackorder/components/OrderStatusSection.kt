@@ -1,5 +1,8 @@
 package org.zaed.khana.presentation.trackorder.components
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +23,11 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -30,10 +38,12 @@ import org.zaed.khana.R
 import org.zaed.khana.data.model.OrderStatus
 import org.zaed.khana.presentation.theme.KhanaTheme
 import org.zaed.khana.presentation.util.formatEpochSecondsToDateTime
+import org.zaed.khana.presentation.util.shimmerEffect
 
 @Composable
 fun OrderStatusSection(
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
     orderStatus: OrderStatus,
     confirmedEpochSeconds: Long,
     shippedEpochSeconds: Long,
@@ -41,12 +51,27 @@ fun OrderStatusSection(
 ) {
     val enabledColor = MaterialTheme.colorScheme.primary
     val disabledColor = MaterialTheme.colorScheme.secondaryContainer
-    val progressPercent = when (orderStatus) {
-        OrderStatus.CONFIRMED -> 0.33f
-        OrderStatus.SHIPPED -> 0.67f
-        OrderStatus.DELIVERED -> 0.999f
-        else -> 0f
+    var progressPercent by remember {
+        mutableFloatStateOf(0.001f)
     }
+    LaunchedEffect(orderStatus, isLoading) {
+        if(!isLoading){
+            progressPercent = when (orderStatus) {
+                OrderStatus.CONFIRMED -> 0.33f
+                OrderStatus.SHIPPED -> 0.67f
+                OrderStatus.DELIVERED -> 0.999f
+                else -> 0.001f
+            }
+        }
+    }
+    val animatedProgress = animateFloatAsState(
+        targetValue = progressPercent,
+        animationSpec = tween(
+            durationMillis = 2000,
+            easing = LinearEasing
+        ),
+        label = "progress percentage"
+    )
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -55,9 +80,9 @@ fun OrderStatusSection(
             text = stringResource(R.string.order_status),
             style = MaterialTheme.typography.titleLarge
         )
-        Box (
+        Box(
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             Column(
                 modifier = Modifier
                     .padding(start = 26.dp)
@@ -68,13 +93,13 @@ fun OrderStatusSection(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(progressPercent)
+                        .weight(animatedProgress.value)
                         .background(enabledColor)
                 )
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1 - progressPercent)
+                        .weight(1 - animatedProgress.value)
                         .background(disabledColor)
                 )
             }
@@ -100,10 +125,19 @@ fun OrderStatusSection(
                         )
                     },
                     supportingContent = {
-                        Text(
-                            text = confirmedEpochSeconds.formatEpochSecondsToDateTime(),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        if (isLoading) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .height(20.dp)
+                                    .shimmerEffect()
+                            )
+                        } else {
+                            Text(
+                                text = confirmedEpochSeconds.formatEpochSecondsToDateTime(),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     },
                     trailingContent = {
                         Icon(
@@ -120,7 +154,7 @@ fun OrderStatusSection(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = null,
                             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
-                            tint = enabledColor
+                            tint = if (animatedProgress.value >= 0.33f) enabledColor else disabledColor
                         )
                     },
                     headlineContent = {
@@ -130,10 +164,19 @@ fun OrderStatusSection(
                         )
                     },
                     supportingContent = {
-                        Text(
-                            text = confirmedEpochSeconds.formatEpochSecondsToDateTime(),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        if(isLoading) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .height(20.dp)
+                                    .shimmerEffect()
+                            )
+                        } else {
+                            Text(
+                                text = confirmedEpochSeconds.formatEpochSecondsToDateTime(),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     },
                     trailingContent = {
                         Icon(
@@ -150,7 +193,7 @@ fun OrderStatusSection(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = null,
                             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
-                            tint = if (orderStatus == OrderStatus.SHIPPED || orderStatus == OrderStatus.DELIVERED) enabledColor else disabledColor
+                            tint = if (animatedProgress.value >= 0.67f) enabledColor else disabledColor
                         )
                     },
                     headlineContent = {
@@ -160,10 +203,19 @@ fun OrderStatusSection(
                         )
                     },
                     supportingContent = {
-                        Text(
-                            text = shippedEpochSeconds.formatEpochSecondsToDateTime(),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        if(isLoading) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .height(20.dp)
+                                    .shimmerEffect()
+                            )
+                        } else {
+                            Text(
+                                text = shippedEpochSeconds.formatEpochSecondsToDateTime(),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     },
                     trailingContent = {
                         Icon(
@@ -180,7 +232,7 @@ fun OrderStatusSection(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = null,
                             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
-                            tint = if (orderStatus == OrderStatus.DELIVERED) enabledColor else disabledColor
+                            tint = if (animatedProgress.value >= 0.9f) enabledColor else disabledColor
                         )
                     },
                     headlineContent = {
@@ -190,10 +242,19 @@ fun OrderStatusSection(
                         )
                     },
                     supportingContent = {
-                        Text(
-                            text = deliveredEpochSeconds.formatEpochSecondsToDateTime(),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        if(isLoading) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .height(20.dp)
+                                    .shimmerEffect()
+                            )
+                        } else {
+                            Text(
+                                text = deliveredEpochSeconds.formatEpochSecondsToDateTime(),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     },
                     trailingContent = {
                         Icon(
@@ -214,6 +275,7 @@ private fun OrderStatusPreview() {
     KhanaTheme {
         OrderStatusSection(
             orderStatus = OrderStatus.DELIVERED,
+//            isLoading = true,
             confirmedEpochSeconds = Clock.System.now().epochSeconds - 15000,
             shippedEpochSeconds = Clock.System.now().epochSeconds + 5000,
             deliveredEpochSeconds = Clock.System.now().epochSeconds + 15000

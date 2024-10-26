@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.zaed.khana.data.repository.AuthenticationRepository
 import org.zaed.khana.data.repository.CartRepository
 import org.zaed.khana.data.repository.OrderRepository
 
@@ -25,7 +24,7 @@ class TrackOrderViewModel(
     private fun fetchOrderDetails(orderId: String) {
         viewModelScope.launch {
             orderRepo.fetchOrderById(orderId).onSuccessWithData { order ->
-                _uiState.update { it.copy(order = order) }
+                _uiState.update { it.copy(order = order, isLoadingOrderDetails = false) }
             }.onFailure {
                 Log.e("TrackOrderViewModel:fetchOrderDetails", "fetchOrderDetails: $it")
             }
@@ -35,7 +34,7 @@ class TrackOrderViewModel(
     private fun fetchCartItem(orderId: String, cartItemId: String) {
         viewModelScope.launch {
             cartRepository.fetchOrderedCartItem(orderId = orderId, cartItemId = cartItemId).onSuccessWithData { item ->
-                _uiState.update { it.copy(cartItem = item) }
+                _uiState.update { it.copy(cartItem = item, isLoadingCartItems = false) }
             }.onFailure {
                 Log.e("TrackOrderViewModel:fetchCartItem", "fetchCartItem: $it")
             }

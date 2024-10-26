@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.trackorder
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import org.zaed.khana.data.model.Color
 import org.zaed.khana.data.model.Order
 import org.zaed.khana.data.model.OrderStatus
 import org.zaed.khana.presentation.myorders.components.PlacedOrderItem
+import org.zaed.khana.presentation.myorders.components.PlacedOrderItemShimmer
 import org.zaed.khana.presentation.theme.KhanaTheme
 import org.zaed.khana.presentation.trackorder.components.OrderDetailsSection
 import org.zaed.khana.presentation.trackorder.components.OrderStatusSection
@@ -48,6 +50,8 @@ fun TrackOrderScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     TrackOrderScreenContent(
         modifier = modifier,
+        isLoadingCartItem = state.isLoadingCartItems,
+        isLoadingOrderDetails = state.isLoadingOrderDetails,
         item = state.cartItem,
         order = state.order,
         onAction = { action ->
@@ -62,6 +66,8 @@ fun TrackOrderScreen(
 @Composable
 private fun TrackOrderScreenContent(
     modifier: Modifier = Modifier,
+    isLoadingCartItem: Boolean,
+    isLoadingOrderDetails: Boolean,
     item: CartItem,
     order: Order,
     onAction: (TrackOrderUiAction) -> Unit,
@@ -93,22 +99,32 @@ private fun TrackOrderScreenContent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            PlacedOrderItem(
-                modifier = Modifier.padding(top = 16.dp),
-                thumbnailUrl = item.productThumbnail,
-                title = item.productColor.name + " " + item.productName,
-                quantity = item.quantity,
-                size = item.productSize,
-                price = item.productBasePrice,
-                showButton = false,
-            )
+            Crossfade(targetState = isLoadingCartItem, label = "placed order item") { state ->
+                when{
+                    state -> { PlacedOrderItemShimmer(modifier = Modifier.padding(top = 16.dp))}
+                    else -> {
+                        PlacedOrderItem(
+                            modifier = Modifier.padding(top = 16.dp),
+                            thumbnailUrl = item.productThumbnail,
+                            title = item.productColor.name + " " + item.productName,
+                            quantity = item.quantity,
+                            size = item.productSize,
+                            price = item.productBasePrice,
+                            showButton = false,
+                        )
+
+                    }
+                }
+            }
             HorizontalDivider(thickness = 0.5.dp)
             OrderDetailsSection(
+                isLoading = isLoadingOrderDetails,
                 expectedDeliveryEpochSeconds = order.expectedDeliveryEpochSeconds,
                 trackingId = order.trackingId
             )
             HorizontalDivider(thickness = 0.5.dp)
             OrderStatusSection(
+                isLoading = isLoadingOrderDetails,
                 orderStatus = OrderStatus.valueOf(order.orderStatus),
                 confirmedEpochSeconds = order.confirmedEpochSeconds,
                 shippedEpochSeconds = order.shippedEpochSeconds,
@@ -139,6 +155,12 @@ private fun TrackOrderScreenContentPreview() {
         quantity = 1
     )
     KhanaTheme {
-        TrackOrderScreenContent(onAction = {}, item = item, order = order)
+        TrackOrderScreenContent(
+            onAction = {},
+            item = item,
+            order = order,
+            isLoadingOrderDetails = true,
+            isLoadingCartItem = true
+        )
     }
 }
