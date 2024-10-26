@@ -124,7 +124,7 @@
     <string name="total_cost">Total Cost</string>
     <string name="view_available_coupons">View Available Coupons</string>
     <string name="nothing_to_see_here">Nothing to see here</string>
-    <string name="no_results_found">No Results Found</string>
+    <string name="no_results_found">No results found</string>
     <string name="choose_shipping_type">Choose Shipping Type</string>
     <string name="no_set_shipping_address">No set shipping address.</string>
 </resources>

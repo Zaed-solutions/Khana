@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.OrderStatus
 import org.zaed.khana.data.model.OrderedCartItem
@@ -59,6 +60,7 @@ class MyOrdersViewModel(
 
     private fun updateDisplayedItems(tab: OrdersTabs) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             val items = when (tab) {
                 OrdersTabs.ACTIVE -> {
                     _uiState.value.orders.filter { it.orderStatus == OrderStatus.SHIPPED.name || it.orderStatus == OrderStatus.CONFIRMED.name }
@@ -96,7 +98,7 @@ class MyOrdersViewModel(
                         }
                 }
             }
-            _uiState.value = uiState.value.copy(displayedItems = items)
+            _uiState.value = uiState.value.copy(displayedItems = items, isLoading = false)
         }
     }
 }
