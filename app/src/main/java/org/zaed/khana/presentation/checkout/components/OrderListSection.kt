@@ -19,7 +19,7 @@ fun OrderListSection(
     cartItems: List<CartItem>
 ) {
     CheckoutScreenSection(title = "Order List") {
-        Crossfade(targetState = isLoading) {state ->
+        Crossfade(targetState = isLoading, label = "order items") { state ->
             when{
                 state -> OrderListShimmer(modifier = modifier)
                 else -> {
@@ -32,6 +32,7 @@ fun OrderListSection(
                         items(cartItems.size){ index ->
                             val item = cartItems[index]
                             CartItem(
+                                modifier = Modifier.animateItem(),
                                 item = item,
                                 showControlQuantitySection = false
                             )

@@ -1,7 +1,7 @@
 package org.zaed.khana.presentation.search
 
 import android.util.Log
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
@@ -47,8 +46,10 @@ fun SearchScreen(
     SearchScreenContent(
         modifier = modifier,
         products = state.products,
+        isLoadingProducts = state.isLoadingProducts,
         wishlistedProductsIds = state.wishlistedProductsIds,
         recentSearches = state.recentSearches,
+        isLoadingRecentSearches = state.isLoadingRecentSearches,
         onAction = { action ->
             when (action) {
                 is SearchUiAction.OnBackPressed -> {
@@ -69,8 +70,10 @@ fun SearchScreen(
 private fun SearchScreenContent(
     modifier: Modifier = Modifier,
     products: List<Product>,
+    isLoadingProducts: Boolean,
     wishlistedProductsIds: List<String>,
     recentSearches: List<String>,
+    isLoadingRecentSearches: Boolean,
     onAction: (SearchUiAction) -> Unit
 ) {
     var searchQuery by remember { mutableStateOf("") }
@@ -88,7 +91,10 @@ private fun SearchScreenContent(
                     )
                 },
                 navigationIcon = {
-                    OutlinedIconButton(onClick = { onAction(SearchUiAction.OnBackPressed) }) {
+                    OutlinedIconButton(
+                        onClick = { onAction(SearchUiAction.OnBackPressed) },
+                        modifier = Modifier.padding(start = 16.dp)
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "back button"
@@ -115,11 +121,12 @@ private fun SearchScreenContent(
                 onDoneClicked = { onAction(SearchUiAction.OnAddRecentSearchItem(searchQuery)) },
                 searchQuery = searchQuery
             )
-            AnimatedContent(targetState = isSearching, label = "Search Tabs") { state ->
+            Crossfade(targetState = isSearching, label = "Search Tabs") { state ->
                 when {
                     state -> {
                         SearchResultList(
                             modifier = Modifier.fillMaxSize(),
+                            isLoading = isLoadingProducts,
                             searchQuery = searchQuery,
                             products = products,
                             onProductClicked = { id -> onAction(SearchUiAction.OnProductClicked(id)) },
@@ -137,6 +144,7 @@ private fun SearchScreenContent(
                     else -> {
                         RecentSearchesSection(
                             items = recentSearches,
+                            isLoading = isLoadingRecentSearches,
                             onItemClick = { query ->
                                 searchQuery = query
                                 onAction(SearchUiAction.OnSearchQueryChanged(query))
@@ -166,7 +174,9 @@ private fun SearchScreenContentPreview() {
             products = emptyList(),
             wishlistedProductsIds = emptyList(),
             recentSearches = listOf("Shoes", "Shirts", "Pants"),
-            onAction = {}
+            onAction = {},
+            isLoadingProducts = true,
+            isLoadingRecentSearches = true
         )
     }
 }

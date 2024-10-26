@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.search.components
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.zaed.khana.R
+import org.zaed.khana.presentation.components.EmptyListScreen
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -26,46 +28,113 @@ import org.zaed.khana.presentation.theme.KhanaTheme
 fun RecentSearchesSection(
     modifier: Modifier = Modifier,
     items: List<String>,
+    isLoading: Boolean,
     onItemClick: (String) -> Unit,
     onDeleteItem: (String) -> Unit,
     onClearAllRecentSearches: () -> Unit
 ) {
-    if (items.isNotEmpty()) {
-        LazyColumn(
-            contentPadding = PaddingValues(vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier
-        ) {
-            stickyHeader {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = stringResource(R.string.recent),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.weight(1f)
-                        )
-                        TextButton(onClick = { onClearAllRecentSearches() }) {
-                            Text(text = stringResource(R.string.clear_all), style = MaterialTheme.typography.titleMedium)
-                        }
-                    }
-                    HorizontalDivider(thickness = 1.dp)
-                }
-
+    Crossfade(targetState = isLoading to items) { state ->
+        when {
+            state.first -> {
+                RecentSearchesShimmer(modifier)
             }
-            items(items) { item ->
-                RecentSearchItem(
-                    modifier = Modifier.animateItem(),
-                    item = item,
-                    onItemClick = onItemClick,
-                    onDeleteItem = onDeleteItem
+
+            state.second.isEmpty() -> {
+                EmptyListScreen()
+            }
+
+            else -> {
+                RecentSearchesContent(
+                    modifier,
+                    onClearAllRecentSearches,
+                    items,
+                    onItemClick,
+                    onDeleteItem
                 )
             }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun RecentSearchesContent(
+    modifier: Modifier,
+    onClearAllRecentSearches: () -> Unit,
+    items: List<String>,
+    onItemClick: (String) -> Unit,
+    onDeleteItem: (String) -> Unit
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
+    ) {
+        stickyHeader {
+            RecentSearchesHeader(
+                isEmpty = false,
+                onClearAllRecentSearches = onClearAllRecentSearches
+            )
+        }
+        items(items) { item ->
+            RecentSearchItem(
+                modifier = Modifier.animateItem(),
+                item = item,
+                onItemClick = onItemClick,
+                onDeleteItem = onDeleteItem
+            )
+        }
+    }
+}
+
+@Composable
+private fun RecentSearchesHeader(
+    isEmpty: Boolean,
+    onClearAllRecentSearches: () -> Unit = {}
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(R.string.recent),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f)
+            )
+            TextButton(
+                onClick = { onClearAllRecentSearches() },
+                enabled = !isEmpty
+            ) {
+                Text(
+                    text = stringResource(R.string.clear_all),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        }
+        HorizontalDivider(thickness = 1.dp)
+    }
+}
+
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun RecentSearchesShimmer(modifier: Modifier = Modifier) {
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
+    ) {
+        stickyHeader {
+            RecentSearchesHeader(
+                isEmpty = true,
+            )
+        }
+        items(12) { _ ->
+            RecentSearchItemShimmer()
         }
     }
 }
@@ -75,10 +144,11 @@ fun RecentSearchesSection(
 private fun RecentSearchesPreview() {
     KhanaTheme {
         RecentSearchesSection(
-            items = listOf("Chicken", "Beef", "Pasta"),
+            items = emptyList(),
             onItemClick = {},
             onDeleteItem = {},
-            onClearAllRecentSearches = {}
+            onClearAllRecentSearches = {},
+            isLoading = false
         )
     }
 }
