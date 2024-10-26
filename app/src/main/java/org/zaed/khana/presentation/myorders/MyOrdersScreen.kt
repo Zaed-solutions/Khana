@@ -11,7 +11,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.PrimaryTabRow
@@ -48,6 +47,8 @@ fun MyOrdersScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     MyOrdersScreenContent(
         modifier = modifier,
+        isLoading = state.isLoading,
+        items = state.displayedItems,
         onAction = { action ->
             when (action) {
                 is MyOrdersUiAction.OnBackPressed -> onBackPressed()
@@ -61,8 +62,7 @@ fun MyOrdersScreen(
 
                 else -> viewModel.handleUiAction(action)
             }
-        },
-        items = state.displayedItems
+        }
     )
 }
 
@@ -70,8 +70,9 @@ fun MyOrdersScreen(
 @Composable
 private fun MyOrdersScreenContent(
     modifier: Modifier = Modifier,
-    onAction: (MyOrdersUiAction) -> Unit,
+    isLoading: Boolean,
     items: List<OrderedCartItem>,
+    onAction: (MyOrdersUiAction) -> Unit,
 ) {
     var selectedTab: OrdersTabs by remember { mutableStateOf(OrdersTabs.ACTIVE) }
     Scaffold(
@@ -123,6 +124,7 @@ private fun MyOrdersScreenContent(
             HorizontalPager(state = pagerState) { pageIndex ->
                 PlacedOrdersList(
                     selectedTab = selectedTab,
+                    isLoading = isLoading,
                     items = items,
                     onTrackOrderClicked = { orderId, itemId ->
                         onAction(
@@ -203,7 +205,9 @@ private fun MyOrdersScreenContentPreview() {
     KhanaTheme {
         MyOrdersScreenContent(
             onAction = {},
-            items = listOf(items.map { OrderedCartItem(orderId = "", data = it) }).flatten()
+            isLoading = false,
+//            items = listOf(items.map { OrderedCartItem(orderId = "", data = it) }).flatten()
+            items = emptyList()
         )
     }
 }
