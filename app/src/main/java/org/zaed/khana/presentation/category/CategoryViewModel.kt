@@ -46,7 +46,7 @@ class CategoryViewModel(
         viewModelScope.launch {
             productRepo.fetchProductsByCategory(_uiState.value.category).collect{ result ->
                 result.onSuccessWithData { products ->
-                    _uiState.update { it.copy(products = products) }
+                    _uiState.update { it.copy(products = products, isLoading = false) }
                 }.onFailure { error ->
                     Log.e("CategoryViewModel", "Failed to fetch products: $error")
                 }
