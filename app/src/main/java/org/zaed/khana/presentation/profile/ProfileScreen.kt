@@ -4,8 +4,12 @@ import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -22,12 +26,17 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -37,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.zaed.khana.R
+import org.zaed.khana.presentation.profile.components.ConfirmLogoutBottomSheetContent
 import org.zaed.khana.presentation.profile.components.ProfileHeader
 import org.zaed.khana.presentation.theme.KhanaTheme
 
@@ -53,6 +63,9 @@ fun ProfileScreen(
     onNavigateToLogin: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var isBottomSheetVisible by remember {
+        mutableStateOf(false)
+    }
     LaunchedEffect(key1 = state.isLoggedOut) {
         if (state.isLoggedOut) {
             onNavigateToLogin()
@@ -60,7 +73,9 @@ fun ProfileScreen(
     }
     ProfileScreenContent(
         modifier = modifier,
+        isLoading = state.isLoading,
         name = state.currentUser.firstName + " " + state.currentUser.lastName,
+        isBottomSheetVisible = isBottomSheetVisible,
         avatarUrl = state.currentUser.avatar,
         avatarUri = null,
         onAction = { action ->
@@ -71,6 +86,14 @@ fun ProfileScreen(
                 ProfileUiAction.OnPaymentMethodsClicked -> onNavigateToPaymentMethods()
                 ProfileUiAction.OnPrivacyPolicyClicked -> onNavigateToPrivacyPolicy()
                 ProfileUiAction.OnSettingsClicked -> onNavigateToSettings()
+                ProfileUiAction.OnLogoutCancelled -> {
+                    isBottomSheetVisible = false
+                }
+
+                ProfileUiAction.OnLogoutClicked -> {
+                    isBottomSheetVisible = true
+                }
+
                 else -> viewModel.handleUiAction(action)
             }
         }
@@ -82,6 +105,8 @@ fun ProfileScreen(
 @Composable
 private fun ProfileScreenContent(
     modifier: Modifier = Modifier,
+    isBottomSheetVisible: Boolean,
+    isLoading: Boolean = false,
     name: String,
     avatarUrl: String,
     avatarUri: Uri?,
@@ -117,6 +142,7 @@ private fun ProfileScreenContent(
         ) {
             ProfileHeader(
                 modifier = Modifier.padding(bottom = 16.dp),
+                isLoading = isLoading,
                 name = name,
                 avatarUrl = avatarUrl,
                 avatarUri = avatarUri,
@@ -147,6 +173,20 @@ private fun ProfileScreenContent(
                 )
                 if (option != ProfileScreenOptions.LOGOUT) {
                     HorizontalDivider(thickness = 0.5.dp)
+                }
+            }
+            if (isBottomSheetVisible) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        onAction(ProfileUiAction.OnLogoutCancelled)
+                    },
+                    windowInsets = WindowInsets.ime.only(WindowInsetsSides.Bottom),
+                    sheetState = rememberModalBottomSheetState()
+                ) {
+                    ConfirmLogoutBottomSheetContent(
+                        onConfirm = { onAction(ProfileUiAction.OnLogoutConfirmed) },
+                        onCancel = { onAction(ProfileUiAction.OnLogoutCancelled) }
+                    )
                 }
             }
         }
@@ -183,7 +223,13 @@ enum class ProfileScreenOptions(
 @Composable
 private fun ProfileScreenContentPreview() {
     KhanaTheme {
-        ProfileScreenContent(name = "Muhammed Edrees", avatarUrl = "", avatarUri = null) {
+        ProfileScreenContent(
+            isBottomSheetVisible = false,
+            name = "Muhammed Edrees",
+            avatarUrl = "",
+            avatarUri = null,
+//            isLoading = true
+        ) {
 
         }
     }

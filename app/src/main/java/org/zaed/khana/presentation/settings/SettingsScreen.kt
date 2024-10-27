@@ -45,7 +45,6 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
     onNavigateToPasswordManager: () -> Unit,
-    onNavigateToNotificationSettings: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -78,7 +77,6 @@ fun SettingsScreen(
                     visibleDialog = VisibleDialogOptions.CONFIRM_ACCOUNT_DELETION
                 }
 
-                SettingsUiAction.OnNotificationsSettingClicked -> onNavigateToNotificationSettings()
                 else -> viewModel.handleAction(action)
             }
         }
@@ -191,7 +189,7 @@ private fun SettingsContentPreview() {
     KhanaTheme {
         SettingsScreenContent(
             onAction = {},
-            visibleDialog = VisibleDialogOptions.CONFIRM_ACCOUNT_DELETION
+            visibleDialog = VisibleDialogOptions.NONE
         )
     }
 }

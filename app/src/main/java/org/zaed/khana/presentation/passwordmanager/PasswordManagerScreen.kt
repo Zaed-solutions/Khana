@@ -139,7 +139,7 @@ private fun PasswordManagerContentPreview() {
         PasswordManagerScreenContent(
             onAction = {},
             isCurrentPasswordWrong = false,
-            isNotMatchingPasswords = true
+            isNotMatchingPasswords = false
         )
     }
 }

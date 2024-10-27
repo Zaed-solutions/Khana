@@ -127,4 +127,7 @@
     <string name="no_results_found">No results found</string>
     <string name="choose_shipping_type">Choose Shipping Type</string>
     <string name="no_set_shipping_address">No set shipping address.</string>
+    <string name="logout">Logout</string>
+    <string name="are_you_sure_you_want_to_logout">Are you sure you want to logout?</string>
+    <string name="yes_logout">Yes, Logout</string>
 </resources>

@@ -11,4 +11,6 @@ sealed interface ProfileUiAction {
     data object OnHelpCenterClicked: ProfileUiAction
     data object OnPrivacyPolicyClicked: ProfileUiAction
     data object OnLogoutClicked: ProfileUiAction
+    data object OnLogoutConfirmed: ProfileUiAction
+    data object OnLogoutCancelled: ProfileUiAction
 }

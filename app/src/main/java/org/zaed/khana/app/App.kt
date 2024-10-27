@@ -330,7 +330,6 @@ fun App() {
                 SettingsScreen(
                     onBackPressed = { navController.popBackStack() },
                     onNavigateToPasswordManager = { navController.navigate(PasswordManagerScreen) },
-                    onNavigateToNotificationSettings = { /*TODO*/ },
                     onNavigateToLogin = { navController.navigate(LoginScreen) }
                 )
             }
