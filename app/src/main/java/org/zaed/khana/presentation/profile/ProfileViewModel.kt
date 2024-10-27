@@ -22,7 +22,7 @@ class ProfileViewModel(
     private fun fetchCurrentUser() {
         viewModelScope.launch {
             authRepo.getSignedInUser().onSuccessWithData { user ->
-                _uiState.update { it.copy(currentUser = user) }
+                _uiState.update { it.copy(currentUser = user, isLoading = false) }
             }.onFailure {
                 Log.e("ProfileViewModel:fetchCurrentUser", "Failed to fetch user $it")
             }
