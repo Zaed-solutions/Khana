@@ -13,6 +13,7 @@
 #}
 -keep class com.google.firebase.** { *; }
 -dontwarn com.google.firebase.**
+-dontwarn org.slf4j.impl.StaticLoggerBinder
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
