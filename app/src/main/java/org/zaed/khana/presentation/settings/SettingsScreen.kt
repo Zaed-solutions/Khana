@@ -52,10 +52,14 @@ fun SettingsScreen(
         mutableStateOf(VisibleDialogOptions.NONE)
     }
     LaunchedEffect(state.isWrongPassword) {
-        visibleDialog = VisibleDialogOptions.VERIFY_PASSWORD
+        if(state.isWrongPassword){
+            visibleDialog = VisibleDialogOptions.VERIFY_PASSWORD
+        }
     }
     LaunchedEffect(state.isAccountDeleted) {
-        onNavigateToLogin()
+        if(state.isAccountDeleted){
+            onNavigateToLogin()
+        }
     }
     SettingsScreenContent(
         modifier = modifier,
