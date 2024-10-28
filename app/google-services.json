@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "33060051650-le63nbf8e2v3g77k5882q0l422sfdvbs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.zaed.khana",
+            "certificate_hash": "681aaef7b7ba1d7dc45c79b401ddcc2d04a1b451"
+          }
+        },
+        {
           "client_id": "33060051650-hq5mt4v3liovok4p56l1icivrof993u9.apps.googleusercontent.com",
           "client_type": 3
         }
