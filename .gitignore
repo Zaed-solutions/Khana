@@ -13,5 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+khana-keystore.jks
 localKeys.properties
 /resources/
