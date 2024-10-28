@@ -41,17 +41,16 @@ fun TrackOrderScreen(
     modifier: Modifier = Modifier,
     viewModel: TrackOrderViewModel = koinViewModel(),
     orderId: String,
-    cartItemId: String,
+    productId: String,
     onBackPressed: () -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
-        viewModel.init(orderId, cartItemId)
+        viewModel.init(orderId, productId)
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     TrackOrderScreenContent(
         modifier = modifier,
-        isLoadingCartItem = state.isLoadingCartItems,
-        isLoadingOrderDetails = state.isLoadingOrderDetails,
+        isLoading = state.isLoading,
         item = state.cartItem,
         order = state.order,
         onAction = { action ->
@@ -66,8 +65,7 @@ fun TrackOrderScreen(
 @Composable
 private fun TrackOrderScreenContent(
     modifier: Modifier = Modifier,
-    isLoadingCartItem: Boolean,
-    isLoadingOrderDetails: Boolean,
+    isLoading: Boolean,
     item: CartItem,
     order: Order,
     onAction: (TrackOrderUiAction) -> Unit,
@@ -99,7 +97,7 @@ private fun TrackOrderScreenContent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Crossfade(targetState = isLoadingCartItem, label = "placed order item") { state ->
+            Crossfade(targetState = isLoading, label = "placed order item") { state ->
                 when{
                     state -> { PlacedOrderItemShimmer(modifier = Modifier.padding(top = 16.dp))}
                     else -> {
@@ -116,15 +114,14 @@ private fun TrackOrderScreenContent(
                     }
                 }
             }
-            HorizontalDivider(thickness = 0.5.dp)
             OrderDetailsSection(
-                isLoading = isLoadingOrderDetails,
+                isLoading = isLoading,
                 expectedDeliveryEpochSeconds = order.expectedDeliveryEpochSeconds,
                 trackingId = order.trackingId
             )
             HorizontalDivider(thickness = 0.5.dp)
             OrderStatusSection(
-                isLoading = isLoadingOrderDetails,
+                isLoading = isLoading,
                 orderStatus = OrderStatus.valueOf(order.orderStatus),
                 confirmedEpochSeconds = order.confirmedEpochSeconds,
                 shippedEpochSeconds = order.shippedEpochSeconds,
@@ -159,8 +156,7 @@ private fun TrackOrderScreenContentPreview() {
             onAction = {},
             item = item,
             order = order,
-            isLoadingOrderDetails = true,
-            isLoadingCartItem = true
+            isLoading = true,
         )
     }
 }

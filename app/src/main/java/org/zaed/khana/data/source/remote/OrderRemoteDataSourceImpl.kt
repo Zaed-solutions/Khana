@@ -66,7 +66,7 @@ class OrderRemoteDataSourceImpl(
 
     override suspend fun fetchOrderById(orderId: String): Result<Order, OrderResult> {
         return try {
-            val request = httpClient.post {
+            val request = httpClient.get {
                 endPoint(EndPoint.Order.FetchOrderById.route)
                 parameter("orderId", orderId)
             }

@@ -142,8 +142,8 @@ private fun CartItemPreview() {
                 productSize = "XL",
                 productBasePrice = 83.97f
             ),
-            onIncrementQuantity = { /*TODO*/ },
-            onDecrementQuantity = { /*TODO*/ })
+            onIncrementQuantity = {},
+            onDecrementQuantity = {})
     }
 }
 

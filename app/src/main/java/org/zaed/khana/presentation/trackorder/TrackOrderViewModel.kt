@@ -7,36 +7,30 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.zaed.khana.data.repository.CartRepository
 import org.zaed.khana.data.repository.OrderRepository
 
 class TrackOrderViewModel(
     private val orderRepo: OrderRepository,
-    private val cartRepository: CartRepository
-): ViewModel(){
+) : ViewModel() {
     private val _uiState = MutableStateFlow(TrackOrderUiState())
     val uiState = _uiState.asStateFlow()
-    fun init(orderId: String, cartItemId: String) {
-        fetchCartItem(orderId, cartItemId)
-        fetchOrderDetails(orderId)
+    fun init(orderId: String, productId: String) {
+        fetchOrderDetails(orderId, productId)
     }
 
-    private fun fetchOrderDetails(orderId: String) {
+    private fun fetchOrderDetails(orderId: String, productId: String) {
         viewModelScope.launch {
             orderRepo.fetchOrderById(orderId).onSuccessWithData { order ->
-                _uiState.update { it.copy(order = order, isLoadingOrderDetails = false) }
+                val item = order.cartItems.first { it.productId == productId }
+                _uiState.update {
+                    it.copy(
+                        order = order,
+                        cartItem = item,
+                        isLoading = false
+                    )
+                }
             }.onFailure {
                 Log.e("TrackOrderViewModel:fetchOrderDetails", "fetchOrderDetails: $it")
-            }
-        }
-    }
-
-    private fun fetchCartItem(orderId: String, cartItemId: String) {
-        viewModelScope.launch {
-            cartRepository.fetchOrderedCartItem(orderId = orderId, cartItemId = cartItemId).onSuccessWithData { item ->
-                _uiState.update { it.copy(cartItem = item, isLoadingCartItems = false) }
-            }.onFailure {
-                Log.e("TrackOrderViewModel:fetchCartItem", "fetchCartItem: $it")
             }
         }
     }

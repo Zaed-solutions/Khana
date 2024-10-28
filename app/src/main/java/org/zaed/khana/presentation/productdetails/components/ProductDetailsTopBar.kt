@@ -62,8 +62,8 @@ fun ProductDetailsTopBar(
 private fun ProductDetailsTopBarPreview() {
     KhanaTheme {
         ProductDetailsTopBar(
-            onBackPressed = { /*TODO*/ },
-            onWishlistProduct = { /*TODO*/ },
+            onBackPressed = {},
+            onWishlistProduct = {},
             isWishlisted = true
         )
     }

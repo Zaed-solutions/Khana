@@ -53,11 +53,11 @@ fun MyOrdersScreen(
             when (action) {
                 is MyOrdersUiAction.OnBackPressed -> onBackPressed()
                 is MyOrdersUiAction.OnTrackItemClicked -> {
-                   onNavigateToTrackOrder(action.orderId, action.itemId)
+                   onNavigateToTrackOrder(action.orderId, action.productId)
                 }
 
                 is MyOrdersUiAction.OnLeaveItemReviewClicked -> {
-                    onNavigateToLeaveReview(action.orderId, action.itemId)
+                    onNavigateToLeaveReview(action.orderId, action.productId)
                 }
 
                 else -> viewModel.handleUiAction(action)
@@ -126,29 +126,22 @@ private fun MyOrdersScreenContent(
                     selectedTab = selectedTab,
                     isLoading = isLoading,
                     items = items,
-                    onTrackOrderClicked = { orderId, itemId ->
+                    onTrackOrderClicked = { orderId, productId ->
                         onAction(
                             MyOrdersUiAction.OnTrackItemClicked(
                                 orderId,
-                                itemId
+                                productId
                             )
                         )
                     },
-                    onLeaveReviewClicked = { orderId, itemId ->
+                    onLeaveReviewClicked = { orderId, productId ->
                         onAction(
                             MyOrdersUiAction.OnLeaveItemReviewClicked(
                                 orderId,
-                                itemId
+                                productId
                             )
                         )
                     },
-                    onReorderClicked = { itemId ->
-                        onAction(
-                            MyOrdersUiAction.OnReorderItemClicked(
-                                itemId
-                            )
-                        )
-                    }
                 )
             }
         }

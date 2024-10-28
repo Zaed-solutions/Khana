@@ -42,7 +42,7 @@ sealed interface Destinations{
     data object HelpCenterScreen: Destinations
 
     @Serializable
-    data class LeaveReviewScreen(val orderId: String, val cartItemId: String): Destinations
+    data class LeaveReviewScreen(val orderId: String, val productId: String): Destinations
 
     @Serializable
     data object MyOrdersScreen: Destinations
@@ -54,7 +54,7 @@ sealed interface Destinations{
     data object SearchScreen: Destinations
 
     @Serializable
-    data class TrackOrderScreen(val orderId: String, val cartItemId: String): Destinations
+    data class TrackOrderScreen(val orderId: String, val productId: String): Destinations
 
     @Serializable
     data object WishlistScreen: Destinations

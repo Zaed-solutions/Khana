@@ -251,7 +251,7 @@ fun App() {
                 val params = backStackEntry.toRoute<LeaveReviewScreen>()
                 LeaveReviewScreen(
                     orderId = params.orderId,
-                    cartItemId = params.cartItemId,
+                    productId = params.productId,
                     onBackPressed = {
                         navController.popBackStack()
                     }
@@ -262,19 +262,19 @@ fun App() {
                     onBackPressed = {
                         navController.popBackStack()
                     },
-                    onNavigateToLeaveReview = { orderId, cartItemId ->
+                    onNavigateToLeaveReview = { orderId, productId ->
                         navController.navigate(
                             LeaveReviewScreen(
                                 orderId = orderId,
-                                cartItemId = cartItemId
+                                productId = productId
                             )
                         )
                     },
-                    onNavigateToTrackOrder = { orderId, cartItemId ->
+                    onNavigateToTrackOrder = { orderId, productId ->
                         navController.navigate(
                             TrackOrderScreen(
                                 orderId = orderId,
-                                cartItemId = cartItemId
+                                productId = productId
                             )
                         )
                     }
@@ -303,7 +303,7 @@ fun App() {
                 val params = backStackEntry.toRoute<TrackOrderScreen>()
                 TrackOrderScreen(
                     orderId = params.orderId,
-                    cartItemId = params.cartItemId,
+                    productId = params.productId,
                     onBackPressed = {
                         navController.popBackStack()
                     }
@@ -364,7 +364,6 @@ fun App() {
                     onBackPressed = { navController.popBackStack() },
                     onNavigateToHelpCenter = { navController.navigate(HelpCenterScreen) },
                     onNavigateToMyOrders = { navController.navigate(MyOrdersScreen) },
-                    onNavigateToPaymentMethods = { /*TODO*/ },
                     onNavigateToPrivacyPolicy = { navController.navigate(PrivacyPolicyScreen) },
                     onNavigateToSettings = { navController.navigate(SettingsScreen) },
                     onNavigateToLogin = { navController.navigate(LoginScreen) })

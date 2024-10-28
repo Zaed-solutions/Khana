@@ -67,7 +67,7 @@ fun OrderStatusSection(
     val animatedProgress = animateFloatAsState(
         targetValue = progressPercent,
         animationSpec = tween(
-            durationMillis = 2000,
+            durationMillis = 1000,
             easing = LinearEasing
         ),
         label = "progress percentage"
@@ -134,7 +134,7 @@ fun OrderStatusSection(
                             )
                         } else {
                             Text(
-                                text = confirmedEpochSeconds.formatEpochSecondsToDateTime(),
+                                text = if(confirmedEpochSeconds == 0L) "TBD" else confirmedEpochSeconds.formatEpochSecondsToDateTime(),
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                 style = MaterialTheme.typography.bodyMedium
                             )
@@ -174,7 +174,7 @@ fun OrderStatusSection(
                             )
                         } else {
                             Text(
-                                text = confirmedEpochSeconds.formatEpochSecondsToDateTime(),
+                                text = if(confirmedEpochSeconds == 0L) "TBD" else confirmedEpochSeconds.formatEpochSecondsToDateTime(),
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                 style = MaterialTheme.typography.bodyMedium
                             )
@@ -214,7 +214,7 @@ fun OrderStatusSection(
                             )
                         } else {
                             Text(
-                                text = shippedEpochSeconds.formatEpochSecondsToDateTime(),
+                                text = if(shippedEpochSeconds == 0L) "TBD" else shippedEpochSeconds.formatEpochSecondsToDateTime(),
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                 style = MaterialTheme.typography.bodyMedium
                             )
@@ -254,7 +254,7 @@ fun OrderStatusSection(
                             )
                         } else {
                             Text(
-                                text = deliveredEpochSeconds.formatEpochSecondsToDateTime(),
+                                text = if(deliveredEpochSeconds == 0L) "TBD" else deliveredEpochSeconds.formatEpochSecondsToDateTime(),
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                 style = MaterialTheme.typography.bodyMedium
                             )

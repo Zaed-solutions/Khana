@@ -42,7 +42,6 @@ class CompleteProfileViewModel(
             ).collect { result ->
              when(result){
                  is Result.Error -> {
-                     //TODO Handle error
                      _uiState.update { it.copy(loading = false) }
                  }
                  Result.Loading -> _uiState.update { it.copy(loading = true) }

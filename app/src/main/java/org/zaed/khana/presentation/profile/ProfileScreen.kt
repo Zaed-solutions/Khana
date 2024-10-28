@@ -57,7 +57,6 @@ fun ProfileScreen(
     onBackPressed: () -> Unit,
     onNavigateToHelpCenter: () -> Unit,
     onNavigateToMyOrders: () -> Unit,
-    onNavigateToPaymentMethods: () -> Unit,
     onNavigateToPrivacyPolicy: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToLogin: () -> Unit
@@ -83,7 +82,6 @@ fun ProfileScreen(
                 ProfileUiAction.OnBackPressed -> onBackPressed()
                 ProfileUiAction.OnHelpCenterClicked -> onNavigateToHelpCenter()
                 ProfileUiAction.OnMyOrdersClicked -> onNavigateToMyOrders()
-                ProfileUiAction.OnPaymentMethodsClicked -> onNavigateToPaymentMethods()
                 ProfileUiAction.OnPrivacyPolicyClicked -> onNavigateToPrivacyPolicy()
                 ProfileUiAction.OnSettingsClicked -> onNavigateToSettings()
                 ProfileUiAction.OnLogoutCancelled -> {
