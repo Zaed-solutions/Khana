@@ -78,7 +78,7 @@ private fun PrivacyPolicyScreenContent(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             LegalInfoSection(
                 title = stringResource(id = R.string.privacy_policy),

@@ -153,12 +153,12 @@ class CartRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun fetchOrderedCartItem(orderId: String, cartItemId: String): Result<CartItem, CartResult> {
+    override suspend fun fetchOrderedCartItem(orderId: String, productId: String): Result<CartItem, CartResult> {
         return try{
             val response = httpClient.get {
                 endPoint(EndPoint.Cart.FetchOrderedCartItem.route)
                 parameter("orderId", orderId)
-                parameter("cartItemId", cartItemId)
+                parameter("productId", productId)
             }
             if(response.status == HttpStatusCode.OK){
                 val responseData = response.body<GenericResponse<CartItem>>().data

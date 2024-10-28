@@ -19,9 +19,9 @@ class LeaveReviewViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LeaveReviewUiState())
     val uiState = _uiState.asStateFlow()
-    fun init(orderId: String, itemId: String) {
+    fun init(orderId: String, productId: String) {
         fetchCurrentUser()
-        fetchOrderedCartItem(orderId, itemId)
+        fetchOrderedCartItem(orderId, productId)
     }
 
     private fun fetchCurrentUser() {
@@ -34,9 +34,9 @@ class LeaveReviewViewModel(
         }
     }
 
-    private fun fetchOrderedCartItem(orderId: String, itemId: String) {
+    private fun fetchOrderedCartItem(orderId: String, productId: String) {
         viewModelScope.launch {
-            cartRepo.fetchOrderedCartItem(orderId, itemId).onSuccessWithData { cartItem ->
+            cartRepo.fetchOrderedCartItem(orderId, productId).onSuccessWithData { cartItem ->
                 _uiState.update { it.copy(item = cartItem, isLoading = false,) }
             }.onFailure {
                 Log.e("LeaveReviewViewModel:fetchCartItem", "Failed to fetch cart item $it")

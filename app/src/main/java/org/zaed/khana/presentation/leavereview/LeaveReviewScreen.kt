@@ -42,10 +42,10 @@ fun LeaveReviewScreen(
     viewModel: LeaveReviewViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
     orderId: String,
-    cartItemId: String,
+    productId: String,
 ) {
     LaunchedEffect(true) {
-        viewModel.init(orderId, cartItemId)
+        viewModel.init(orderId, productId)
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = state.isReviewSubmitted) {

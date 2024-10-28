@@ -2,7 +2,6 @@ package org.zaed.khana.presentation.productdetails.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,16 +12,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import org.zaed.khana.presentation.theme.KhanaTheme
 
 @Composable
-fun ExpandableText(text: String) {
+fun ExpandableText(
+    text: String,
+    style: TextStyle = MaterialTheme.typography.bodyMedium,
+    minDisplayedLines: Int = 3
+) {
     var isExpanded by remember { mutableStateOf(false) }
     var showReadMoreButtonState by remember { mutableStateOf(false) }
-    val maxLines = if (isExpanded) 200 else 3
+    val maxLines = if (isExpanded) Int.MAX_VALUE else minDisplayedLines
 
     Column {
         Text(

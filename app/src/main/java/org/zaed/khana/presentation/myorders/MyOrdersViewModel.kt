@@ -10,11 +10,13 @@ import kotlinx.coroutines.launch
 import org.zaed.khana.data.model.OrderStatus
 import org.zaed.khana.data.model.OrderedCartItem
 import org.zaed.khana.data.repository.AuthenticationRepository
+import org.zaed.khana.data.repository.CartRepository
 import org.zaed.khana.data.repository.OrderRepository
 
 class MyOrdersViewModel(
     private val authRepo: AuthenticationRepository,
-    private val orderRepo: OrderRepository
+    private val orderRepo: OrderRepository,
+    private val cartRepository: CartRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MyOrdersUiState())
     val uiState = _uiState.asStateFlow()
@@ -50,10 +52,6 @@ class MyOrdersViewModel(
     fun handleUiAction(action: MyOrdersUiAction) {
         when (action) {
             is MyOrdersUiAction.OnChangeTab -> updateDisplayedItems(action.tab)
-            is MyOrdersUiAction.OnReorderItemClicked -> {
-                //TODO
-            }
-
             else -> Unit
         }
     }

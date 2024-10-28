@@ -42,7 +42,7 @@ class CartRepositoryImpl(
         return cartRemoteSource.fetchUserCartItems(userId)
     }
 
-    override suspend fun fetchOrderedCartItem(orderId: String, cartItemId: String): Result<CartItem, CartResult> {
-        return cartRemoteSource.fetchOrderedCartItem(orderId, cartItemId)
+    override suspend fun fetchOrderedCartItem(orderId: String, productId: String): Result<CartItem, CartResult> {
+        return cartRemoteSource.fetchOrderedCartItem(orderId, productId)
     }
 }

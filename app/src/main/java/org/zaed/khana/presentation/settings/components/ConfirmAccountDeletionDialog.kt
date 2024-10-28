@@ -66,7 +66,7 @@ fun ConfirmAccountDeletionDialog(
 @Composable
 private fun ConfirmAccountDeletionPreview() {
     KhanaTheme {
-        ConfirmAccountDeletionDialog(onDismiss = { /*TODO*/ }) {
+        ConfirmAccountDeletionDialog(onDismiss = {}) {
 
         }
     }

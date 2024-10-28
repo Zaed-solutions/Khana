@@ -148,7 +148,7 @@ private fun ThumbnailSectionPreview2() {
     KhanaTheme {
         ThumbnailSection(
             productThumbnailImageLink = "https://www.imge.com/test.jpg",
-            onWishlistProduct = { /*TODO*/ },
+            onWishlistProduct = {},
             isWishlisted = false
         )
     }
@@ -160,7 +160,7 @@ private fun ThumbnailSectionPreview1() {
     KhanaTheme {
         ThumbnailSection(
             productThumbnailImageLink = "https://www.imge.com/test.jpg",
-            onWishlistProduct = { /*TODO*/ },
+            onWishlistProduct = { },
             isWishlisted = true
         )
     }
@@ -176,8 +176,8 @@ private fun ProductItemPreview() {
             productRating = 4.7f,
             productPrice = 183f,
             isWishlisted = false,
-            onWishlistProduct = { /*TODO*/ },
-            onProductClicked = { /*TODO*/ },
+            onWishlistProduct = {},
+            onProductClicked = { },
         )
     }
 }

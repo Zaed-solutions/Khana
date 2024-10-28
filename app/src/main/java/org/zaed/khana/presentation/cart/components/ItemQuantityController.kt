@@ -67,7 +67,7 @@ fun ItemQuantityController(
 @Composable
 private fun ItemQuantityControllerPreview() {
     KhanaTheme {
-        ItemQuantityController(quantity = 1, onIncrementQuantity = { /*TODO*/ }) {
+        ItemQuantityController(quantity = 1, onIncrementQuantity = {}) {
 
         }
     }

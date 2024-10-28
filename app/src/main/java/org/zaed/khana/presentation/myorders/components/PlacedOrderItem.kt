@@ -79,7 +79,7 @@ fun PlacedOrderItem(
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
-                    if (showButton) {
+                    if (showButton ) {
                         Spacer(modifier = Modifier.weight(1f))
                         Button(
                             onClick = { onButtonClicked() },

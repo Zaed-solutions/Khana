@@ -132,6 +132,6 @@ fun VerifyPasswordDialog(
 @Composable
 private fun VerifyPasswordPreview() {
     KhanaTheme {
-        VerifyPasswordDialog(onDismiss = { /*TODO*/ }, onContinue = {}, isWrongPassword = true)
+        VerifyPasswordDialog(onDismiss = { }, onContinue = {}, isWrongPassword = true)
     }
 }

@@ -92,7 +92,7 @@ private fun SwipeToDeleteContainerPreview() {
             items(10){ index ->
                 SwipeToDeleteContainer(
                     modifier = Modifier.padding(vertical = 16.dp),
-                    onDelete = { /*TODO*/ }) {
+                    onDelete = {}) {
                     Text(text = "Item: $index", modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().background(MaterialTheme.colorScheme.background),)
                 }
             }

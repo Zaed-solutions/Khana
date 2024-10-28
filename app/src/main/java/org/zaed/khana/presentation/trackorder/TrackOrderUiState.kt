@@ -6,8 +6,7 @@ import org.zaed.khana.data.model.User
 
 data class TrackOrderUiState(
     val currentUser: User = User(),
-    val isLoadingCartItems: Boolean = true,
-    val isLoadingOrderDetails: Boolean = true,
+    val isLoading: Boolean = true,
     val order: Order = Order(),
     val cartItem: CartItem = CartItem(),
 )

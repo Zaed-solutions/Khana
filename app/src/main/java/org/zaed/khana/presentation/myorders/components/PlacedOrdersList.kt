@@ -20,7 +20,6 @@ fun PlacedOrdersList(
     items: List<OrderedCartItem>,
     onTrackOrderClicked: (String, String) -> Unit,
     onLeaveReviewClicked: (String, String) -> Unit,
-    onReorderClicked: (String) -> Unit
 ) {
     Crossfade(targetState = isLoading to items, label = "placed orders list") { state ->
         when{
@@ -37,7 +36,6 @@ fun PlacedOrdersList(
                     selectedTab = selectedTab,
                     onTrackOrderClicked = onTrackOrderClicked,
                     onLeaveReviewClicked = onLeaveReviewClicked,
-                    onReorderClicked = onReorderClicked
                 )
             }
         }
@@ -51,7 +49,6 @@ private fun PlacedOrdersContent(
     selectedTab: OrdersTabs,
     onTrackOrderClicked: (String, String) -> Unit,
     onLeaveReviewClicked: (String, String) -> Unit,
-    onReorderClicked: (String) -> Unit
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
@@ -68,19 +65,18 @@ private fun PlacedOrdersContent(
                 size = item.data.productSize,
                 price = item.data.productBasePrice,
                 buttonText = selectedTab.buttonText,
+                showButton = selectedTab.buttonText != OrdersTabs.CANCELLED.buttonText
             ) {
                 when (selectedTab) {
                     OrdersTabs.ACTIVE -> {
-                        onTrackOrderClicked(item.orderId, item.data.id)
+                        onTrackOrderClicked(item.orderId, item.data.productId)
                     }
 
                     OrdersTabs.COMPLETED -> {
-                        onLeaveReviewClicked(item.orderId, item.data.id)
+                        onLeaveReviewClicked(item.orderId, item.data.productId)
                     }
 
-                    OrdersTabs.CANCELLED -> {
-                        onReorderClicked(item.orderId)
-                    }
+                    else -> {}
                 }
             }
         }
