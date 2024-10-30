@@ -22,7 +22,8 @@ checkout process, order tracking, and much more.
 - [Architecture](#architecture)
 - [Contributing](#contributing)
 - [License](#license)
-
+  
+<a name="features"></a>
 ## 🌟 Features
 
 ### Core Features
@@ -60,7 +61,7 @@ checkout process, order tracking, and much more.
 - **Profile Management:** Users can update profile info and change passwords.
 - **Customer Support:** Provides access to a help center with FAQ and contact options.
 - **Policies & T&C:** Users can view the privacy policy and the Terms and Conditions of the app.
-
+<a name="screenshots"></a>
 ## 🖼️ Screenshots
 
 | **Sign In**                                                    | **Home 1**                                          | **Home 2**                                         |
@@ -95,12 +96,12 @@ checkout process, order tracking, and much more.
 |---------------------------------------------------------------------|------------------------------------------------------------------------|
 | ![Privacy Policy Screen](media/screenshots/PrivacyPolicy-Light.png) | ![Password Manager Screen](media/screenshots/PasswordManager-Dark.png) | 
 
-
+<a name="demo"></a>
 ## 🎥 Demo
 
 ![Demo 1](media/demo/Demo.gif) 
 
-
+<a name="installation"></a>
 ## 📲 Installation
 
 To install Khana, download the latest release APK file from
@@ -111,7 +112,7 @@ the [Releases](https://github.com/Zaed-solutions/Khana/releases) section.
 3. Open the APK file and follow the installation prompts.
    **Note:** To run the app, you need to run the local server from
    the [KhanaServer](https://github.com/Zaed-solutions/KhanaServer) repository.
-
+<a name="usage"></a>
 ## ✨ Usage
 
 1. Open the app and sign up or log in.
@@ -121,7 +122,9 @@ the [Releases](https://github.com/Zaed-solutions/Khana/releases) section.
 5. Track orders and manage profile settings.
 6. Enjoy shopping 🤎
 
-## 🛠️ Built With
+   
+<a name="technologies-used"></a>
+## 🛠️ Technologies Used
 
 ### Core Technologies
 
@@ -159,6 +162,7 @@ the [Releases](https://github.com/Zaed-solutions/Khana/releases) section.
 - **Lottie Compose:** For rendering Lottie animations to enhance user experience and the visual
   appeal of the app.
 
+<a name="architecture"></a>
 ## 📐👷🏻‍♀️ Architecture
 
 Khana follows the MVVM (Model-View-ViewModel) architecture to ensure a clear separation of concerns
@@ -169,6 +173,7 @@ and to make the codebase more maintainable and testable.
 - **ViewModel:** Exposes data to the UI and manages states.
 - **View:** Composable functions that display the UI and react to ViewModel changes.
 
+<a name="contributing"></a>
 ## ✍️ Contributing
 
 Contributions are welcome! To contribute:
@@ -178,6 +183,7 @@ Contributions are welcome! To contribute:
 3. Commit your changes and push the branch.
 4. Open a pull request with a description of your changes.
 
+<a name="license"></a>
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
