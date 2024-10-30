@@ -17,7 +17,6 @@ checkout process, order tracking, and much more.
 - [Screenshots](#screenshots)
 - [Demo](#demo)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Technologies Used](#technologies-used)
 - [Architecture](#architecture)
 - [Contributing](#contributing)
@@ -112,15 +111,6 @@ the [Releases](https://github.com/Zaed-solutions/Khana/releases) section.
 3. Open the APK file and follow the installation prompts.
    **Note:** To run the app, you need to run the local server from
    the [KhanaServer](https://github.com/Zaed-solutions/KhanaServer) repository.
-<a name="usage"></a>
-## ✨ Usage
-
-1. Open the app and sign up or log in.
-2. Browse available products on the home screen, filter, or search for specific items.
-3. Add items to the cart or wishlist.
-4. Apply promo codes and proceed to checkout.
-5. Track orders and manage profile settings.
-6. Enjoy shopping 🤎
 
    
 <a name="technologies-used"></a>
