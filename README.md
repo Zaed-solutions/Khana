@@ -1,6 +1,6 @@
 # 👜 Khana
 
-![Khana Banner](path/to/your/banner/image.png) <!-- Replace with the actual path to your banner image -->
+<!-- ![Khana Banner](path/to/your/banner/image.png)  Replace with the actual path to your banner image -->
 
 [![Latest release](https://img.shields.io/github/v/release/Zaed-solutions/khana?color=%23FDD835&label=version)](https://github.com/Zaed-solutions/Khana/releases/tag/v1.0.0)
 [![GitHub license](https://img.shields.io/github/license/Zaed-solutions/khana)
