@@ -118,12 +118,14 @@ private fun HelpCenterScreenContent(
                 state = pagerState,
                 modifier = Modifier.fillMaxWidth()
             ) { pageIndex ->
-                AnimatedContent(targetState = selectedTab, label = "screenContent") { state ->
+                AnimatedContent(targetState = pageIndex, label = "screenContent") { state ->
                     when(state){
                         0 -> {
+                            selectedTab = 0
                             FaqSection(faq = faq, faqTags = faqTags)
                         }
                         1 -> {
+                            selectedTab = 1
                             ContactUsSection(contactInfo = contactInfo)
                         }
                     }

@@ -31,7 +31,7 @@ class ProfileViewModel(
     fun handleUiAction(action: ProfileUiAction) {
         when(action) {
             is ProfileUiAction.OnAvatarPicked -> updateUserAvatar(action.uri)
-            is ProfileUiAction.OnLogoutClicked -> logout()
+            is ProfileUiAction.OnLogoutConfirmed -> logout()
             else -> Unit
         }
     }

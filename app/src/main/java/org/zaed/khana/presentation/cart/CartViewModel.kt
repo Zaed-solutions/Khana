@@ -143,8 +143,7 @@ class CartViewModel(
 
     private fun removeCartItem(itemId: String) {
         viewModelScope.launch {
-            val item = uiState.value.cartItems.find { it.id == itemId } ?: return@launch
-            cartRepo.removeCartItem(item.id)
+            cartRepo.removeCartItem(itemId)
                 .onSuccess {
                     val updatedItems = uiState.value.cartItems.filter { it.id != itemId }
                     _uiState.value = uiState.value.copy(cartItems = updatedItems)

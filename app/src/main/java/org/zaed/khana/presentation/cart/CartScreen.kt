@@ -149,7 +149,7 @@ private fun CartScreenContent(
                             modifier = bottomSheetModifier,
                             item = item,
                             onRemoveCartItem = {
-                                onAction(CartUiAction.OnRemoveItemFromCart(item.productId))
+                                onAction(CartUiAction.OnRemoveItemFromCart(item.id))
                                 showBottomSheet = false
                             },
                             onCancel = {

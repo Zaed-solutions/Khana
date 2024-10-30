@@ -14,7 +14,7 @@ class HelpCenterViewModel(
 ): ViewModel() {
     private val _uiState = MutableStateFlow(HelpCenterUiState())
     val uiState = _uiState.asStateFlow()
-    fun init(){
+    init {
         fetchFAQs()
         fetchContactInfo()
     }
