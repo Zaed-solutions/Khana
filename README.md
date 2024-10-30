@@ -15,6 +15,7 @@ checkout process, order tracking, and much more.
 
 - [Features](#features)
 - [Screenshots](#screenshots)
+- [Demo](#demo)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Technologies Used](#technologies-used)
