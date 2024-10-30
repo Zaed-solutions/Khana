@@ -82,20 +82,19 @@ fun App() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = (navBackStackEntry?.destination?.route
         ?: HomeScreen::class.qualifiedName.orEmpty()).substringBefore("?")
-    val bottomNavRoutes = BottomNavigation.entries.map{ it.route::class.qualifiedName.orEmpty() }
+    val bottomNavRoutes = BottomNavigation.entries.map { it.route::class.qualifiedName.orEmpty() }
     val isDarkMode = isSystemInDarkTheme()
     val context = LocalContext.current as ComponentActivity
-
     DisposableEffect(isDarkMode) {
         context.enableEdgeToEdge(
             statusBarStyle = if (!isDarkMode) {
                 SystemBarStyle.light(
-                    scrim = context.getResources().getColor(R.color.background_light),
-                    darkScrim = context.getResources().getColor(R.color.on_background_light)
+                    scrim = context.resources.getColor(R.color.background_light),
+                    darkScrim = context.resources.getColor(R.color.on_background_light)
                 )
             } else {
                 SystemBarStyle.dark(
-                    scrim = context.getResources().getColor(R.color.background_dark),
+                    scrim = context.resources.getColor(R.color.background_dark),
                 )
             }
         )
@@ -105,8 +104,7 @@ fun App() {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding()
-        ,
+            .systemBarsPadding(),
         bottomBar = {
             AnimatedVisibility(
                 visible = bottomNavRoutes.contains(currentRoute),
@@ -174,6 +172,9 @@ fun App() {
                     productFilter = filter,
                     onNavigateToFilterScreen = { initialFilter ->
                         navController.navigate(FilterScreen(initialFilter))
+                    },
+                    onNavigateToCategoryScreen = { category ->
+                        navController.navigate(CategoryScreen(category))
                     },
                     onNavigateToSearchScreen = {
                         navController.navigate(SearchScreen)

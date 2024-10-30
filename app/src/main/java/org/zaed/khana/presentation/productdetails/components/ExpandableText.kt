@@ -24,13 +24,13 @@ fun ExpandableText(
     minDisplayedLines: Int = 3
 ) {
     var isExpanded by remember { mutableStateOf(false) }
-    var showReadMoreButtonState by remember { mutableStateOf(false) }
+    var showReadMoreButtonState by remember { mutableStateOf(true) }
     val maxLines = if (isExpanded) Int.MAX_VALUE else minDisplayedLines
 
     Column {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall,
+            style =style,
             overflow = TextOverflow.Ellipsis,
             maxLines = maxLines,
             onTextLayout = { textLayoutResult: TextLayoutResult ->

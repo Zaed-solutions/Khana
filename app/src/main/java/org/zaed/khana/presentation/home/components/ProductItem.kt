@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,7 +61,7 @@ fun ProductItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.width(160.dp)
         ) {
-            Text(text = productName, modifier = Modifier.weight(1f))
+            Text(text = productName, maxLines = 2, modifier = Modifier.weight(1f))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -92,8 +91,7 @@ private fun ThumbnailSection(
         StatefulAsyncImage(
             modifier = Modifier.size(160.dp).align(Alignment.Center),
             imageUrl = productThumbnailImageLink,
-            shape = MaterialTheme.shapes.large,
-            contentScale = ContentScale.FillBounds
+            shape = MaterialTheme.shapes.large
         )
         IconButton(
             onClick = { onWishlistProduct() },

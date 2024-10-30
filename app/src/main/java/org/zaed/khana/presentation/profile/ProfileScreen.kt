@@ -73,7 +73,7 @@ fun ProfileScreen(
     ProfileScreenContent(
         modifier = modifier,
         isLoading = state.isLoading,
-        name = state.currentUser.firstName + " " + state.currentUser.lastName,
+        name = state.currentUser.username,
         isBottomSheetVisible = isBottomSheetVisible,
         avatarUrl = state.currentUser.avatar,
         avatarUri = null,

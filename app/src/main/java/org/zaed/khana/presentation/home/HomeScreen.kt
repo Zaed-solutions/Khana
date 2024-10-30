@@ -35,6 +35,7 @@ fun HomeScreen(
     productFilter: ProductFilter,
     onNavigateToFilterScreen: (ProductFilter) -> Unit,
     onNavigateToProductDetailsScreen: (String) -> Unit,
+    onNavigateToCategoryScreen: (String) -> Unit,
     onNavigateToSearchScreen: () -> Unit,
     onNavigateToCouponsScreen: () -> Unit,
 ) {
@@ -57,6 +58,7 @@ fun HomeScreen(
                 HomeUiAction.OnFiltersButtonClicked -> onNavigateToFilterScreen(state.filter)
                 is HomeUiAction.OnProductClicked -> onNavigateToProductDetailsScreen(action.productId)
                 is HomeUiAction.OnSearchClicked -> onNavigateToSearchScreen()
+                is HomeUiAction.OnCategoryClicked -> onNavigateToCategoryScreen(action.categoryTitle)
                 HomeUiAction.OnBrowseOffersClicked -> onNavigateToCouponsScreen()
                 else -> viewModel.handleUiAction(action)
             }
@@ -100,7 +102,8 @@ private fun HomeContent(
             )
             CategoriesSection(
                 isLoading = isLoading,
-                categories = categories
+                categories = categories,
+                onCategoryClicked = { title -> onAction(HomeUiAction.OnCategoryClicked(title)) }
             )
             FlashSaleSection(
                 modifier = Modifier.padding(horizontal = 16.dp),

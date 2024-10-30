@@ -1,7 +1,5 @@
 package org.zaed.khana.presentation.auth.component
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,11 +75,7 @@ fun PasswordTextField(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
             ),
             modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    BorderStroke(2.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)),
-                    shape = RoundedCornerShape(30.dp)
-                ),
+                .fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             trailingIcon = {
                 Icon(

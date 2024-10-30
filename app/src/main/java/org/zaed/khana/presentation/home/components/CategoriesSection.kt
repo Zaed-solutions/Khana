@@ -1,5 +1,6 @@
 package org.zaed.khana.presentation.home.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,9 +27,10 @@ import org.zaed.khana.presentation.util.shimmerEffect
 
 @Composable
 fun CategoriesSection(
+    modifier: Modifier = Modifier,
     isLoading: Boolean,
     categories: List<Category>,
-    modifier: Modifier = Modifier
+    onCategoryClicked: (String) -> Unit = {},
 ) {
     Column {
         Text(
@@ -50,7 +52,10 @@ fun CategoriesSection(
                 items(categories.size) { index ->
                     val category = categories[index]
                     CategoryItem(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier
+                            .clickable {
+                                onCategoryClicked(category.categoryTitle)
+                            }.animateItem(),
                         categoryImage = category.categoryImage,
                         categoryTitle = category.categoryTitle
                     )
@@ -111,6 +116,6 @@ private fun CategoriesSectionPreview() {
         ),
     )
     KhanaTheme {
-        CategoriesSection(false, categories)
+        CategoriesSection(isLoading = false, categories =  categories)
     }
 }
